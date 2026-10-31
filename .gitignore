@@ -1,0 +1,39 @@
+# Local environment files and API keys
+.env
+.env.*
+!.env.example
+.envrc
+/secrets/
+/credentials/
+*.pem
+*.key
+
+# Python virtual environments and caches
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Coverage and build output
+.coverage
+.coverage.*
+htmlcov/
+build/
+dist/
+*.egg-info/
+
+# Local databases, logs, and execution artifacts
+# Keep submission traces and test results in examples/.
+/runtime/
+*.log
+
+# Editor and operating-system files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
