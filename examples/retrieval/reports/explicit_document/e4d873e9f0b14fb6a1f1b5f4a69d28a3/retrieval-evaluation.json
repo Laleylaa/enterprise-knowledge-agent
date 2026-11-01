@@ -1,0 +1,8 @@
+{
+  "scope": "single_search_tool",
+  "model_calls": 0,
+  "requested_doc": "D02",
+  "returned_docs": [
+    "D02"
+  ]
+}

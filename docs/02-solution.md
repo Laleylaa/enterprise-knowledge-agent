@@ -2,9 +2,11 @@
 
 更新日期：2026-11-01。设计状态：基于分轮确认形成的实现基线。初始底座、离线冒烟及一次真实模型冒烟已完成；完整接入契约与业务验收尚未完成，当前进展见下方说明。
 
-**当前实现进展（不改变下文目标契约）：** 已建立 `src/knowledge_agent/` 组件、统一配置及 `tests/smoke/`，并固定通过离线及真实模型冒烟的依赖版本。实际入口为 `smoke / config`，使用明确标识的 `smoke_fixture` 资料源；下文 `chat / prepare / evaluate` 及完整工具协议仍为待实现目标。按用户分步要求，`tests/contract/agent_loop/` 已逐步验证正常路径（3 项）及输出修正（16 项，含结构错误、引用错误、混合响应与共享修正额度）。第 3 步执行边界已验证 38 项：预算 8、传输 20、超时与取消 10；前两步 19 项与原有冒烟均回归通过。当前仍未实现完整工具协议、会话和业务测试；异步取消验证不代替未来本地 embedding 工作进程的超时验证。原文存储契约为 Markdown 文件＋元数据清单，保留 F1 样例。提前生成的全量用例规格、旧格式草稿和静态目录检查已清理；Q01～Q18 只保留为下文计划，后续随对应功能逐项开发和测试。单次真实冒烟不代表第 13 节第一阶段全部通过。实际命令与记录以 README 和 03-evaluation.md 为准。
+**当前实现进展（不改变下文目标契约）：** 已建立 `src/knowledge_agent/` 组件、统一配置及 `tests/integration/smoke/`，并固定通过离线及真实模型冒烟的依赖版本。实际入口为 `smoke / config`，使用明确标识的 `smoke_fixture` 资料源；下文 `chat / prepare / evaluate` 及完整工具协议仍为待实现目标。按用户分步要求，`tests/agent_loop/contract/` 已逐步验证正常路径（3 项）及输出修正（16 项，含结构错误、引用错误、混合响应与共享修正额度）。第 3 步执行边界已验证 38 项：预算 8、传输 20、超时与取消 10；前两步 19 项与原有冒烟均回归通过。当前仍未实现完整工具协议、会话和业务测试；异步取消验证不代替未来本地 embedding 工作进程的超时验证。原文存储契约为 Markdown 文件＋元数据清单，保留 F1 样例。提前生成的全量用例规格、旧格式草稿和静态目录检查已清理；Q01～Q18 只保留为下文计划，后续随对应功能逐项开发和测试。单次真实冒烟不代表第 13 节第一阶段全部通过。实际命令与记录以 README 和 03-evaluation.md 为准。
 
 需求依据：[01-requirements.md](01-requirements.md)，当前已由用户确认并定稿。本文不修改 PRD；出现需求变化时须同步确认两份文档。
+
+**独立检索进展补充：** 按用户要求，本步只实现 BM25 搜索工具及其所需分块／定位，不接 Agent 主循环、不扩展完整读取工具。已有独立入口、固定 BGE tokenizer、原文块与快照校验、BM25 过滤／精确 ID／分页／错误契约。测试只直接调用工具：冒烟 2、契约 38、业务 7 项通过；F1／F2 原文及正式离线块已准备。F1 两种问法的支持条款均在第 3 位，完整效果与限制见评估文档。这不改变后续向量／混合检索、会话及完整 Agent 验收目标。
 
 本文中的接口、目录、命令、参数与示例均为**拟实现契约**，不是现有可运行能力。预期路径不是实际 Trace，不能作为考核通过证据。实际结果、失败及材料链接应记录在 [03-evaluation.md](03-evaluation.md)。
 
@@ -81,10 +83,10 @@ flowchart LR
 | Python | 以 3.11 作为初始环境 | 本机 3.11.15 已通过安装与离线冒烟 |
 | PydanticAI／Pydantic | Agent、函数工具、结构化结果、校验反馈、运行消息及事件 | 当前冒烟环境为 2.64.0／2.14.2；已记录依赖，完整接入检查仍待完成 |
 | DeepSeek | 官方 provider，`deepseek-flash`，非流式输出，thinking 明确关闭 | 记录请求别名、响应模型标识与运行日期；别名可能更新 |
-| BM25 | `rank_bm25`，查询与块使用相同的 `jieba` 分词规则 | 版本、词典及预处理配置纳入索引指纹 |
+| BM25 | `rank_bm25`，查询与块使用相同的 `jieba` 分词规则 | 当前 rank-bm25 0.2.2／jieba 0.42.1；版本、词典及预处理配置已纳入索引指纹 |
 | BGE | `sentence-transformers` 加载本地模型；按官方用法处理查询指令、归一化 | 锁定模型 revision、tokenizer revision 和依赖版本 |
 | 向量存储 | 本地向量数组与精确余弦相似度；不部署向量数据库 | 记录 dtype、维数和块顺序 |
-| 测试 | `pytest`＋CLI 集成运行＋真实模型评估脚本 | pytest 9.2.0；仅冒烟已实现，完整真实评估脚本待实现 |
+| 测试 | `pytest`＋CLI 集成运行＋真实模型评估脚本 | pytest 9.2.0；已有主循环契约和独立检索三层测试，完整真实评估脚本待实现 |
 
 RRF 根据排名融合不同检索列表，不直接相加不同量纲的原始分数。组件选择依据见第 16 节；工程参数为初始默认，效果须实测。
 
@@ -128,6 +130,8 @@ Markdown 文件是唯一正文来源；使用明确标题、段落、编号条�
 
 这样离线演示可在基础依赖已安装、无 API 密钥、无模型权重和无网络的环境中执行。修改演示原文后，旧块不再有效：需显式运行准备命令并获得 tokenizer 文件。不能为了继续演示而换一套未标识的分块方式。向量／混合模式及正式重分块测试需要额外的本地模型或 tokenizer 缓存。
 
+当前已为独立搜索生成 F1、F2 派生块；它们尚未替换原 Agent Mock 的 smoke_fixture。分块实际使用 tokenizers 0.22.1 和 BGE tokenizer revision `7999e1d3359715c523056ef9478215996d62a620`，校验文件 SHA-256，准备命令显式下载 tokenizer，不下载模型权重。现阶段 BM25 索引启动时从块重建，只持久化块与索引身份记录，不持久化排名索引文件。
+
 ## 4. 分块与检索设计
 
 ### 4.1 结构边界与 token 预算结合
@@ -158,6 +162,8 @@ BM25 和向量搜索使用同一资料与块集合。当前资料很少，内部
 默认向模型返回前 5 个块，每页最多 10 个。工具提供不透明分页 cursor：它绑定同一快照、查询、过滤条件及本次固定的候选排序，翻页不重新扩大候选窗口并重排，以免重复或遗漏。排序并列时按稳定块标识确定顺序。`has_more=false` 只表示本次候选列表已读完，不能证明知识库没有其他有效规定；例如 BM25 未匹配的同义条款可能从未进入列表。将来扩大资料规模时可限制召回窗口，但须同步记录覆盖边界并重新评估。
 
 分页与返回量限额以执行配置为准；主模型决定是否翻页、改写查询或读取。程序不要求遍历全库，也不因只返回一个文档就宣称没有冲突。召回不足、同文档块挤占结果、冲突另一方被排到后面均是独立评估问题。
+
+当前独立实现的游标只在同一 SearchTool 实例存活期间有效，最多保留 256 项（可配置），超额淘汰最早项，失效值明确报 INVALID_CURSOR；不提供跨进程恢复。按全快照计算 BM25 词频统计，在过滤范围内排序候选，purpose 不参与排名。分块支持 ATX 标题并跳过围栏代码中的标题标记；其他文本保留为原文，不宣称完整 Markdown AST 支持。独立工具的完整使用约定见 [retrieval/README.md](../src/knowledge_agent/retrieval/README.md)。
 
 ### 4.4 分支故障
 
@@ -729,7 +735,11 @@ sequenceDiagram
 
 ## 10. Trace、输出材料与可复核性
 
-每轮创建独立目录，并按验证用途分开保存：业务正常流、异常流验证放在 `examples/traces/<case_id>/<variant_id>/<mode>/<run_id>/`；开发测试需要留存的输入、输出和调试 Trace 放在 `examples/tests/<类别>/runs/<mode>/<run_id>/`，测试报告放在同类别的 `reports/`。类别包括 smoke、contract、business；业务验收执行器产生的流程证据放 traces，自动断言报告放 tests/business，并通过 run_id 关联，不复制证据。默认日常试跑与开发缓存放在被忽略的 `runtime/`，不把密钥、权重或机器专属缓存提交进仓库。当前只有冒烟材料，不能据其文件数量声称业务验收已覆盖。以下为完整目标文件契约，已有子集及实际记录见评估文档：
+测试代码先按 `tests/<模块>/`、`tests/integration/`、`tests/e2e/`、`tests/support/` 组织；前面各范围内部按实际需要维护 smoke、contract、business、boundary，support 只放公共辅助代码。业务行为测试可以只针对一个模块，不自动等于端到端验收。
+
+实际材料镜像被测范围放入 `examples/<模块或流程>/`，内部区分 `inputs/<case_id>/<run_id>/`、`outputs/<case_id>/<run_id>/`、`traces/<case_id>/<run_id>/` 和 `reports/`。输入快照含当次实际参数、资料与公开配置；工具调用与返回等中间材料归 traces，最终结果与执行摘要归 outputs，评估指标归 reports。通过相同 case_id／run_id 及 traces 内 artifacts.json 的文件路径和 SHA-256 关联；变体、模式保留在实际输入和运行元数据中。所有测试范围都可以有 Trace。JUnit 汇总报告按类别存入 reports，逐次指标按 case_id／run_id 存入 reports。
+
+当前测试层使用公共导出器将运行器原始材料分类留存，不改变业务记录格式；默认测试使用临时目录，仅显式 --examples-dir 时归档已登记的运行，失败时也保留已产生材料。原始历史内容不改写，当前只有接入冒烟和单工具材料，完整 e2e 验收尚未执行。日常试跑与开发缓存放在被忽略的 runtime，不提交密钥、权重或机器专属缓存。以下为完整目标文件契约，已有子集及实际记录见评估文档：
 
 | 文件 | 内容 |
 |---|---|
@@ -821,7 +831,7 @@ P2 独立专项属于可选测试增强，当前不新增专用资料集或必�
 
 下表固定后续验收所需的资料与输入，目前仅为设计计划，没有全量用例文件或业务执行器。随对应功能开发逐项补充测试，不提前固化尚未实现的运行器接口。后续每项规格可包含 `case_id, variant_id, corpus_fixture, input_turns, imported_history, fault_plan, config_overrides, expected_checks`；预期只传给评估器。默认无历史、无故障、使用第 8 节预算。箭头表示同会话连续输入，除非明确重启或独立运行；后一轮携带前轮实际回答，不能用理想回答替换。
 
-资料集独立加载，不相互混用。文档标题与 ID 固定，版本日期统一 2026-01-01，以消除“新日期优先”的干扰；另设日期变化反例。以下定义关键业务条款及前提，不再将单句等同完整文档。按 [资料存储契约](../data/README.md)，目前仅保留 F1 原文样例，F2～F6 尚未准备；后续逐项编写不能改变冲突、范围或缺口。预生成块及正式索引指纹待后续实现：
+资料集独立加载，不相互混用。文档标题与 ID 固定，版本日期统一 2026-01-01，以消除“新日期优先”的干扰；另设日期变化反例。以下定义关键业务条款及前提，不再将单句等同完整文档。按 [资料存储契约](../data/README.md)，目前已有 F1 原文样例及 F2 冲突资料，用于独立检索工具测试；F3～F6 尚未准备。F1／F2 预生成块与 BM25 索引指纹已实现，后续逐项编写不能改变冲突、范围或缺口：
 
 | 资料集 | 关键条款／前提 |
 |---|---|
@@ -873,15 +883,15 @@ PYTHONPATH=src python -m knowledge_agent prepare --corpus data/default --retriev
 PYTHONPATH=src python -m knowledge_agent chat --mode real --retrieval hybrid
 
 # 显式导入历史
-PYTHONPATH=src python -m knowledge_agent chat --mode real --history examples/inputs/history.json
+PYTHONPATH=src python -m knowledge_agent chat --mode real --history examples/e2e/inputs/Q12_history/RUN_ID/history.json
 
 # 基础离线演示：无需密钥、BGE 权重或运行时下载
 PYTHONPATH=src python -m knowledge_agent chat --mode mock --scenario normal --retrieval bm25
 
 # 单题及批量评估入口，仍属于 CLI 运行方式
 PYTHONPATH=src python -m knowledge_agent chat --mode real --question "国内差旅报销期限多久？"
-PYTHONPATH=src python -m knowledge_agent evaluate --mode real --suite tests/cases --retrieval hybrid
-python -m pytest tests/smoke -q --junitxml=examples/tests/smoke/reports/results.xml
+PYTHONPATH=src python -m knowledge_agent evaluate --mode real --suite tests/e2e/business --retrieval hybrid
+python -m pytest tests/integration/smoke -q --junitxml=examples/integration/reports/smoke/current-results.xml
 ```
 
 统一使用 requirements.txt 管理运行、测试及后续向量依赖，避免多份安装清单。embedding 及正式重新分块相关依赖仍按需导入；基础 Mock＋BM25 不加载模型权重。基础离线模式不能因顶层导入神经模型包而要求下载或访问网络。依赖安装本身需要事先完成，不能承诺全新环境无网络即可安装；统一安装清单可能增加环境准备体积，权重下载仍由显式 prepare 管理。
@@ -900,20 +910,22 @@ src/knowledge_agent/
   corpus.py, chunking.py, indexes.py, retrieval.py
   tools.py, evidence.py, validation.py, trace.py
 tests/
-  smoke/, contract/, business/, cases/
+  retrieval/, agent_loop/     # 内部按 smoke、contract、business、boundary 分类
+  integration/, e2e/, support/
 data/
   default/, fixtures/, prepared/
 examples/
-  inputs/                    # 可复用的演示输入（后续生成）
-  traces/<case_id>/<variant_id>/<mode>/<run_id>/
-  tests/<category>/reports/, tests/<category>/runs/<mode>/<run_id>/
+  <模块或流程>/inputs/<case_id>/<run_id>/
+  <模块或流程>/outputs/<case_id>/<run_id>/
+  <模块或流程>/traces/<case_id>/<run_id>/
+  <模块或流程>/reports/
 docs/
   01-requirements.md ... 05-retrospective.md
 requirements.txt, .env.example, README.md
 runtime/                     # 日常试跑、派生缓存，不作为交付证据
 ```
 
-评估器知道用例名称、期望与故障注入，运行器只收到选定资料快照、问题与可观察错误；不要把 `tests/cases` 的全部配置直接拼到模型 prompt。
+评估器知道用例名称、期望与故障注入，运行器只收到选定资料快照、问题与可观察错误；不要把测试用例的全部配置直接拼到模型 prompt。
 
 ## 13. 实现顺序与接入检查
 

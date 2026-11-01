@@ -1,0 +1,9 @@
+{
+  "scope": "single_search_tool",
+  "model_calls": 0,
+  "status": "error",
+  "error_codes": [
+    "SEARCH_FAILED"
+  ],
+  "evidence_count": 0
+}

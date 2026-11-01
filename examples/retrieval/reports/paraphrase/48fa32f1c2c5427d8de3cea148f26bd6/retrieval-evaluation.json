@@ -1,0 +1,11 @@
+{
+  "scope": "single_search_tool",
+  "model_calls": 0,
+  "query": "国内出差回来最迟多久交报销？",
+  "returned": 4,
+  "supporting_ranks": [
+    3
+  ],
+  "support_in_top_5": true,
+  "support_at_rank_1": false
+}

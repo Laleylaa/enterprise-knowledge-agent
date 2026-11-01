@@ -1,0 +1,5 @@
+{
+  "scope": "test_only",
+  "target": "Bm25Index.rank",
+  "error": "OSError"
+}

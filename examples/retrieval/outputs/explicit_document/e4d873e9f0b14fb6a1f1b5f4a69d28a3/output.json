@@ -1,0 +1,60 @@
+{
+  "schema_version": 1,
+  "tool": "search_knowledge",
+  "tool_call_id": "search-1",
+  "corpus_hash": "c283060df71f135a8009b5a8d3c6a072a798ad705e56ed39c24c6d73d3bc27a8",
+  "status": "ok",
+  "data": {
+    "hits": [
+      {
+        "evidence_id": "e4d873e9f0b14fb6a1f1b5f4a69d28a3:E1",
+        "doc_id": "D02",
+        "title": "差旅报销规定 D02",
+        "version_date": "2026-01-01",
+        "content_hash": "3215da0316f02d06809366e34c1ddda19800c425e01b44e19efb6a70d5e22ff9",
+        "section_id": "D02-S0001",
+        "section_heading": "差旅报销规定",
+        "heading_span": {
+          "start": 2,
+          "end": 8
+        },
+        "chunk_id": "D02-C0001",
+        "source_span": {
+          "start": 0,
+          "end": 29
+        },
+        "text": "# 差旅报销规定\n\n本材料记录员工差旅报销的提交期限。\n\n"
+      },
+      {
+        "evidence_id": "e4d873e9f0b14fb6a1f1b5f4a69d28a3:E2",
+        "doc_id": "D02",
+        "title": "差旅报销规定 D02",
+        "version_date": "2026-01-01",
+        "content_hash": "3215da0316f02d06809366e34c1ddda19800c425e01b44e19efb6a70d5e22ff9",
+        "section_id": "D02-S0002",
+        "section_heading": "提交期限",
+        "heading_span": {
+          "start": 32,
+          "end": 36
+        },
+        "chunk_id": "D02-C0002",
+        "source_span": {
+          "start": 29,
+          "end": 59
+        },
+        "text": "## 提交期限\n\n差旅报销须在行程结束后 15 天内提交。\n"
+      }
+    ],
+    "segments": [],
+    "locators": []
+  },
+  "errors": [],
+  "execution": {
+    "strategy": "id_lookup",
+    "requested_mode": "bm25",
+    "effective_branches": [],
+    "next_cursor": null,
+    "has_more": false,
+    "return_limited": false
+  }
+}

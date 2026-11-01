@@ -1,10 +1,10 @@
 # 企业知识问答 Agent
 
-当前阶段：**工程底座、端到端冒烟及主循环正常路径、输出修正、执行边界契约**。已具备 CLI → PydanticAI → 本地工具 → 结构化结果 → 文件记录的运行链路。
+当前阶段：**主循环基线已建立；新增独立 BM25 检索工具及单工具测试**。新检索尚未接入 Agent，完整读取工具待实现。
 
-目前使用 `data/smoke/manifest.json` 的小型合成资料。`search_knowledge` 返回这份资料集的全部候选，明确标记 `smoke_fixture`，**尚未实现 BM25、向量或混合检索**。此入口用于验证接入，不代表完整企业知识问答产品。
+现有 Agent 的 `smoke` 入口仍使用 `data/smoke/manifest.json`，其占位搜索返回资料全集并标记 `smoke_fixture`。新检索通过下方独立入口执行真实 BM25，支持过滤、精确 ID 定位和分页；向量、混合检索仍未实现。
 
-知识库统一采用 [Markdown 原文＋元数据清单](data/README.md)，保留最小冒烟资料及一份 F1 制度样例。Q01～Q18 目前仅是 solution 中的验收计划，后续随功能实现逐项补充资料和测试，不预先铺开全部用例。
+知识库统一采用 [Markdown 原文＋元数据清单](data/README.md)，目前有最小冒烟资料、F1 单规则和 F2 冲突资料，以及正式生成的离线原文块。Q01～Q18 的 Agent 验收仍未执行，不将单工具检索效果计为 Agent 验收成绩。
 
 ## 环境与安装
 
@@ -24,6 +24,42 @@ python -m pip install -r requirements.txt
 
 ## 运行
 
+### 独立检索工具（本次开发入口）
+
+依赖安装后，使用仓库内预生成块即可离线搜索，无须密钥或 tokenizer 文件：
+
+```sh
+PYTHONPATH=src python -m knowledge_agent.retrieval search \
+  --corpus data/fixtures/F1_single_rule/manifest.json \
+  --prepared data/prepared/F1_single_rule.json \
+  --query "国内差旅报销期限多久？" --output-dir runtime/search-tool
+```
+
+返回原文块、出处、证据 ID、工具执行状态和分页信息，不生成最终业务答案。运行目录记录 `stage=standalone_search_tool`、`model_calls=0`。一次 CLI 运行返回一页；连续翻页使用同一 `SearchTool` 实例的 Python 接口，见 [单工具说明](src/knowledge_agent/retrieval/README.md)。
+
+首次准备或修改资料后重分块，需要显式下载固定版本的 BGE tokenizer（约 439 KB，无模型权重），之后可离线 prepare：
+
+```sh
+PYTHONPATH=src python -m knowledge_agent.retrieval download-tokenizer
+PYTHONPATH=src python -m knowledge_agent.retrieval prepare \
+  --corpus data/fixtures/F1_single_rule/manifest.json \
+  --prepared data/prepared/F1_single_rule.json
+```
+
+搜索启动时校验原文、配置和派生块指纹；过期且本地 tokenizer 齐备时重建，否则明确要求 prepare，不使用过期块或自动联网。下载文件和 jieba 缓存留在被忽略的 `runtime/`。检索／分块参数统一由 Settings 和 `.env.example` 管理。
+
+只运行本次单工具测试：
+
+```sh
+python -m pytest tests/retrieval/smoke -q
+python -m pytest tests/retrieval/contract -q
+python -m pytest tests/retrieval/business -q
+```
+
+实际结果为 **2／38／7 项通过**。搜索及分页测试直接使用离线块；重新分块、资料替换等测试使用真实本地 tokenizer，未下载时会明确跳过相应项。三类测试均封锁网络和 Agent 调用；本次未运行 Agent 联调测试。
+
+当前两种报销问法均在前 5 个候选中取得支持条款，但支持条款都位于第 3 位；冲突双方均取得。小型资料集上的结果不代表复杂知识库效果，详情及实际记录见 [评估](docs/03-evaluation.md#独立检索工具bm25)。
+
 ### 离线冒烟
 
 ```sh
@@ -34,10 +70,10 @@ PYTHONPATH=src python -m knowledge_agent smoke --mode mock
 
 标准输出为 JSON，包含回答、引用、缺口、状态、真实／Mock 模式、来源标记、计数及已取得原文；材料目录写到标准错误。正常离线运行应有两次脚本决策、一次业务工具调用、零次 HTTP 尝试。
 
-日常试跑默认保存到被 Git 忽略的 `runtime/runs/`。需要留作开发测试证据时，显式指定分类目录：
+日常试跑默认保存到被 Git 忽略的 `runtime/runs/`。需要留作开发测试证据时，通过接入冒烟测试导出分类材料：
 
 ```sh
-PYTHONPATH=src python -m knowledge_agent smoke --mode mock --output-dir examples/tests/smoke/runs
+python -m pytest tests/integration/smoke/test_cli.py -q --examples-dir=examples
 ```
 
 ### 真实模型冒烟
@@ -66,33 +102,33 @@ PYTHONPATH=src python -m knowledge_agent --help
 ## 测试与评审入口
 
 ```sh
-# 本阶段全部冒烟；真实 API 用例默认跳过
-python -m pytest tests/smoke -q --junitxml=examples/tests/smoke/reports/execution-boundaries-smoke-results.xml
+# CLI 接入冒烟；真实 API 用例默认跳过
+python -m pytest tests/integration/smoke -q --junitxml=examples/integration/reports/smoke/current-results.xml
 
 # 配好本机密钥后，显式执行真实模型冒烟
-python -m pytest tests/smoke/test_live.py --run-live -q
+python -m pytest tests/integration/smoke/test_live.py --run-live -q --examples-dir=examples
 ```
 
-所有测试按目的分类，详见 [tests/README.md](tests/README.md)。正常路径 3 项，输出修正 16 项，执行边界 38 项（预算 8、传输 20、超时与取消 10）。后者使用受控模型及 SDK 本地 HTTP 模拟，封锁网络，不调用真实 API；不证明业务语义或真实服务稳定性。
+测试先按模块、integration、e2e 分范围，再在内部按冒烟、契约、业务、边界分类，详见 [tests/README.md](tests/README.md)。正常路径 3 项，输出修正 16 项，执行边界 38 项（预算 8、传输 20、超时与取消 10）。后者使用受控模型及 SDK 本地 HTTP 模拟，封锁网络，不调用真实 API；不证明业务语义或真实服务稳定性。
 
 ```sh
-python -m pytest tests/contract/agent_loop/test_normal_flow.py -q --junitxml=examples/tests/contract/reports/agent-loop-normal-results.xml
-python -m pytest tests/contract/agent_loop/test_output_correction.py -q --junitxml=examples/tests/contract/reports/agent-loop-output-correction-results.xml
-python -m pytest tests/contract/agent_loop/test_budgets.py tests/contract/agent_loop/test_transport.py tests/contract/agent_loop/test_timeouts.py -q --junitxml=examples/tests/contract/reports/agent-loop-execution-boundaries-results.xml
+python -m pytest tests/agent_loop/contract/test_normal_flow.py -q --junitxml=examples/agent_loop/reports/contract/agent-loop-normal-results.xml
+python -m pytest tests/agent_loop/contract/test_output_correction.py -q --junitxml=examples/agent_loop/reports/contract/agent-loop-output-correction-results.xml
+python -m pytest tests/agent_loop/boundary -q --junitxml=examples/agent_loop/reports/boundary/current-results.xml
 ```
 
-开发测试材料位于 `examples/tests/`，用于检查程序是否正确；业务正常流、异常流的输入、实际输出及行动过程位于 `examples/traces/`，用于核对 Agent 行为与结果。当前业务验证目录只有规范说明，尚无验收记录。完整索引见 [examples/README.md](examples/README.md)。
+材料按同一范围存入 `examples/<模块或流程>/`，下分 `inputs/`、`outputs/`、`traces/`、`reports/`；用例 ID 与运行 ID 关联同次执行。Trace 同样适用于模块测试。`examples/e2e/` 留给最终完整业务验收，目前未执行。完整索引见 [examples/README.md](examples/README.md)。
 
-- [本阶段评估与限制](docs/03-evaluation.md)
-- [执行边界：38 passed](examples/tests/contract/reports/agent-loop-execution-boundaries-results.xml)；[前两步回归：19 passed](examples/tests/contract/reports/execution-boundaries-regression-results.xml)；[冒烟回归：5 passed，1 skipped](examples/tests/smoke/reports/execution-boundaries-smoke-results.xml)
-- [输出修正契约：16 passed](examples/tests/contract/reports/agent-loop-output-correction-results.xml)；[冒烟回归：5 passed，1 skipped](examples/tests/smoke/reports/output-correction-smoke-results.xml)
-- [主循环正常路径契约：3 passed](examples/tests/contract/reports/agent-loop-normal-results.xml)；[对应冒烟回归：5 passed，1 skipped](examples/tests/smoke/reports/agent-loop-normal-smoke-results.xml)
-- [当前冒烟：5 passed，1 skipped](examples/tests/smoke/reports/scope-aligned-smoke-results.xml)
-- [初始冒烟：5 passed，1 skipped](examples/tests/smoke/reports/smoke-results.xml)
-- [显式真实模型冒烟：1 passed](examples/tests/smoke/reports/live-smoke-network-results.xml)；[实际输出](examples/tests/smoke/runs/real/2f49173f9b8540b8af130a1e735b8430/output.json)。首次受限环境连接失败的记录另见评估文档。
-- [离线冒烟实际输出](examples/tests/smoke/runs/mock/7882cbd51ad8437e9901d74fa081be6b/output.json)
-- [离线冒烟 Trace](examples/tests/smoke/runs/mock/7882cbd51ad8437e9901d74fa081be6b/trace.jsonl)
-- [真实模式缺少密钥的中断记录](examples/tests/smoke/runs/real/b31b71e307f14fbe980e1843cb1f7712/output.json)：没有发送真实 API 请求，不能作为真实模型效果证据。
+- 当前目录整理回归：检索 47、主循环 57、接入冒烟 5 项通过，真实 API 1 项跳过；[评估与报告](docs/03-evaluation.md)。
+- [执行边界：38 passed](examples/agent_loop/reports/contract/agent-loop-execution-boundaries-results.xml)；[前两步回归：19 passed](examples/agent_loop/reports/contract/execution-boundaries-regression-results.xml)；[冒烟回归：5 passed，1 skipped](examples/integration/reports/smoke/execution-boundaries-smoke-results.xml)
+- [输出修正契约：16 passed](examples/agent_loop/reports/contract/agent-loop-output-correction-results.xml)；[冒烟回归：5 passed，1 skipped](examples/integration/reports/smoke/output-correction-smoke-results.xml)
+- [主循环正常路径契约：3 passed](examples/agent_loop/reports/contract/agent-loop-normal-results.xml)；[对应冒烟回归：5 passed，1 skipped](examples/integration/reports/smoke/agent-loop-normal-smoke-results.xml)
+- [当前冒烟：5 passed，1 skipped](examples/integration/reports/smoke/scope-aligned-smoke-results.xml)
+- [初始冒烟：5 passed，1 skipped](examples/integration/reports/smoke/smoke-results.xml)
+- [显式真实模型冒烟：1 passed](examples/integration/reports/smoke/live-smoke-network-results.xml)；[实际输出](examples/integration/outputs/cli_real/2f49173f9b8540b8af130a1e735b8430/output.json)。首次受限环境连接失败的记录另见评估文档。
+- [离线冒烟实际输出](examples/integration/outputs/cli_mock/7882cbd51ad8437e9901d74fa081be6b/output.json)
+- [离线冒烟 Trace](examples/integration/traces/cli_mock/7882cbd51ad8437e9901d74fa081be6b/trace.jsonl)
+- [真实模式缺少密钥的中断记录](examples/integration/outputs/cli_real/b31b71e307f14fbe980e1843cb1f7712/output.json)：没有发送真实 API 请求，不能作为真实模型效果证据。
 
 ## 组件职责
 
@@ -114,17 +150,20 @@ src/knowledge_agent/
   mock_model.py            # 显式冒烟脚本
   runtime.py               # 单轮协调、终止及结果保存
   trace.py                 # 运行材料持久化
+  retrieval/               # 独立搜索：tokenizer、分块、快照、BM25、分页及工具入口
 tests/
-  smoke/                   # 启动、配置与端到端冒烟
-  contract/agent_loop/      # 正常路径、输出修正、预算、传输、超时与取消
+  retrieval/               # 内部分 smoke、contract、business
+  agent_loop/              # 内部分 contract、boundary
+  integration/smoke/       # CLI、主循环与占位工具接入冒烟
+  e2e/                     # 最终完整业务验收，当前仅说明
+  support/                 # 共享隔离与材料导出
 data/
   smoke/                   # 合成接入资料
-  fixtures/                # 一份 F1 制度样例，尚未业务验收
+  fixtures/                # F1 单规则、F2 冲突原文
+  prepared/                # 正式 tokenizer 生成的离线块与指纹
 examples/
-  traces/                  # 业务正常流、异常流验证；尚未生成记录
-  tests/smoke/reports/      # 开发阶段冒烟测试报告
-  tests/smoke/runs/         # 冒烟输入、输出和调试 Trace，按模式和运行 ID 分组
-  tests/contract/reports/   # 主循环契约与回归报告
+  retrieval/, agent_loop/, integration/, e2e/
+                           # 各自 inputs、outputs、traces、reports，按实际材料建立
 ```
 
 CLI 和测试复用同一运行器，真实与 Mock 模式复用同一 Agent、工具和证据链。后续可替换资料源、扩展工具契约，不需要复制整套运行流程。
@@ -143,9 +182,9 @@ PYTHONPATH=src python -m knowledge_agent smoke --mode mock --output-dir runtime/
 
 ## 未完成范围
 
-当前已通过一次真实模型冒烟；六类业务验收、至少两条真实差异路径、完整工具协议、分块与检索、多轮历史、完整故障注入和评估器均未完成。简单引用校验仅保证出处与文字一致，不保证结论受引用支持。
+当前已通过一次历史真实模型冒烟；六类 Agent 业务验收、至少两条真实差异路径、完整读取工具、向量／混合检索、多轮历史和完整评估器均未完成。简单引用校验仅保证出处与文字一致，不保证结论受引用支持。
 
-当前完成底座、端到端冒烟及主循环三步契约，另保留 F1 原文样例。工具仍为最小占位资料源；完整工具协议、CLI 展示与多轮会话另行开发。下一阶段建议按 solution 实现资料分块、精确定位及基础检索。
+当前独立 BM25 搜索及其所需分块／定位已有单工具验证；Agent 仍使用原有占位工具。下一步可基于同一资料快照实现读取工具，再另行接入主循环并回归。
 
 [PRD](docs/01-requirements.md) · [技术方案](docs/02-solution.md) · [AI 使用记录](docs/04-ai-usage.md)
 

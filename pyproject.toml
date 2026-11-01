@@ -23,8 +23,9 @@ testpaths = ["tests"]
 pythonpath = ["src"]
 addopts = "--strict-markers"
 markers = [
-  "smoke: minimal startup and end-to-end integration checks",
+  "smoke: minimal startup and execution checks within the selected scope",
   "live: explicitly enabled real API calls (requires credentials)",
-  "contract: protocol and component boundary tests (future phase)",
-  "business: business acceptance scenarios (future phase)",
+  "contract: input/output protocols and component contracts",
+  "business: business behavior within the selected scope, not necessarily full E2E",
+  "boundary: limits, deadlines, cancellation and recovery boundaries",
 ]

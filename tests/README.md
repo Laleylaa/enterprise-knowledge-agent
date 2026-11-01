@@ -1,36 +1,64 @@
 # 测试范围与分类
 
-当前维护启动、配置与端到端冒烟，以及主循环正常路径、输出修正、执行边界的契约测试，使用已确认的 Markdown 原文＋manifest 元数据清单。每实现一部分功能，再编写该部分测试；不提前生成全部业务用例或为尚未实现的接口固定测试格式。
+先按被测范围分目录：各模块、integration、e2e、support；模块和流程内部再按冒烟、契约、业务、边界分类。有实际用例才增加分类目录，不提前铺开全量业务测试。
 
-| 当前文件 | 职责 |
-|---|---|
-| `smoke/test_cli.py` | 启动、配置优先级与脱敏、离线端到端、缺少密钥与非法配置的启动检查 |
-| `smoke/test_live.py` | 显式启用的真实模型接入冒烟，默认跳过 |
-| `contract/agent_loop/test_normal_flow.py` | 检索后结束、继续读取后结束、无工具直接澄清；仅验证框架控制流 |
-| `contract/agent_loop/test_output_correction.py` | 结构／引用错误反馈、混合响应、共享输出修正额度；16 个参数化用例 |
-| `contract/agent_loop/test_budgets.py` | 模型／工具上限、批量串行执行、参数错误与重复调用计数；8 项 |
-| `contract/agent_loop/test_transport.py` | 真实 SDK＋本地 HTTP 模拟，验证错误分类、重试、HTTP 上限与资源关闭；20 项 |
-| `contract/agent_loop/test_timeouts.py` | 模型／工具／整轮超时，模型／工具／重试等待时取消及材料保存；10 项 |
-| `contract/agent_loop/conftest.py` | 只供主循环契约使用的本地配置与网络隔离 |
-| `smoke/conftest.py` | 隔离本机配置，明确指定冒烟 manifest 与临时输出目录 |
-
-离线端到端检查覆盖：读取 manifest 及 Markdown → 模型脚本选择工具 → 实际本地工具返回 → 结果与引用校验 → 保存输出及 Trace，并核对资料快照和引用来自原文。封锁网络、移除密钥，脚本结果不证明真实模型能力。
-
-```sh
-python -m pytest tests/smoke -q --junitxml=examples/tests/smoke/reports/scope-aligned-smoke-results.xml
-python -m pytest tests/contract/agent_loop/test_normal_flow.py -q --junitxml=examples/tests/contract/reports/agent-loop-normal-results.xml
-python -m pytest tests/contract/agent_loop/test_output_correction.py -q --junitxml=examples/tests/contract/reports/agent-loop-output-correction-results.xml
-python -m pytest tests/contract/agent_loop/test_budgets.py tests/contract/agent_loop/test_transport.py tests/contract/agent_loop/test_timeouts.py -q --junitxml=examples/tests/contract/reports/agent-loop-execution-boundaries-results.xml
-# 仅在需要显式验证真实接入时运行
-python -m pytest tests/smoke/test_live.py --run-live -q
+```text
+tests/
+  retrieval/
+    smoke/          # 独立工具启动与 CLI
+    contract/       # 参数、返回、证据、分页、分块与版本协议
+    business/       # 支持条款、改写、冲突召回、资料缺口及故障
+  agent_loop/
+    conftest.py     # 主循环局部 fixture，供契约与边界共享
+    contract/       # 正常继续／结束、输出修正协议
+    boundary/       # 预算、传输重试、超时与取消
+  integration/
+    smoke/          # 正式 CLI → 主循环 → 原占位工具的接入冒烟
+  e2e/              # 最终完整业务验收；当前仅有范围说明
+  support/          # 可复用 fixture、隔离与材料导出
 ```
 
-当前契约测试在 `tests/contract/agent_loop/`，通过注入 PydanticAI FunctionModel 受控响应运行同一 runtime、实际工具及证据校验，不另写测试循环。传输测试改用实际 SDK 与 `httpx2.MockTransport`，仅允许本地模拟响应，socket／DNS 仍封锁；其他测试禁用真实模型请求。临时运行材料由 pytest 管理，交付测试报告在 examples/tests/contract/reports。脚本响应不证明真实模型决策效果。
+目录表示主要验证目的；例如分页极值同时属于接口契约，不为满足分类数量重复编写用例。pytest 的 smoke、contract、business、boundary 标记与分类对应，可用 `-m` 筛选。检索业务测试只检查工具业务行为，不等于完整 Agent 业务验收。
 
-第 2 步验证 ToolOutput 参数结构、引用和混合响应修正；第 3 步验证执行边界。批量请求超过剩余额度时整批拒绝且不计为接纳；额度充足时逐个计数，再串行执行，失败／参数错误／重复请求均占额度。工具超时返回错误交给模型，不自动重跑工具；整轮超时或取消停止后续调用并保存已有证据。异步超时测试不覆盖未来的 CPU embedding 工作进程。后续逐部分开发；多轮会话、业务验收及对应规格在实现时再创建测试，Q01～Q18 目前仍只在 solution 中规划。
+## 当前检索工具
+
+| 文件 | 范围 | 已有实际结果 |
+|---|---|---|
+| `retrieval/smoke/test_search_smoke.py` | 无 tokenizer／密钥／网络的工具启动与 CLI | 2 passed |
+| `retrieval/contract/test_search_tool.py` | 参数、原文证据、ID 过滤、部分错误、排序、分页、预算和故障 | 25 passed |
+| `retrieval/contract/test_preparation.py` | 章节／块、真实 tokenizer 预算、快照／索引失效、原文覆盖 | 13 passed |
+| `retrieval/business/test_search_effects.py` | 明确条款、改写、冲突双方、资料外查询、线索、故障及替换 | 7 passed |
+
+```sh
+python -m pytest tests/retrieval/smoke -q --junitxml=examples/retrieval/reports/smoke/current-results.xml
+python -m pytest tests/retrieval/contract -q --junitxml=examples/retrieval/reports/contract/current-results.xml
+python -m pytest tests/retrieval/business -q --junitxml=examples/retrieval/reports/business/current-results.xml --examples-dir=examples
+```
+
+测试直接执行 SearchTool，封锁 Agent.run／run_sync、真实模型请求与网络，未接入 Agent 主循环。基础检索使用已提交的预生成块；真实重分块测试需要显式下载固定 tokenizer，缺失时明确跳过，不用字符计数 Mock 替代。临时压力文本与资料替换只写临时目录。
+
+## 主循环与接入
+
+主循环正常路径 3 项、输出修正 16 项；边界 38 项（预算 8、传输 20、超时与取消 10）。使用 FunctionModel 受控响应或实际 SDK＋本地 MockTransport，禁止真实网络。脚本行为只证明程序控制流与协议。
+
+接入冒烟为 5 个默认离线检查及 1 个需显式启用的真实 API 检查；覆盖配置、正式入口、manifest＋Markdown、原占位工具、引用校验与记录。当前真实检索尚未接入，不能当作题目的完整验收。
+
+```sh
+python -m pytest tests/agent_loop/contract -q --junitxml=examples/agent_loop/reports/contract/current-results.xml
+python -m pytest tests/agent_loop/boundary -q --junitxml=examples/agent_loop/reports/boundary/current-results.xml
+python -m pytest tests/integration/smoke -q --junitxml=examples/integration/reports/smoke/current-results.xml --examples-dir=examples
+# 按范围和目的组合筛选
+python -m pytest tests/retrieval -m smoke -q
+# 仅在需要显式验证真实接入时运行，会使用 API 额度
+python -m pytest tests/integration/smoke/test_live.py --run-live -q --examples-dir=examples
+```
 
 ## 材料保存
 
-- 测试代码在 tests，实际测试报告在 `examples/tests/<类别>/reports/`；需要留存的调试记录在同类别 runs 下，普通中间文件使用临时目录。
-- 正常流、异常流的业务实际输入、输出及过程保存在 `examples/traces/`，当前尚无业务验收记录。
-- 日常试跑仍写入被 Git 忽略的 runtime；历史实际报告保留并注明对应阶段，不当作当前可复现的测试清单。
+`tests/` 存代码；`examples/<模块或流程>/` 下分 inputs、outputs、traces、reports。所有范围都可以有 Trace。详情及历史实际运行索引见 [examples](../examples/README.md)。
+
+默认运行仅使用 pytest 临时目录；加 `--examples-dir=examples` 后，已登记的检索业务运行与 CLI 冒烟运行在测试清理时导出，断言失败也保存已经产生的材料。不登记的小型参数断言只需测试报告。该参数不启用真实 API，真实调用仍必须加 `--run-live`。
+
+公共导出器位于 `support/artifacts.py`：保留原始文件字节，用相同 case_id／run_id 分目录保存，并生成含路径及 SHA-256 的 artifacts.json。实际输入按运行留快照，不把后续修改的输入误配给旧结果；已有不同内容禁止覆盖。未来用例通过 archive_run fixture 登记，无须修改业务运行器。
+
+JUnit 报告通过 `--junitxml` 单独指定。示例中的 current-results.xml 是最新结果；需要保留多次结果时使用不同文件名。原历史报告原样保留，内部旧源码路径反映当时阶段，不宣称为当前测试清单。support 是辅助代码，不在 examples 下建立镜像目录。

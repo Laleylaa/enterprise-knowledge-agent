@@ -1,0 +1,2 @@
+{"run_id": "8063cef779984265a898a47aab9d01d3", "sequence": 1, "timestamp": "2026-11-01T06:53:47.654539+00:00", "event_type": "tool_started", "origin": "runtime", "payload": {"tool": "search_knowledge", "tool_call_id": "search-1", "arguments": {"query": "育儿假天数", "purpose": "查找可核对的制度原文"}}}
+{"run_id": "8063cef779984265a898a47aab9d01d3", "sequence": 2, "timestamp": "2026-11-01T06:53:47.654761+00:00", "event_type": "tool_result", "origin": "runtime", "payload": {"tool": "search_knowledge", "tool_call_id": "search-1", "status": "empty", "doc_ids": [], "error_codes": []}}

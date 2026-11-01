@@ -1,0 +1,7 @@
+{
+  "scope": "single_search_tool",
+  "model_calls": 0,
+  "replacement": "30→20",
+  "new_clause_found": true,
+  "stale_clause_found": false
+}

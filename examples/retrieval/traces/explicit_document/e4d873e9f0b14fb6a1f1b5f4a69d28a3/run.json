@@ -1,0 +1,17 @@
+{
+  "run_id": "e4d873e9f0b14fb6a1f1b5f4a69d28a3",
+  "stage": "standalone_search_tool",
+  "origin": "direct_tool",
+  "model_calls": 0,
+  "retrieval": "bm25",
+  "config": {
+    "max_tool_chars": 12000,
+    "chunk_target_tokens": 320,
+    "chunk_max_tokens": 480,
+    "chunk_overlap_tokens": 48,
+    "bm25_k1": 1.5,
+    "bm25_b": 0.75,
+    "bm25_epsilon": 0.25,
+    "search_cursor_capacity": 256
+  }
+}

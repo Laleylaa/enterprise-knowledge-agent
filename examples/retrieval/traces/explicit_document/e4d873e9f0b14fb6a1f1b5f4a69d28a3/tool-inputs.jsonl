@@ -1,0 +1,1 @@
+{"tool": "search_knowledge", "tool_call_id": "search-1", "arguments": {"query": "", "purpose": "查找可核对的制度原文", "doc_ids": ["D02"]}}
