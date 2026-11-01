@@ -11,7 +11,7 @@ examples/
     smoke/
       reports/                      # 冒烟测试报告
       runs/<mode>/<run_id>/          # 冒烟输入、输出、资料及调试 Trace
-    contract/                       # 后续契约测试材料，尚未创建
+    contract/reports/               # 主循环正常路径、输出修正与执行边界契约报告
     business/                       # 后续业务自动断言报告，尚未创建
 ```
 
@@ -39,3 +39,9 @@ examples/
 历史阶段报告：[静态规格检查](tests/smoke/reports/case-catalog-results.xml)、[当时回归](tests/smoke/reports/data-baseline-smoke-results.xml)、[加载检查阶段](tests/smoke/reports/document-source-smoke-results.xml)。对应的全量规格与独立检查已按开发范围清理，报告只保留历史事实，不作为当前测试覆盖或业务验收证据。
 
 当前范围回归：[scope-aligned-smoke-results.xml](tests/smoke/reports/scope-aligned-smoke-results.xml)，5 passed、1 skipped；端到端读取 manifest＋Markdown，未调用真实 API。
+
+主循环正常路径第 1 步：[契约报告](tests/contract/reports/agent-loop-normal-results.xml)（3 passed）、[冒烟回归](tests/smoke/reports/agent-loop-normal-smoke-results.xml)（5 passed、1 skipped）。受控模型＋实际本地工具，仅验证正常继续和结束，不计为真实业务决策证据。
+
+主循环输出修正第 2 步：[输出修正契约报告](tests/contract/reports/agent-loop-output-correction-results.xml)（16 passed）、[正常路径回归](tests/contract/reports/agent-loop-normal-regression-results.xml)（3 passed）、[冒烟回归](tests/smoke/reports/output-correction-smoke-results.xml)（5 passed、1 skipped）。本地受控模型，仅验证程序协议和修正额度。
+
+主循环执行边界第 3 步：[预算／传输／超时／取消报告](tests/contract/reports/agent-loop-execution-boundaries-results.xml)（38 passed）、[前两步回归](tests/contract/reports/execution-boundaries-regression-results.xml)（19 passed）、[冒烟回归](tests/smoke/reports/execution-boundaries-smoke-results.xml)（5 passed、1 skipped）。传输测试标记 mode=real 以运行真实 SDK，但 HTTP 由本地 MockTransport 替换，未连接服务；不作为真实 API 或业务决策证据。逐次输入输出在 pytest 临时目录验证，报告按契约／冒烟分类保存。

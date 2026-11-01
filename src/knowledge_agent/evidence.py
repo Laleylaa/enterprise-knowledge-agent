@@ -32,12 +32,12 @@ class EvidenceStore:
                 item.delivered_to_model = True
 
     def validate(self, result: Answer) -> None:
-        for citation in result.citations:
+        for index, citation in enumerate(result.citations):
             item = self._items.get(citation.evidence_id)
             if item is None or not item.delivered_to_model:
-                raise ValueError("引用必须来自本轮已反馈给模型的证据。")
+                raise ValueError(f"citations.{index}.evidence_id：引用必须来自本轮已反馈给模型的证据。")
             if citation.doc_id != item.doc_id or citation.quote not in item.text:
-                raise ValueError("引用文档不匹配，或引文不是对应原文的连续片段。")
+                raise ValueError(f"citations.{index}：引用文档不匹配，或引文不是对应原文的连续片段。")
 
     def snapshot(self) -> list[Evidence]:
         return [item.model_copy(deep=True) for item in self._items.values()]

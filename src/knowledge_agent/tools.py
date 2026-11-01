@@ -9,11 +9,9 @@ BUSINESS_TOOLS = frozenset({"search_knowledge", "read_document"})
 
 
 def _result(ctx: RunContext[TurnContext], tool: str, documents: list[Document],
-            purpose: str, arguments: dict, *, missing: bool = False) -> dict:
+            *, error: dict | None = None) -> dict:
     state = ctx.deps
     call_id = ctx.tool_call_id or f"local-{state.usage.tool_calls}"
-    state.recorder.event("tool_started", tool=tool, tool_call_id=call_id,
-                         arguments=arguments, purpose=purpose)
     items = []
     for document in documents:
         evidence = state.evidence.add(document, call_id)
@@ -36,10 +34,9 @@ def _result(ctx: RunContext[TurnContext], tool: str, documents: list[Document],
         "tool": tool,
         "tool_call_id": call_id,
         "corpus_hash": state.source.corpus_hash,
-        "status": "error" if missing else "ok" if items else "empty",
+        "status": "error" if error else "ok" if items else "empty",
         "data": {"hits": items if is_search else [], "segments": [] if is_search else items, "locators": []},
-        "errors": [{"code": "NOT_FOUND", "message": "该文档不在本次资料快照中。",
-                    "retryable": False, "target": {"kind": "doc", "id": arguments["doc_id"]}}] if missing else [],
+        "errors": [error] if error else [],
         "execution": {"strategy": state.source.strategy, "requested_mode": "smoke_fixture" if is_search else None,
                       "effective_branches": [], "next_cursor": None, "has_more": False, "return_limited": False},
     }
@@ -49,6 +46,11 @@ def _result(ctx: RunContext[TurnContext], tool: str, documents: list[Document],
     return result
 
 
+def tool_error(ctx: RunContext[TurnContext], tool: str, code: str, message: str) -> dict:
+    return _result(ctx, tool, [], error={"code": code, "message": message,
+                                       "retryable": True, "target": {"kind": "tool", "id": tool}})
+
+
 async def search_knowledge(ctx: RunContext[TurnContext], query: NonEmpty, purpose: NonEmpty) -> dict:
     """取得冒烟资料候选。仅返回本次小型合成资料全集；尚未实现关键词或向量排序。
 
@@ -56,7 +58,7 @@ async def search_knowledge(ctx: RunContext[TurnContext], query: NonEmpty, purpos
         query: 要查找的制度问题；冒烟资料源不会按此参数筛选。
         purpose: 简短行动目的，不要提供内部思维过程。
     """
-    return _result(ctx, "search_knowledge", ctx.deps.source.candidates(), purpose, {"query": query})
+    return _result(ctx, "search_knowledge", ctx.deps.source.candidates())
 
 
 async def read_document(ctx: RunContext[TurnContext], doc_id: NonEmpty, purpose: NonEmpty) -> dict:
@@ -67,5 +69,6 @@ async def read_document(ctx: RunContext[TurnContext], doc_id: NonEmpty, purpose:
         purpose: 简短行动目的，不要提供内部思维过程。
     """
     document = ctx.deps.source.get(doc_id)
-    return _result(ctx, "read_document", [document] if document else [], purpose,
-                   {"doc_id": doc_id}, missing=document is None)
+    error = None if document else {"code": "NOT_FOUND", "message": "该文档不在本次资料快照中。",
+                                  "retryable": False, "target": {"kind": "doc", "id": doc_id}}
+    return _result(ctx, "read_document", [document] if document else [], error=error)

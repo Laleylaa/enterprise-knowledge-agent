@@ -6,7 +6,7 @@ from dataclasses import asdict
 from typing import AsyncIterator
 
 from openai import AsyncOpenAI
-from pydantic_ai.exceptions import ModelAPIError, ModelConnectionError, ModelHTTPError
+from pydantic_ai.exceptions import ModelAPIError, ModelConnectionError, ModelHTTPError, ModelRequestTimeout
 from pydantic_ai.messages import ModelMessage, ModelMessagesTypeAdapter, ModelRequest, ToolCallPart, ToolReturnPart
 from pydantic_ai.models import Model
 from pydantic_ai.models.openai import OpenAIChatModel, OpenAIChatModelSettings
@@ -14,9 +14,11 @@ from pydantic_ai.models.wrapper import WrapperModel
 from pydantic_ai.providers.deepseek import DeepSeekProvider
 
 from knowledge_agent.config import Settings
+from knowledge_agent.budgets import admit_tools, begin_attempt, begin_model_turn, check_http_capacity, check_time
 from knowledge_agent.context import TurnContext
 from knowledge_agent.errors import RunStopped
 from knowledge_agent.mock_model import create_smoke_model
+from knowledge_agent.output_validation import MIXED_OUTPUT_REASON, reject_output
 from knowledge_agent.tools import BUSINESS_TOOLS
 
 
@@ -56,17 +58,10 @@ class RecordedModel(WrapperModel):
 
     async def request(self, messages, model_settings, model_request_parameters):
         state, settings = self.state, self.state.settings
-        if state.usage.model_turns >= settings.max_model_turns:
-            raise RunStopped("model_turn_limit", "达到模型决策轮次上限，处理尚未完成。")
-        if state.usage.tool_calls >= settings.max_tool_calls:
-            raise RunStopped("tool_call_limit", "达到工具调用上限，处理尚未完成。")
-        state.usage.model_turns += 1
+        begin_model_turn(state)
         turn = state.usage.model_turns
         for attempt in range(settings.transport_retries + 1):
-            if settings.mode == "real":
-                if state.usage.http_attempts >= settings.max_http_attempts:
-                    raise RunStopped("http_attempt_limit", "达到模型请求尝试上限。")
-                state.usage.http_attempts += 1
+            begin_attempt(state)
             state.recorder.append("model-inputs.jsonl", {
                 "model_turn": turn, "attempt": attempt + 1,
                 "messages": public_messages(messages),
@@ -84,25 +79,22 @@ class RecordedModel(WrapperModel):
                 break
             except (ModelAPIError, TimeoutError) as exc:
                 status = exc.status_code if isinstance(exc, ModelHTTPError) else None
-                retryable = isinstance(exc, (ModelConnectionError, TimeoutError)) or status in {429, 500, 502, 503, 504}
+                retryable = isinstance(exc, (ModelConnectionError, ModelRequestTimeout, TimeoutError)) or status in {429, 500, 502, 503, 504}
                 state.recorder.event("model_request_failed", model_turn=turn, attempt=attempt + 1,
                                      error_type=type(exc).__name__, status_code=status, retryable=retryable)
                 if not retryable or attempt >= settings.transport_retries:
                     raise RunStopped("model_request_failed", "模型请求失败且无法继续；请检查服务、凭证或网络。") from exc
+                check_http_capacity(state)
                 state.recorder.event("model_request_retry", model_turn=turn)
                 await asyncio.sleep(0.25)
+        check_time(state)
         state.recorder.event("model_response", origin=settings.mode, model_turn=turn,
                              model_name=response.model_name, messages=public_messages([response]))
         calls = [p for p in response.parts if isinstance(p, ToolCallPart)]
         business = [p for p in calls if p.tool_name in BUSINESS_TOOLS]
         output_names = {t.name for t in model_request_parameters.output_tools}
         state.mixed_response = bool(business and any(p.tool_name in output_names for p in calls))
-        if business and state.usage.model_turns >= settings.max_model_turns:
-            raise RunStopped("model_turn_limit", "没有剩余模型轮次观察新工具结果，处理尚未完成。")
-        for call in business:
-            if state.usage.tool_calls >= settings.max_tool_calls:
-                raise RunStopped("tool_call_limit", "达到工具调用上限，处理尚未完成。")
-            state.usage.tool_calls += 1
-            state.recorder.event("tool_requested", origin=settings.mode, model_turn=turn,
-                                 tool=call.tool_name, tool_call_id=call.tool_call_id, arguments=call.args)
+        if state.mixed_response:
+            reject_output(state, MIXED_OUTPUT_REASON, "mixed_response")
+        admit_tools(state, business)
         return response

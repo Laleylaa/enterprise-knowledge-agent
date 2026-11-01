@@ -1,6 +1,6 @@
 # 企业知识问答 Agent
 
-当前阶段：**最小工程底座与端到端冒烟**。已具备 CLI → PydanticAI → 本地工具 → 结构化结果 → 文件记录的运行链路。
+当前阶段：**工程底座、端到端冒烟及主循环正常路径、输出修正、执行边界契约**。已具备 CLI → PydanticAI → 本地工具 → 结构化结果 → 文件记录的运行链路。
 
 目前使用 `data/smoke/manifest.json` 的小型合成资料。`search_knowledge` 返回这份资料集的全部候选，明确标记 `smoke_fixture`，**尚未实现 BM25、向量或混合检索**。此入口用于验证接入，不代表完整企业知识问答产品。
 
@@ -59,7 +59,7 @@ PYTHONPATH=src python -m knowledge_agent --help
 
 配置全部集中在 `src/knowledge_agent/config.py`，每次启动加载一次并显式传给各组件。优先级：**CLI 参数 > 系统环境变量 > 当前工作目录的 `.env` > 默认值**。路径相对于启动目录；建议始终在仓库根目录运行。配置导出只显示密钥是否存在，不输出密钥值。
 
-主要配置见 `.env.example`：模型、资料及输出路径、模型轮次、HTTP 尝试、工具次数、输出修正、单次及整轮超时。基础上限已接入；精确边界、混合响应和异常重试等仍待后续契约验证。当前只有 `smoke` 与 `config` 命令，solution 规划的 `chat / prepare / evaluate` 尚未提供。
+主要配置见 `.env.example`：模型、资料及输出路径、模型轮次、HTTP 尝试、工具次数、输出修正、单次及整轮超时。上述边界已有本地受控验证；模型传输最多重试一次，超限返回 incomplete，取消时尽力保存已有证据。工具超时目前覆盖可取消的异步调用；后续本地 embedding 仍需可终止的工作进程。当前只有 `smoke` 与 `config` 命令，solution 规划的 `chat / prepare / evaluate` 尚未提供。
 
 退出码：0 表示本轮正常交付（包括正常的未解决／待补充）；1 表示未完成；2 表示配置、输入或材料读写失败；130 表示用户中断。
 
@@ -67,17 +67,26 @@ PYTHONPATH=src python -m knowledge_agent --help
 
 ```sh
 # 本阶段全部冒烟；真实 API 用例默认跳过
-python -m pytest tests/smoke -q --junitxml=examples/tests/smoke/reports/scope-aligned-smoke-results.xml
+python -m pytest tests/smoke -q --junitxml=examples/tests/smoke/reports/execution-boundaries-smoke-results.xml
 
 # 配好本机密钥后，显式执行真实模型冒烟
 python -m pytest tests/smoke/test_live.py --run-live -q
 ```
 
-所有测试按目的分类，详见 [tests/README.md](tests/README.md)。本阶段仅编写和执行冒烟测试，契约测试与业务验收留到后续阶段。
+所有测试按目的分类，详见 [tests/README.md](tests/README.md)。正常路径 3 项，输出修正 16 项，执行边界 38 项（预算 8、传输 20、超时与取消 10）。后者使用受控模型及 SDK 本地 HTTP 模拟，封锁网络，不调用真实 API；不证明业务语义或真实服务稳定性。
+
+```sh
+python -m pytest tests/contract/agent_loop/test_normal_flow.py -q --junitxml=examples/tests/contract/reports/agent-loop-normal-results.xml
+python -m pytest tests/contract/agent_loop/test_output_correction.py -q --junitxml=examples/tests/contract/reports/agent-loop-output-correction-results.xml
+python -m pytest tests/contract/agent_loop/test_budgets.py tests/contract/agent_loop/test_transport.py tests/contract/agent_loop/test_timeouts.py -q --junitxml=examples/tests/contract/reports/agent-loop-execution-boundaries-results.xml
+```
 
 开发测试材料位于 `examples/tests/`，用于检查程序是否正确；业务正常流、异常流的输入、实际输出及行动过程位于 `examples/traces/`，用于核对 Agent 行为与结果。当前业务验证目录只有规范说明，尚无验收记录。完整索引见 [examples/README.md](examples/README.md)。
 
 - [本阶段评估与限制](docs/03-evaluation.md)
+- [执行边界：38 passed](examples/tests/contract/reports/agent-loop-execution-boundaries-results.xml)；[前两步回归：19 passed](examples/tests/contract/reports/execution-boundaries-regression-results.xml)；[冒烟回归：5 passed，1 skipped](examples/tests/smoke/reports/execution-boundaries-smoke-results.xml)
+- [输出修正契约：16 passed](examples/tests/contract/reports/agent-loop-output-correction-results.xml)；[冒烟回归：5 passed，1 skipped](examples/tests/smoke/reports/output-correction-smoke-results.xml)
+- [主循环正常路径契约：3 passed](examples/tests/contract/reports/agent-loop-normal-results.xml)；[对应冒烟回归：5 passed，1 skipped](examples/tests/smoke/reports/agent-loop-normal-smoke-results.xml)
 - [当前冒烟：5 passed，1 skipped](examples/tests/smoke/reports/scope-aligned-smoke-results.xml)
 - [初始冒烟：5 passed，1 skipped](examples/tests/smoke/reports/smoke-results.xml)
 - [显式真实模型冒烟：1 passed](examples/tests/smoke/reports/live-smoke-network-results.xml)；[实际输出](examples/tests/smoke/runs/real/2f49173f9b8540b8af130a1e735b8430/output.json)。首次受限环境连接失败的记录另见评估文档。
@@ -97,13 +106,17 @@ src/knowledge_agent/
   corpus.py                # 只读资料接口及冒烟资料源
   tools.py                 # 框架工具与资料接口适配
   evidence.py              # 本轮证据登记、原文引用校验
-  agent.py                 # Agent 装配、指令及输出校验
+  agent.py                 # Agent 装配、指令及引用校验
+  output_validation.py     # 结构错误反馈、混合终态拒绝、共享修正额度
+  budgets.py               # 模型／HTTP／工具的接纳计数与整轮截止检查
+  execution_policy.py      # 框架工具执行钩子、异步超时和取消
   model_adapter.py         # 模型创建、请求记录与有限重试
   mock_model.py            # 显式冒烟脚本
   runtime.py               # 单轮协调、终止及结果保存
   trace.py                 # 运行材料持久化
 tests/
   smoke/                   # 启动、配置与端到端冒烟
+  contract/agent_loop/      # 正常路径、输出修正、预算、传输、超时与取消
 data/
   smoke/                   # 合成接入资料
   fixtures/                # 一份 F1 制度样例，尚未业务验收
@@ -111,6 +124,7 @@ examples/
   traces/                  # 业务正常流、异常流验证；尚未生成记录
   tests/smoke/reports/      # 开发阶段冒烟测试报告
   tests/smoke/runs/         # 冒烟输入、输出和调试 Trace，按模式和运行 ID 分组
+  tests/contract/reports/   # 主循环契约与回归报告
 ```
 
 CLI 和测试复用同一运行器，真实与 Mock 模式复用同一 Agent、工具和证据链。后续可替换资料源、扩展工具契约，不需要复制整套运行流程。
@@ -131,7 +145,7 @@ PYTHONPATH=src python -m knowledge_agent smoke --mode mock --output-dir runtime/
 
 当前已通过一次真实模型冒烟；六类业务验收、至少两条真实差异路径、完整工具协议、分块与检索、多轮历史、完整故障注入和评估器均未完成。简单引用校验仅保证出处与文字一致，不保证结论受引用支持。
 
-当前交付只完成底座与端到端冒烟，另保留 F1 原文样例，不宣称 solution 第 13 节第一阶段的全部接入检查完成。下一步按确认的阶段补齐契约验证及基础检索。
+当前完成底座、端到端冒烟及主循环三步契约，另保留 F1 原文样例。工具仍为最小占位资料源；完整工具协议、CLI 展示与多轮会话另行开发。下一阶段建议按 solution 实现资料分块、精确定位及基础检索。
 
 [PRD](docs/01-requirements.md) · [技术方案](docs/02-solution.md) · [AI 使用记录](docs/04-ai-usage.md)
 

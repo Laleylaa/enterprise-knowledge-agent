@@ -1,13 +1,17 @@
 """Single-turn coordination; reusable by CLI and later evaluation entry points."""
 
 import asyncio
+from collections.abc import Callable
+from contextlib import AbstractAsyncContextManager
 from time import monotonic
 from uuid import uuid4
 
 from pydantic_ai.exceptions import UnexpectedModelBehavior, UsageLimitExceeded
 from pydantic_ai.usage import UsageLimits
+from pydantic_ai.models import Model
 
 from knowledge_agent.agent import build_agent
+from knowledge_agent.budgets import check_time
 from knowledge_agent.config import Settings
 from knowledge_agent.context import TurnContext
 from knowledge_agent.corpus import KnowledgeSource
@@ -17,6 +21,8 @@ from knowledge_agent.model_adapter import RecordedModel, open_model
 from knowledge_agent.schemas import Answer, RunResult, Usage
 from knowledge_agent.trace import RunRecorder
 
+ModelFactory = Callable[[Settings], AbstractAsyncContextManager[Model]]
+
 
 def incomplete(message: str) -> Answer:
     return Answer(status="incomplete", answer=message, citations=[],
@@ -24,13 +30,22 @@ def incomplete(message: str) -> Answer:
                   decision_summary="程序记录执行中断事实，未生成后续模型决策。")
 
 
-async def run_turn(question: str, settings: Settings, source: KnowledgeSource) -> RunResult:
+async def run_turn(
+    question: str, settings: Settings, source: KnowledgeSource,
+    *, model_factory: ModelFactory | None = None,
+) -> RunResult:
+    """Run the same framework loop with a production or explicitly supplied model.
+
+    A supplied factory owns model resource lifetime only; tools, observations,
+    validation and recording still go through the normal runtime.
+    """
     if not question.strip() or len(question) > settings.max_input_chars:
         raise ValueError("问题不能为空，且不得超过配置的字符上限。")
     started = monotonic()
     run_id = uuid4().hex
     recorder = RunRecorder(settings.output_dir / settings.mode / run_id, run_id)
-    state = TurnContext(settings, source, EvidenceStore(run_id, source.corpus_hash), recorder, Usage())
+    state = TurnContext(settings, source, EvidenceStore(run_id, source.corpus_hash), recorder, Usage(),
+                        deadline=started + settings.turn_timeout)
     recorder.write("input.json", {"question": question, "effective_history": [], "config": settings.public_config()})
     recorder.write("corpus.json", {"corpus_hash": source.corpus_hash, "documents": source.snapshot()})
     recorder.event("input_accepted")
@@ -38,11 +53,12 @@ async def run_turn(question: str, settings: Settings, source: KnowledgeSource) -
     reason = "completed"
     cancelled = False
     try:
-        async with asyncio.timeout(settings.turn_timeout):
-            async with open_model(settings) as model:
+        async with asyncio.timeout(max(0, state.deadline - monotonic())):
+            async with (model_factory or open_model)(settings) as model:
                 agent = build_agent(RecordedModel(model, state), state)
                 result = await agent.run(question, deps=state,
-                                         usage_limits=UsageLimits(request_limit=settings.max_model_turns))
+                                         usage_limits=UsageLimits(request_limit=None))
+                check_time(state)
                 answer = result.output
     except RunStopped as exc:
         reason, origin, answer = exc.reason, "runtime_fallback", incomplete(str(exc))
