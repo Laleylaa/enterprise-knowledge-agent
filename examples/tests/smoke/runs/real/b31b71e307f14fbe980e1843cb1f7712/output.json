@@ -1,0 +1,24 @@
+{
+  "run_id": "b31b71e307f14fbe980e1843cb1f7712",
+  "mode": "real",
+  "stage": "integration_smoke",
+  "requested_retrieval": "smoke_fixture",
+  "result_origin": "runtime_fallback",
+  "termination_reason": "missing_api_key",
+  "result": {
+    "status": "incomplete",
+    "answer": "真实模式缺少 DEEPSEEK_API_KEY，未调用模型，也未切换 Mock。",
+    "citations": [],
+    "gaps": [
+      "当前问题的回答或查证尚未完成。"
+    ],
+    "clarification": null,
+    "decision_summary": "程序记录执行中断事实，未生成后续模型决策。"
+  },
+  "observed_evidence": [],
+  "usage": {
+    "model_turns": 0,
+    "http_attempts": 0,
+    "tool_calls": 0
+  }
+}

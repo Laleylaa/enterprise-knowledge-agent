@@ -1,0 +1,2 @@
+{"run_id": "b31b71e307f14fbe980e1843cb1f7712", "sequence": 1, "timestamp": "2026-11-01T04:44:33.483807+00:00", "event_type": "input_accepted", "origin": "runtime", "payload": {}}
+{"run_id": "b31b71e307f14fbe980e1843cb1f7712", "sequence": 2, "timestamp": "2026-11-01T04:44:33.483925+00:00", "event_type": "final_result", "origin": "runtime", "payload": {"status": "incomplete", "termination_reason": "missing_api_key", "result_origin": "runtime_fallback"}}

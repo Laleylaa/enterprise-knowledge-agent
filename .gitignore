@@ -16,6 +16,11 @@ __pycache__/
 .pytest_cache/
 .mypy_cache/
 .ruff_cache/
+.tox/
+.nox/
+.hypothesis/
+/.cache/
+/.uv-cache/
 
 # Coverage and build output
 .coverage
@@ -28,6 +33,11 @@ dist/
 # Local databases, logs, and execution artifacts
 # Keep submission traces and test results in examples/.
 /runtime/
+# Local model downloads and derived caches; keep synthetic data/prepared fixtures tracked.
+/models/
+/checkpoints/
+/data/cache/
+/tmp/
 *.log
 
 # Editor and operating-system files

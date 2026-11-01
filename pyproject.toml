@@ -1,0 +1,30 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "enterprise-knowledge-agent"
+version = "0.1.0"
+description = "Evidence-based employee policy agent — initial integration scaffold"
+requires-python = ">=3.11,<3.13"
+dynamic = ["dependencies"]
+
+[project.scripts]
+knowledge-agent = "knowledge_agent.cli:main"
+
+[tool.setuptools.dynamic]
+dependencies = {file = ["requirements.txt"]}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+addopts = "--strict-markers"
+markers = [
+  "smoke: minimal startup and end-to-end integration checks",
+  "live: explicitly enabled real API calls (requires credentials)",
+  "contract: protocol and component boundary tests (future phase)",
+  "business: business acceptance scenarios (future phase)",
+]

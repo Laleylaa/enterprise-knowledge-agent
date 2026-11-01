@@ -1,0 +1,12 @@
+{
+  "run_id": "b31b71e307f14fbe980e1843cb1f7712",
+  "elapsed_seconds": 0.0007408750097965822,
+  "usage": {
+    "model_turns": 0,
+    "http_attempts": 0,
+    "tool_calls": 0
+  },
+  "artifacts_saved": true,
+  "mode": "real",
+  "stage": "integration_smoke"
+}

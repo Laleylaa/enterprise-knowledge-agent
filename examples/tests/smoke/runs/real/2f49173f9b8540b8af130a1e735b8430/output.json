@@ -1,0 +1,55 @@
+{
+  "run_id": "2f49173f9b8540b8af130a1e735b8430",
+  "mode": "real",
+  "stage": "integration_smoke",
+  "requested_retrieval": "smoke_fixture",
+  "result_origin": "model",
+  "termination_reason": "completed",
+  "result": {
+    "status": "resolved",
+    "answer": "根据《合成国内差旅报销制度》（2026-01-01 版），国内差旅报销须在行程结束后 30 天内提交。",
+    "citations": [
+      {
+        "evidence_id": "2f49173f9b8540b8af130a1e735b8430:E1",
+        "doc_id": "D01",
+        "quote": "国内差旅报销须在行程结束后 30 天内提交。"
+      }
+    ],
+    "gaps": [],
+    "clarification": null,
+    "decision_summary": "检索并读取国内差旅报销制度原文，直接引用其时限条款作答。"
+  },
+  "observed_evidence": [
+    {
+      "evidence_id": "2f49173f9b8540b8af130a1e735b8430:E1",
+      "tool_call_id": "call_00_HZmNk3d3Um5YOFkkRfcA0704",
+      "corpus_hash": "9d8587fced1c93bc9a9ff84ce9795dc257d0d882bf3e35cce17b1abc74a452c3",
+      "doc_id": "D01",
+      "title": "合成国内差旅报销制度",
+      "version_date": "2026-01-01",
+      "content_hash": "7d428bf7e3c66eb1e5e601b06c6cedaaad2369a6ff41971fdbb693653223963e",
+      "start": 0,
+      "end": 22,
+      "text": "国内差旅报销须在行程结束后 30 天内提交。",
+      "delivered_to_model": true
+    },
+    {
+      "evidence_id": "2f49173f9b8540b8af130a1e735b8430:E2",
+      "tool_call_id": "call_00_Sn557aaz6YVJDRu599Qr9266",
+      "corpus_hash": "9d8587fced1c93bc9a9ff84ce9795dc257d0d882bf3e35cce17b1abc74a452c3",
+      "doc_id": "D01",
+      "title": "合成国内差旅报销制度",
+      "version_date": "2026-01-01",
+      "content_hash": "7d428bf7e3c66eb1e5e601b06c6cedaaad2369a6ff41971fdbb693653223963e",
+      "start": 0,
+      "end": 22,
+      "text": "国内差旅报销须在行程结束后 30 天内提交。",
+      "delivered_to_model": true
+    }
+  ],
+  "usage": {
+    "model_turns": 4,
+    "http_attempts": 4,
+    "tool_calls": 2
+  }
+}
