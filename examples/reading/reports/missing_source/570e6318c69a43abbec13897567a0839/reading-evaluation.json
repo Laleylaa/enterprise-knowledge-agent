@@ -1,0 +1,9 @@
+{
+  "scope": "single_read_tool",
+  "model_calls": 0,
+  "status": "error",
+  "error_codes": [
+    "NOT_FOUND"
+  ],
+  "evidence_count": 0
+}

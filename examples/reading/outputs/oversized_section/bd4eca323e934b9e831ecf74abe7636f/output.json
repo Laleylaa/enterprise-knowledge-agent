@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "tool": "read_document",
+  "tool_call_id": "read-local-2",
+  "corpus_hash": "206bb6a754343e60df827b453f6e3e90096d94b123e522887d2aa3007ea54b53",
+  "status": "ok",
+  "data": {
+    "hits": [],
+    "segments": [
+      {
+        "evidence_id": "bd4eca323e934b9e831ecf74abe7636f:E3",
+        "doc_id": "D10",
+        "title": "合成差旅报销办理说明",
+        "version_date": "2026-01-01",
+        "content_hash": "20aae3dded91d77d05bbb6b4604921425acf7bfcca99b5b5f16c655ed1e59abe",
+        "section_id": "D10-S0002",
+        "section_heading": "提交与补充材料",
+        "heading_span": {
+          "start": 45,
+          "end": 52
+        },
+        "chunk_id": "D10-C0004",
+        "source_span": {
+          "start": 543,
+          "end": 633
+        },
+        "text": "申请编号只能用于定位办理记录，不能作为制度适用范围或优先级的判断依据。\n\n9. 本节上述提交期限仅适用于国内差旅。海外差旅的提交期限须另查相应制度，不能据本节推定为 30 天。\n\n"
+      }
+    ],
+    "locators": []
+  },
+  "errors": [],
+  "execution": {
+    "strategy": "chunk",
+    "requested_mode": null,
+    "effective_branches": [],
+    "next_cursor": null,
+    "has_more": false,
+    "return_limited": false
+  }
+}

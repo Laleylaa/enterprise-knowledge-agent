@@ -40,6 +40,7 @@ class Settings(BaseSettings):
     bm25_b: float = Field(default=0.75, ge=0, le=1)
     bm25_epsilon: float = Field(default=0.25, ge=0)
     search_cursor_capacity: int = Field(default=256, ge=1)
+    read_cursor_capacity: int = Field(default=256, ge=1)
 
     @model_validator(mode="after")
     def consistent_chunk_limits(self) -> "Settings":

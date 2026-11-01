@@ -1,0 +1,9 @@
+{
+  "tool": "read_document",
+  "tool_call_id": "read-section",
+  "arguments": {
+    "doc_id": "D10",
+    "purpose": "取得可核对的制度原文",
+    "section_id": "D10-S0002"
+  }
+}

@@ -1,0 +1,42 @@
+{
+  "case_id": "policy_after",
+  "run_id": "44eb0be58d3c49919ffb055ff063a364",
+  "artifacts": [
+    {
+      "path": "inputs/policy_after/44eb0be58d3c49919ffb055ff063a364/corpus.json",
+      "sha256": "952cbd0140aedce0c1a13a3df05f2fbafb2909f70b70c8276d0e83a67ed949e0"
+    },
+    {
+      "path": "inputs/policy_after/44eb0be58d3c49919ffb055ff063a364/input.json",
+      "sha256": "9643fbe3424b0f8ebe3d393c43a3793d9d76bf31c23144ecfca7123175b965a7"
+    },
+    {
+      "path": "traces/policy_after/44eb0be58d3c49919ffb055ff063a364/observed-evidence.json",
+      "sha256": "6cceb7d3d8299fdcd33c6dfd049e09adf08a8c168220e281b3ab186e7a9113cc"
+    },
+    {
+      "path": "outputs/policy_after/44eb0be58d3c49919ffb055ff063a364/output.json",
+      "sha256": "59284f09d4809fd21ea7d4d83c7bfe0645cdea34ab3c6128dbbc8423f54f68cb"
+    },
+    {
+      "path": "reports/policy_after/44eb0be58d3c49919ffb055ff063a364/reading-evaluation.json",
+      "sha256": "20ea620805f91c7a9dc40ea0e9e4ec783a493d0db6e22d244abc723de5cd33df"
+    },
+    {
+      "path": "traces/policy_after/44eb0be58d3c49919ffb055ff063a364/run.json",
+      "sha256": "3418e5bb687407de09f38e5f75ee0f645585efe696603bbf0eebbd5835d6ec95"
+    },
+    {
+      "path": "traces/policy_after/44eb0be58d3c49919ffb055ff063a364/tool-inputs.jsonl",
+      "sha256": "d986401270f843cb6a6c53e4c238f340f095634063201e69f6c5ad2853da38e2"
+    },
+    {
+      "path": "traces/policy_after/44eb0be58d3c49919ffb055ff063a364/tool-results.jsonl",
+      "sha256": "74556f68a2987c318bddad661eebebe25558bce0194bda93be764b9e168786d8"
+    },
+    {
+      "path": "traces/policy_after/44eb0be58d3c49919ffb055ff063a364/trace.jsonl",
+      "sha256": "1270e1ed28e7db365ad8bf3c2064b00eda28fb07f07bddb43c375f2514845795"
+    }
+  ]
+}

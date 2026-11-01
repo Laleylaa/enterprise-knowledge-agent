@@ -1,0 +1,2 @@
+{"run_id": "570e6318c69a43abbec13897567a0839", "sequence": 1, "timestamp": "2026-11-01T07:59:51.048421+00:00", "event_type": "tool_started", "origin": "runtime", "payload": {"tool": "read_document", "tool_call_id": "read-1", "arguments": {"doc_id": "D99", "purpose": "取得可核对的制度原文"}}}
+{"run_id": "570e6318c69a43abbec13897567a0839", "sequence": 2, "timestamp": "2026-11-01T07:59:51.048597+00:00", "event_type": "tool_result", "origin": "runtime", "payload": {"tool": "read_document", "tool_call_id": "read-1", "status": "error", "doc_ids": [], "error_codes": ["NOT_FOUND"]}}

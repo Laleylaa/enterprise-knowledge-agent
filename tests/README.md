@@ -8,6 +8,11 @@ tests/
     smoke/          # 独立工具启动与 CLI
     contract/       # 参数、返回、证据、分页、分块与版本协议
     business/       # 支持条款、改写、冲突召回、资料缺口及故障
+  reading/
+    smoke/          # 独立读取启动与 CLI
+    contract/       # 选择器、来源／引用、搜索定位兼容与记录
+    business/       # 全文、章节补读、冲突原文、资料缺失、故障及替换
+    boundary/       # 超限定位、游标隔离／容量、预算边界与原文字符
   agent_loop/
     conftest.py     # 主循环局部 fixture，供契约与边界共享
     contract/       # 正常继续／结束、输出修正协议
@@ -36,6 +41,24 @@ python -m pytest tests/retrieval/business -q --junitxml=examples/retrieval/repor
 ```
 
 测试直接执行 SearchTool，封锁 Agent.run／run_sync、真实模型请求与网络，未接入 Agent 主循环。基础检索使用已提交的预生成块；真实重分块测试需要显式下载固定 tokenizer，缺失时明确跳过，不用字符计数 Mock 替代。临时压力文本与资料替换只写临时目录。
+
+## 当前读取工具
+
+| 文件 | 范围 | 实际结果 |
+|---|---|---|
+| `reading/smoke/test_read_smoke.py` | 无 tokenizer／密钥／网络读取；CLI 成功与未知文档 | 3 passed |
+| `reading/contract/test_read_tool.py` | 参数、全文／章节／块、跨文档定位、搜索 ID／证据兼容、精确引用和记录失败 | 23 passed |
+| `reading/business/test_read_effects.py` | 明确原文、章节补读、冲突来源、缺失 ID、读取故障、超限局部读取及资料替换 | 7 passed |
+| `reading/boundary/test_read_limits.py` | 多页定位不漏项、游标隔离／过期、字符预算边界、块预算防循环、Unicode／CRLF／ROOT | 14 passed |
+
+```sh
+python -m pytest tests/reading/smoke -q --junitxml=examples/reading/reports/smoke/current-results.xml
+python -m pytest tests/reading/contract -q --junitxml=examples/reading/reports/contract/current-results.xml
+python -m pytest tests/reading/business -q --junitxml=examples/reading/reports/business/current-results.xml --examples-dir=examples
+python -m pytest tests/reading/boundary -q --junitxml=examples/reading/reports/boundary/current-results.xml
+```
+
+复用 retrieval_settings 封锁网络和 Agent；没有真实模型或主循环调用。R1 专项原文的预生成块支持离线章节补读；大型章节、无标题 Unicode 原文及资料替换测试使用本机固定 tokenizer 在临时目录正式准备，未安装 tokenizer 时相应项明确跳过。业务用例通过 archive_run 导出到 examples/reading；测试选择补读动作不等于模型自主决策。直接搜索与读取的兼容检查属于工具契约，不是 Agent 联调。
 
 ## 主循环与接入
 

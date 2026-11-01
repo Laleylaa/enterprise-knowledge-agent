@@ -1,0 +1,11 @@
+{
+  "scope": "single_read_tool",
+  "model_calls": 0,
+  "returned_documents": [
+    "D01",
+    "D02"
+  ],
+  "first_rule_present": true,
+  "second_rule_present": true,
+  "adjudication": false
+}

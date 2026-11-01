@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "documents": [
+    {
+      "doc_id": "D10",
+      "title": "合成差旅报销办理说明",
+      "version_date": "2026-01-01",
+      "source_path": "documents/D10.md"
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "tool": "read_document",
+  "tool_call_id": "read-1",
+  "corpus_hash": "5863212f2b2165ea6237b6a33d04f736d827ec23201925879cb106faf8c533c8",
+  "status": "error",
+  "data": {
+    "hits": [],
+    "segments": [],
+    "locators": []
+  },
+  "errors": [
+    {
+      "code": "NOT_FOUND",
+      "message": "文档 ID 不在本次资料快照中。",
+      "retryable": false,
+      "target": {
+        "kind": "doc",
+        "id": "D99"
+      }
+    }
+  ],
+  "execution": {
+    "strategy": "document",
+    "requested_mode": null,
+    "effective_branches": [],
+    "next_cursor": null,
+    "has_more": false,
+    "return_limited": false
+  }
+}

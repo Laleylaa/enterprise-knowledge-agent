@@ -1,10 +1,10 @@
 # 企业知识问答 Agent
 
-当前阶段：**主循环基线已建立；新增独立 BM25 检索工具及单工具测试**。新检索尚未接入 Agent，完整读取工具待实现。
+当前阶段：**主循环基线、独立 BM25 检索及独立原文读取工具已建立**。两个正式工具均尚未接入 Agent。
 
 现有 Agent 的 `smoke` 入口仍使用 `data/smoke/manifest.json`，其占位搜索返回资料全集并标记 `smoke_fixture`。新检索通过下方独立入口执行真实 BM25，支持过滤、精确 ID 定位和分页；向量、混合检索仍未实现。
 
-知识库统一采用 [Markdown 原文＋元数据清单](data/README.md)，目前有最小冒烟资料、F1 单规则和 F2 冲突资料，以及正式生成的离线原文块。Q01～Q18 的 Agent 验收仍未执行，不将单工具检索效果计为 Agent 验收成绩。
+知识库统一采用 [Markdown 原文＋元数据清单](data/README.md)，目前有最小冒烟资料、F1 单规则、F2 冲突和 R1 章节补读资料，以及正式生成的离线原文块。Q01～Q18 的 Agent 验收仍未执行，不将单工具效果计为 Agent 验收成绩。
 
 ## 环境与安装
 
@@ -24,7 +24,7 @@ python -m pip install -r requirements.txt
 
 ## 运行
 
-### 独立检索工具（本次开发入口）
+### 独立检索工具
 
 依赖安装后，使用仓库内预生成块即可离线搜索，无须密钥或 tokenizer 文件：
 
@@ -59,6 +59,26 @@ python -m pytest tests/retrieval/business -q
 实际结果为 **2／38／7 项通过**。搜索及分页测试直接使用离线块；重新分块、资料替换等测试使用真实本地 tokenizer，未下载时会明确跳过相应项。三类测试均封锁网络和 Agent 调用；本次未运行 Agent 联调测试。
 
 当前两种报销问法均在前 5 个候选中取得支持条款，但支持条款都位于第 3 位；冲突双方均取得。小型资料集上的结果不代表复杂知识库效果，详情及实际记录见 [评估](docs/03-evaluation.md#独立检索工具bm25)。
+
+### 独立读取工具（本次开发入口）
+
+```sh
+PYTHONPATH=src python -m knowledge_agent.reading \
+  --corpus data/fixtures/F1_single_rule/manifest.json \
+  --prepared data/prepared/F1_single_rule.json \
+  --doc-id D01 --output-dir runtime/read-tool
+```
+
+可选 `--section-id` 或 `--chunk-id`，分别读取章节或块；不传则读取全文。定位来自同一资料快照的搜索结果。全文／章节超过预算时返回 `CONTENT_TOO_LARGE` 和局部读取定位，不截断正文。游标续页使用同一工具实例，详见 [读取工具说明](src/knowledge_agent/reading/README.md)。该入口不调用 Agent 或模型。
+
+```sh
+python -m pytest tests/reading/smoke -q
+python -m pytest tests/reading/contract -q
+python -m pytest tests/reading/business -q --examples-dir=examples
+python -m pytest tests/reading/boundary -q
+```
+
+读取测试共 47 项：冒烟 3、契约 23、业务 7、边界 14。测试封锁网络和 Agent；部分重准备／压力用例需要本地固定 tokenizer，缺失时明确跳过。实际材料与报告见 [读取工具记录](examples/reading/README.md)。章节扩展由测试直接调用验证，不作为模型自主补读或 P2 真实路径证据。
 
 ### 离线冒烟
 
@@ -95,7 +115,7 @@ PYTHONPATH=src python -m knowledge_agent --help
 
 配置全部集中在 `src/knowledge_agent/config.py`，每次启动加载一次并显式传给各组件。优先级：**CLI 参数 > 系统环境变量 > 当前工作目录的 `.env` > 默认值**。路径相对于启动目录；建议始终在仓库根目录运行。配置导出只显示密钥是否存在，不输出密钥值。
 
-主要配置见 `.env.example`：模型、资料及输出路径、模型轮次、HTTP 尝试、工具次数、输出修正、单次及整轮超时。上述边界已有本地受控验证；模型传输最多重试一次，超限返回 incomplete，取消时尽力保存已有证据。工具超时目前覆盖可取消的异步调用；后续本地 embedding 仍需可终止的工作进程。当前只有 `smoke` 与 `config` 命令，solution 规划的 `chat / prepare / evaluate` 尚未提供。
+主要配置见 `.env.example`：模型、资料及输出路径、模型轮次、HTTP 尝试、工具次数、输出修正、单次及整轮超时。上述边界已有本地受控验证；模型传输最多重试一次，超限返回 incomplete，取消时尽力保存已有证据。工具超时目前覆盖可取消的异步调用；后续本地 embedding 仍需可终止的工作进程。Agent 入口仍只有 `smoke` 与 `config`；工具的独立准备、搜索和读取入口不等于 solution 规划的统一 `chat / prepare / evaluate`。
 
 退出码：0 表示本轮正常交付（包括正常的未解决／待补充）；1 表示未完成；2 表示配置、输入或材料读写失败；130 表示用户中断。
 
@@ -151,18 +171,20 @@ src/knowledge_agent/
   runtime.py               # 单轮协调、终止及结果保存
   trace.py                 # 运行材料持久化
   retrieval/               # 独立搜索：tokenizer、分块、快照、BM25、分页及工具入口
+  reading/                 # 独立读取：全文／章节／块、超限定位分页及工具入口
 tests/
   retrieval/               # 内部分 smoke、contract、business
+  reading/                 # 内部分 smoke、contract、business、boundary
   agent_loop/              # 内部分 contract、boundary
   integration/smoke/       # CLI、主循环与占位工具接入冒烟
   e2e/                     # 最终完整业务验收，当前仅说明
   support/                 # 共享隔离与材料导出
 data/
   smoke/                   # 合成接入资料
-  fixtures/                # F1 单规则、F2 冲突原文
+  fixtures/                # F1 单规则、F2 冲突、R1 章节补读原文
   prepared/                # 正式 tokenizer 生成的离线块与指纹
 examples/
-  retrieval/, agent_loop/, integration/, e2e/
+  retrieval/, reading/, agent_loop/, integration/, e2e/
                            # 各自 inputs、outputs、traces、reports，按实际材料建立
 ```
 
@@ -182,9 +204,9 @@ PYTHONPATH=src python -m knowledge_agent smoke --mode mock --output-dir runtime/
 
 ## 未完成范围
 
-当前已通过一次历史真实模型冒烟；六类 Agent 业务验收、至少两条真实差异路径、完整读取工具、向量／混合检索、多轮历史和完整评估器均未完成。简单引用校验仅保证出处与文字一致，不保证结论受引用支持。
+当前已通过一次历史真实模型冒烟；六类 Agent 业务验收、至少两条真实差异路径、正式工具接入、向量／混合检索、多轮历史和完整评估器均未完成。简单引用校验仅保证出处与文字一致，不保证结论受引用支持。
 
-当前独立 BM25 搜索及其所需分块／定位已有单工具验证；Agent 仍使用原有占位工具。下一步可基于同一资料快照实现读取工具，再另行接入主循环并回归。
+当前独立 BM25 搜索与读取工具均已有单工具验证，并直接验证搜索定位到章节／块读取的契约兼容；Agent 仍使用原有占位工具。下一步另行接入主循环并回归。
 
 [PRD](docs/01-requirements.md) · [技术方案](docs/02-solution.md) · [AI 使用记录](docs/04-ai-usage.md)
 

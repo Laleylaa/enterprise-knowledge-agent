@@ -12,6 +12,8 @@ examples/
     reports/<case_id>/<run_id>/ # 每次执行的效果核对
   agent_loop/
     reports/                   # 当前只选留报告；单次运行在 pytest 临时目录
+  reading/                     # 独立读取工具，含直接搜索定位到读取的契约记录
+    inputs/, outputs/, traces/, reports/
   integration/                 # 当前 CLI 与占位工具接入冒烟
     inputs/, outputs/, traces/, reports/
   e2e/                         # 最终题目验收，当前只有说明
@@ -20,6 +22,8 @@ examples/
 同一次运行通过 case_id／run_id 关联三个目录。每次保留实际输入快照，包含资料／索引配置；traces 中的 artifacts.json 列出当次文件路径与 SHA-256。工具参数、工具返回和证据属于执行中间过程；最终结果与运行摘要放 outputs；评估侧指标放 reports，不作为模型输入。
 
 可执行代码在仓库根目录 tests。support 是辅助代码，无需材料镜像。未产生材料的分类不建空目录。e2e 的范围和真实／Mock 边界见 [完整验收说明](e2e/README.md)。
+
+最新独立读取材料见 [reading/README.md](reading/README.md)：47 项测试通过，业务记录包括正常、章节补读、冲突双方原文、缺失 ID、注入读取故障、超限局部读取和资料替换。均为工具直接调用，不接 Agent，不作为真实决策或完整 Q01～Q18 验收成绩。
 
 ## 当前材料索引
 

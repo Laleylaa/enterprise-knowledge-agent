@@ -1,6 +1,6 @@
 # 开发评估记录
 
-记录日期：2026-11-01。当前维护接入底座、主循环基线及独立检索工具验证，不代表 PRD 业务验收通过。
+记录日期：2026-11-01。当前维护接入底座、主循环基线及独立检索／读取工具验证，不代表 PRD 业务验收通过。
 
 ## 环境
 
@@ -207,11 +207,41 @@ python -m pytest tests/agent_loop -q --junitxml=examples/agent_loop/reports/orga
 python -m pytest tests/integration/smoke -q --junitxml=examples/integration/reports/smoke/organization-module-results.xml
 ```
 
+## 独立读取工具
+
+按用户确认的范围，仅实现读取工具本身及单工具测试，不接 Agent 主循环。复用原文加载、RetrievalSnapshot、Section／Chunk ID、EvidenceStore、RunRecorder；没有另建一套正文、章节或证据身份。全文、章节、块读取分别返回实际原文范围；未知 ID、跨文档选择器、读取故障和超限分开报告。全文／章节超限不返回截断正文，只给每页最多 20 项定位；块读取不自动扩大到章节。
+
+| 层次 | 实际结果 | 报告 |
+|---|---|---|
+| 冒烟 | 3 passed，0.02s | [读取冒烟](../examples/reading/reports/smoke/read-tool-results.xml) |
+| 契约 | 23 passed，0.39s | [读取契约](../examples/reading/reports/contract/read-tool-results.xml) |
+| 业务 | 7 passed，0.39s | [读取业务](../examples/reading/reports/business/read-tool-results.xml) |
+| 边界 | 14 passed，1.06s | [读取边界](../examples/reading/reports/boundary/read-tool-results.xml) |
+| 原检索回归 | 47 passed，8.06s | [搜索兼容回归](../examples/retrieval/reports/read-tool-compatibility-results.xml) |
+
+读取共 47 项通过，无跳过；检索另 47 项通过。未运行 Agent 主循环或集成测试，未调用真实 API，没有新增依赖。读取基础测试只用提交的预生成块；超大章节、Unicode 原文和资料替换测试用已缓存的固定真实 tokenizer，复现机器未准备时会明确跳过，不得宣称全部通过。
+
+实际输入、输出、Trace、证据和逐组指标在 [读取材料索引](../examples/reading/README.md)，通过 case_id／run_id 与 artifacts.json 关联。业务记录的结果为：
+
+- 明确原文：全文分段拼接等于 Markdown 原文，保留国内差旅、行程结束和 30 天条件。
+- 章节扩展：R1 的期限块不含第 9 条适用范围；按搜索结果的 section_id 读取后，取得“仅适用于国内差旅”的原文。同一 chunk_id 读取只返回原块及标题。
+- 冲突来源：分别读取 D01 的 30 天与 D02 的 15 天，保留双方来源，不生成制度裁决。
+- 缺失资料定位：D99 返回 NOT_FOUND 和具体目标，没有证据，不声称制度不存在。
+- 工具故障：测试向 RetrievalSnapshot.get 注入一次 OSError；返回 READ_FAILED，实际尝试 1 次、证据 0，不自动重试或泄漏异常内容。
+- 超限章节：340 字符预算下返回 CONTENT_TOO_LARGE 和 3 个块定位，随后按各 read_args 读取成功并取得范围条款；这些动作由测试发起。
+- 资料替换：临时原文从 30 天改为 20 天；已打开快照保持原文，新装配重准备后读取 20 天，版本指纹改变；前后两次运行互相记录 run_id。
+
+首次章节扩展测试从多个实际搜索候选中选取期限块，证明定位兼容，但不能证明首次整体观察缺少范围。为明确补读前提，随后收紧为 query=“草稿保存时间”、limit=1，实际唯一返回期限块；补读取得范围。针对变更用例复测 **1 passed，0.23s**，见 [收紧后的报告](../examples/reading/reports/business/section-expansion-refined-results.xml)。两次实际材料均保留并在索引中区分；不是失败后隐藏记录，也不是模型决定使用 limit=1。
+
+边界测试另检查全文／章节恰好容纳与少 1 字符的区别、超过 20 项的定位完整性、选择器范围、块读取可恢复、跨工具／实例／快照游标拒绝、游标容量淘汰和重放、分离标题不得拼接引用、未反馈证据不得引用、无标题 ROOT 和 Unicode／CRLF。输入错误不访问来源，记录写入失败直接传播，不伪装成成功或 READ_FAILED。
+
+**限制：** 所有运行 model_calls=0、delivered_to_model=false（引用校验单元测试仅在内存模拟投递标记）。不提供最终 Agent 答案，不计入真实 P2、冲突查证、工具恢复或六类题目验收。章节沿用现有 ATX Section 划分，没有新增章节树；同步内存工具未验证 Agent 异步超时。独立入口多次调用时 input/output 为最后一次，JSONL 保留全部过程；正式接入需将整轮材料写入职责交由运行器管理。
+
 ## 限制与下一阶段
 
 - 独立检索阶段只验证单工具；目录整理时额外复跑原主循环与接入基线，仍未联通新检索。Q01～Q18 的完整 Agent 场景尚未验收，不报告 Agent 业务通过率。
 - Agent 的 `smoke_fixture` 仍直接返回小型资料集；独立搜索已实现 BM25，尚未接入 Agent，不能把原冒烟描述为新检索联调。
-- 独立搜索实现当前 BM25 搜索契约；完整读取工具、向量及混合搜索尚未实现。
+- 独立搜索实现 BM25 搜索契约，独立读取已实现全文／章节／块及超限定位契约；两者尚未接入主循环，向量及混合搜索尚未实现。
 - 真实接入已通过一次实际工具闭环；当前版本仍仅作为冒烟环境基线，完整接入契约待验证。
 - 同批工具与终态、共享输出修正额度、模型／工具预算、错误参数计数、传输重试及异步超时／取消已受控验证；完整工具协议、CPU 工作进程及 CLI 中断展示仍待对应模块开发。
 - 当前仅单题 CLI，没有历史、多轮问答或完整离线场景集合。

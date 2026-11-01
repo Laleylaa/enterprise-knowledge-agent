@@ -43,7 +43,8 @@
 | [smoke/manifest.json](smoke/manifest.json) | 最小冒烟资料也采用正式格式；原有单句正文及脚本前提保持不变 |
 | [F1 清单](fixtures/F1_single_rule/manifest.json)、[D01 原文](fixtures/F1_single_rule/documents/D01.md) | 已准备一份有章节的制度，包含提交期限及处理状态说明；没有凭证要求 |
 | [F2 清单](fixtures/F2_conflicting_rules/manifest.json) | 独立冲突资料：D01 为 30 天，D02 为 15 天；相同日期，不提供优先级或范围解释 |
-| [prepared](prepared/README.md) | F1、F2 的正式 tokenizer 预生成块，支持无网络、无 tokenizer 文件的基础搜索 |
+| [R1 清单](fixtures/R1_section_context/manifest.json) | 独立读取专项：期限与适用范围在同一章节的不同块；验证按搜索定位扩展读取，非 Agent 业务验收资料集 |
+| [prepared](prepared/README.md) | F1、F2、R1 的正式 tokenizer 预生成块，支持无网络、无 tokenizer 文件的基础搜索与读取 |
 
 F1 和 F2 已用于独立搜索工具的测试，不表示 Q01／Q02 的 Agent 行为已验收，也不是当前固定 Mock 脚本的输入。原有 Agent 冒烟仍只使用 smoke/manifest.json。
 
