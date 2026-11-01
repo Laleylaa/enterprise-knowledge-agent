@@ -1,0 +1,7 @@
+{
+  "run_id": "258c2d6f87d6446684a5c57f58c7b5dc",
+  "stage": "agent_tool_calls",
+  "model_origin": "scripted_function_model",
+  "live_model": false,
+  "boundary": "stop_after_tool_observation_no_final_answer"
+}

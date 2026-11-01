@@ -1,6 +1,6 @@
 # 独立原文读取工具
 
-本组件实现 solution §5.3，不导入或执行 Agent。主循环的 `tools.py` 冒烟读取保持原样；正式接入留给后续阶段。
+本组件实现 solution §5.3，不导入或执行 Agent。正式接入由 `tool_binding.py` 的标准函数工具注册完成；原 `tools.py` 冒烟读取继续供 smoke_fixture 使用。
 
 ## 调用与来源契约
 
@@ -61,4 +61,4 @@ if result["data"]["locators"]:
 
 与现有搜索入口一致，多次调用的 input.json/output.json 是最后一次调用，tool-inputs.jsonl/tool-results.jsonl 和 Trace 保留全过程。run.json 标明 standalone_read_tool、model_calls=0；corpus.json 保留原文及派生块。评估通过统一导出器保存到 examples/reading 的 inputs、outputs、traces、reports，以 case_id/run_id 关联。
 
-正式 Agent 接入时须共享运行上下文，并将这些独立入口的 input/output 记录职责移到单轮运行器，避免覆盖整轮结果；当前尚未接入。章节范围沿用现有 ATX 标题切分的 Section，不新增 Markdown 章节树。同步内存读取不包含模型决策、异步超时或大规模文件系统性能验证。
+正式 Agent 绑定使用 standalone=False，共享本轮快照、证据和 recorder，跳过独立入口 input/output 写入以及工具开始事件；运行器保存整轮材料，执行钩子记录开始。原文返回和证据登记逻辑复用本组件；接入测试见 [FC 记录](../../../examples/integration/tool-calls.md)。章节范围沿用现有 ATX 标题切分的 Section，不新增 Markdown 章节树。同步内存读取不包含模型决策、强制异步中断或大规模文件系统性能验证。

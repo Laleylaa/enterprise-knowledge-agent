@@ -14,7 +14,7 @@ examples/
     reports/                   # 当前只选留报告；单次运行在 pytest 临时目录
   reading/                     # 独立读取工具，含直接搜索定位到读取的契约记录
     inputs/, outputs/, traces/, reports/
-  integration/                 # 当前 CLI 与占位工具接入冒烟
+  integration/                 # 原 CLI 冒烟，以及正式工具 FC 接入
     inputs/, outputs/, traces/, reports/
   e2e/                         # 最终题目验收，当前只有说明
 ```
@@ -24,6 +24,8 @@ examples/
 可执行代码在仓库根目录 tests。support 是辅助代码，无需材料镜像。未产生材料的分类不建空目录。e2e 的范围和真实／Mock 边界见 [完整验收说明](e2e/README.md)。
 
 最新独立读取材料见 [reading/README.md](reading/README.md)：47 项测试通过，业务记录包括正常、章节补读、冲突双方原文、缺失 ID、注入读取故障、超限局部读取和资料替换。均为工具直接调用，不接 Agent，不作为真实决策或完整 Q01～Q18 验收成绩。
+
+最新正式工具接入材料见 [integration/tool-calls.md](integration/tool-calls.md)：12 项框架 FC 集成与 2 项 SDK 本地 HTTP 协议测试通过，实际工具结果已反馈给受控模型。它们属于 agent_tool_calls 范围，停止于工具观察，output.json 不包含最终业务答案。没有真实服务请求，不归入 e2e，也不计为真实模型差异路径。
 
 ## 当前材料索引
 

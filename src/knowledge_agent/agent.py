@@ -8,9 +8,10 @@ from knowledge_agent.execution_policy import ToolExecutionPolicy
 from knowledge_agent.output_validation import OutputValidationPolicy, reject_output
 from knowledge_agent.schemas import Answer
 from knowledge_agent.tools import read_document, search_knowledge
+from knowledge_agent.tool_binding import register_knowledge_tools
 
 INSTRUCTIONS = """
-你是员工制度问答助手。本次是接入冒烟，工具资料为合成资料。
+你是员工制度问答助手，工具资料为合成资料。
 根据当前问题自主选择检索或读取工具，再依据实际工具结果决定继续或结束。
 无需制度依据即可提出必要澄清时，可以直接提交澄清结果；不强制先调用工具。
 制度结论必须依据本轮工具取得的原文；不要凭常识、用户声明或历史回答补充制度。
@@ -20,6 +21,9 @@ INSTRUCTIONS = """
 所有诉求有依据才 resolved；具体追问用 needs_info；无依据且无具体追问用 unresolved；
 必要处理被故障中断用 incomplete。工具失败不等于资料不存在。
 工具调用和最终结果应分开提交，先观察工具结果再决定是否结束。
+搜索返回原文块和定位信息；证据已充分时可以直接结束，不必重复读取。
+需要扩大上下文时，用命中块的 doc_id 与 section_id 读取章节，或仅用 doc_id 读取全文。
+chunk_id 只读取该块，不自动扩大到章节；CONTENT_TOO_LARGE 的 locators 仅为定位，须另行读取才能作为证据。
 purpose 和 decision_summary 只写简短行动依据，不输出内部思维过程。
 """.strip()
 
@@ -36,8 +40,12 @@ def build_agent(model: Model, state: TurnContext) -> Agent[TurnContext, Answer]:
         # default timeout instead consumes its parameter/ModelRetry allowance.
         capabilities=[OutputValidationPolicy(), ToolExecutionPolicy()],
     )
-    agent.tool(search_knowledge, sequential=True)
-    agent.tool(read_document, sequential=True)
+    if state.knowledge_tools is not None:
+        register_knowledge_tools(agent)
+    else:
+        # The explicit legacy smoke source remains available for existing baseline checks.
+        agent.tool(search_knowledge, sequential=True)
+        agent.tool(read_document, sequential=True)
 
     @agent.output_validator
     def validate_answer(ctx: RunContext[TurnContext], result: Answer) -> Answer:

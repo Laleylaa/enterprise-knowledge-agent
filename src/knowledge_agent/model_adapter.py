@@ -72,6 +72,8 @@ class RecordedModel(WrapperModel):
             })
             state.evidence.mark_delivered({p.tool_call_id for m in messages if isinstance(m, ModelRequest)
                                            for p in m.parts if isinstance(p, ToolReturnPart)})
+            if state.knowledge_tools is not None:
+                state.recorder.write("observed-evidence.json", [e.model_dump(mode="json") for e in state.evidence.snapshot()])
             state.recorder.event("model_request_started", origin=settings.mode, model_turn=turn, attempt=attempt + 1)
             try:
                 async with asyncio.timeout(settings.model_timeout):

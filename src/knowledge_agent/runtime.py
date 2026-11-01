@@ -16,10 +16,12 @@ from knowledge_agent.config import Settings
 from knowledge_agent.context import TurnContext
 from knowledge_agent.corpus import KnowledgeSource
 from knowledge_agent.errors import RunStopped
+from knowledge_agent.knowledge_base import IndexedCorpus
 from knowledge_agent.evidence import EvidenceStore
 from knowledge_agent.model_adapter import RecordedModel, open_model
 from knowledge_agent.schemas import Answer, RunResult, Usage
 from knowledge_agent.trace import RunRecorder
+from knowledge_agent.tool_binding import KnowledgeTools
 
 ModelFactory = Callable[[Settings], AbstractAsyncContextManager[Model]]
 
@@ -30,15 +32,8 @@ def incomplete(message: str) -> Answer:
                   decision_summary="程序记录执行中断事实，未生成后续模型决策。")
 
 
-async def run_turn(
-    question: str, settings: Settings, source: KnowledgeSource,
-    *, model_factory: ModelFactory | None = None,
-) -> RunResult:
-    """Run the same framework loop with a production or explicitly supplied model.
-
-    A supplied factory owns model resource lifetime only; tools, observations,
-    validation and recording still go through the normal runtime.
-    """
+def create_turn_context(question: str, settings: Settings, source: KnowledgeSource | IndexedCorpus) -> TurnContext:
+    """Prepare real tools and run-scoped state without starting any model requests."""
     if not question.strip() or len(question) > settings.max_input_chars:
         raise ValueError("问题不能为空，且不得超过配置的字符上限。")
     started = monotonic()
@@ -46,9 +41,28 @@ async def run_turn(
     recorder = RunRecorder(settings.output_dir / settings.mode / run_id, run_id)
     state = TurnContext(settings, source, EvidenceStore(run_id, source.corpus_hash), recorder, Usage(),
                         deadline=started + settings.turn_timeout)
-    recorder.write("input.json", {"question": question, "effective_history": [], "config": settings.public_config()})
-    recorder.write("corpus.json", {"corpus_hash": source.corpus_hash, "documents": source.snapshot()})
+    indexed = isinstance(source, IndexedCorpus)
+    config = {**settings.public_config(), "stage": "tool_integration" if indexed else "integration_smoke",
+              "retrieval": source.strategy}
+    recorder.write("input.json", {"question": question, "effective_history": [], "config": config})
+    corpus = {"corpus_hash": source.corpus_hash, "documents": source.snapshot()}
+    if indexed:
+        corpus["prepared"] = source.retrieval_snapshot.prepared.model_dump(mode="json")
+        recorder.write("index-manifest.json", {"index_hash": source.index.index_hash, **source.index.manifest})
+        state.knowledge_tools = KnowledgeTools.bind(source, state)
+    recorder.write("corpus.json", corpus)
     recorder.event("input_accepted")
+    return state
+
+
+async def run_turn(
+    question: str, settings: Settings, source: KnowledgeSource | IndexedCorpus,
+    *, model_factory: ModelFactory | None = None,
+) -> RunResult:
+    """Run the framework loop with indexed tools or the explicit legacy smoke source."""
+    started = monotonic()
+    state = create_turn_context(question, settings, source)
+    recorder, run_id = state.recorder, state.recorder.run_id
     origin = "model" if settings.mode == "real" else "mock"
     reason = "completed"
     cancelled = False
@@ -77,13 +91,15 @@ async def run_turn(
         recorder.event("runtime_error", error_type=type(exc).__name__)
         reason, origin, answer = "runtime_error", "runtime_fallback", incomplete("运行发生内部错误，处理尚未完成。")
     outcome = RunResult(run_id=run_id, mode=settings.mode, result_origin=origin,
+                        stage="tool_integration" if state.knowledge_tools else "integration_smoke",
+                        requested_retrieval=source.strategy,
                         termination_reason=reason, result=answer,
                         observed_evidence=state.evidence.snapshot(), usage=state.usage)
     recorder.event("final_result", status=answer.status, termination_reason=reason, result_origin=origin)
     recorder.write("output.json", outcome.model_dump(mode="json"))
     recorder.write("run-summary.json", {"run_id": run_id, "elapsed_seconds": monotonic() - started,
                                        "usage": state.usage.model_dump(), "artifacts_saved": True,
-                                       "mode": settings.mode, "stage": "integration_smoke"})
+                                       "mode": settings.mode, "stage": outcome.stage})
     if cancelled:
         raise asyncio.CancelledError
     return outcome

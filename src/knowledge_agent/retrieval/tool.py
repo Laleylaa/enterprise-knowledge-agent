@@ -50,18 +50,21 @@ class SearchTool:
     name = "search_knowledge"
     description = "按关键词检索原文块；可过滤文档、按明确 ID 定位或沿游标翻页。候选不代表结论。"
 
-    def __init__(self, index: Bm25Index, settings: Settings, evidence: EvidenceStore, recorder: RunRecorder):
+    def __init__(self, index: Bm25Index, settings: Settings, evidence: EvidenceStore, recorder: RunRecorder,
+                 *, standalone: bool = True):
         if evidence.corpus_hash != index.snapshot.corpus_hash:
             raise ValueError("Evidence store and index must use the same snapshot")
         self.index, self.settings, self.evidence, self.recorder = index, settings, evidence, recorder
+        self.standalone = standalone
         self._cursors: OrderedDict[str, CursorPage] = OrderedDict()
 
     def execute(self, arguments: dict, *, call_id: str) -> dict:
         """call_id is supplied by the caller, never included in model arguments."""
         recorded_input = {"tool": self.name, "tool_call_id": call_id, "arguments": arguments}
         self.recorder.append("tool-inputs.jsonl", recorded_input)
-        self.recorder.write("input.json", recorded_input)
-        self.recorder.event("tool_started", tool=self.name, tool_call_id=call_id, arguments=arguments)
+        if self.standalone:
+            self.recorder.write("input.json", recorded_input)
+            self.recorder.event("tool_started", tool=self.name, tool_call_id=call_id, arguments=arguments)
         try:
             request = SearchRequest.model_validate(arguments)
         except ValidationError:
@@ -145,6 +148,7 @@ class SearchTool:
         self.recorder.event("tool_result", tool=self.name, tool_call_id=call_id, status=status,
                              doc_ids=[h["doc_id"] for h in response["data"]["hits"]],
                              error_codes=[e["code"] for e in response["errors"]])
-        self.recorder.write("output.json", response)
+        if self.standalone:
+            self.recorder.write("output.json", response)
         self.recorder.write("observed-evidence.json", [e.model_dump(mode="json") for e in self.evidence.snapshot()])
         return response

@@ -1,0 +1,50 @@
+{
+  "case_id": "fc_search_pagination",
+  "run_id": "12b1e6abc3734455ac7606c6d16f32fe",
+  "artifacts": [
+    {
+      "path": "inputs/fc_search_pagination/12b1e6abc3734455ac7606c6d16f32fe/corpus.json",
+      "sha256": "758cfd629aa76666a489e86868e3c52584f606df4c0e6fba130b00b30347cd60"
+    },
+    {
+      "path": "inputs/fc_search_pagination/12b1e6abc3734455ac7606c6d16f32fe/index-manifest.json",
+      "sha256": "092039b10911289c54acb61d0b10ddd847e659568fac56a2ed995a4acc9db3e6"
+    },
+    {
+      "path": "inputs/fc_search_pagination/12b1e6abc3734455ac7606c6d16f32fe/input.json",
+      "sha256": "293640b961c2c7c0c4001ae6d0e6897c459961be4e03adc6e873c8d5b9f0a107"
+    },
+    {
+      "path": "traces/fc_search_pagination/12b1e6abc3734455ac7606c6d16f32fe/model-inputs.jsonl",
+      "sha256": "a9600640a6f701bf5ed451464844763e67153dd7ad18ab63265d94b45ef72c43"
+    },
+    {
+      "path": "traces/fc_search_pagination/12b1e6abc3734455ac7606c6d16f32fe/observed-evidence.json",
+      "sha256": "8f2c3c5a8213e06775d0b909b0e2e96ddd841c46891c64ffa3316e7fc39b7546"
+    },
+    {
+      "path": "outputs/fc_search_pagination/12b1e6abc3734455ac7606c6d16f32fe/output.json",
+      "sha256": "2e8c519a3cffac15dddf7f8b8de826ca60cad76bfeb738f5d9265d24623bb89b"
+    },
+    {
+      "path": "traces/fc_search_pagination/12b1e6abc3734455ac7606c6d16f32fe/run.json",
+      "sha256": "e9e07444257e366c65640298cea806623850afe3a86c643376eb709045911ab8"
+    },
+    {
+      "path": "traces/fc_search_pagination/12b1e6abc3734455ac7606c6d16f32fe/tool-inputs.jsonl",
+      "sha256": "6dacac82bc5e430f6c0bc4c6d7ccd4299b23dc95fa265a0de472630c474a73b7"
+    },
+    {
+      "path": "reports/fc_search_pagination/12b1e6abc3734455ac7606c6d16f32fe/tool-integration-evaluation.json",
+      "sha256": "c5ff20f75b643d0303af923c9def19ab15393bccafa3aab17e626ddf412307d9"
+    },
+    {
+      "path": "traces/fc_search_pagination/12b1e6abc3734455ac7606c6d16f32fe/tool-results.jsonl",
+      "sha256": "bb6761aba1fa9dc91464fe6c413a5879da87f9df87885a2d6a5854836505da7c"
+    },
+    {
+      "path": "traces/fc_search_pagination/12b1e6abc3734455ac7606c6d16f32fe/trace.jsonl",
+      "sha256": "d84c0d69d597fd67e06bffdb34c25b1fbfea5c39ae11e8a6d508e589d6e4c786"
+    }
+  ]
+}

@@ -1,8 +1,8 @@
 # 企业知识问答 Agent
 
-当前阶段：**主循环基线、独立 BM25 检索及独立原文读取工具已建立**。两个正式工具均尚未接入 Agent。
+当前阶段：**BM25 检索和原文读取已通过标准函数工具注册接入 Agent**。本阶段验证工具定义、FC 调用、实际执行和结果反馈；完整业务 E2E 尚未开展。
 
-现有 Agent 的 `smoke` 入口仍使用 `data/smoke/manifest.json`，其占位搜索返回资料全集并标记 `smoke_fixture`。新检索通过下方独立入口执行真实 BM25，支持过滤、精确 ID 定位和分页；向量、混合检索仍未实现。
+不带 `--prepared` 的 `smoke` 保留原占位资料源和离线脚本，标记 `smoke_fixture`；显式指定原文及派生块即可启用正式 BM25／读取工具，标记 `tool_integration`。独立工具入口继续可用；向量、混合检索仍未实现。
 
 知识库统一采用 [Markdown 原文＋元数据清单](data/README.md)，目前有最小冒烟资料、F1 单规则、F2 冲突和 R1 章节补读资料，以及正式生成的离线原文块。Q01～Q18 的 Agent 验收仍未执行，不将单工具效果计为 Agent 验收成绩。
 
@@ -23,6 +23,25 @@ python -m pip install -r requirements.txt
 可直接使用下方 `PYTHONPATH=src` 命令，无须安装项目本身。可选执行 `python -m pip install -e .` 后使用 `knowledge-agent` 命令。
 
 ## 运行
+
+### Agent 的正式工具接入（本次开发入口）
+
+```sh
+# 单独验证 FC 接入，无密钥、无网络，不评估最终业务答案
+python -m pytest tests/integration/tool_calls -q
+
+# 手动真实模型接入入口；本次未执行真实服务调用
+PYTHONPATH=src python -m knowledge_agent smoke --mode real \
+  --corpus data/fixtures/F1_single_rule/manifest.json \
+  --prepared data/prepared/F1_single_rule.json \
+  --question "国内差旅报销期限多久？" --output-dir runtime/tool-integration
+```
+
+真实入口需要本机模型密钥。`--prepared` 对应 `KA_PREPARED_PATH`，须与 `--corpus` 指向同一资料集；不设置则保留原 smoke 路径。当前 CLI Mock 仍只支持原冒烟资料，指定派生块时明确拒绝，不静默换回占位工具。正式工具的离线 FC 验证由上方受控测试入口承担。
+
+接入使用 PydanticAI 标准 `agent.tool` 注册：每次模型请求携带 `search_knowledge`、`read_document` 的名称、说明及由既有请求模型生成的参数 schema。框架解析和校验 FC，请求 ID 贯穿工具执行与 tool-role 结果反馈。两个工具共用本轮快照、证据和记录；不会覆盖整轮 input/output，也不会重复记录工具开始事件。
+
+新测试为 12 项框架 FC 集成＋2 项实际 SDK／本地 HTTP 协议测试。后者检查线上格式的 `tools[].function` 和 `role=tool` 消息，但使用本地注入响应，未连接真实服务。测试在模型收到工具结果后停止，不生成或验收业务终态；材料见 [FC 接入记录](examples/integration/tool-calls.md)。
 
 ### 独立检索工具
 
@@ -60,7 +79,7 @@ python -m pytest tests/retrieval/business -q
 
 当前两种报销问法均在前 5 个候选中取得支持条款，但支持条款都位于第 3 位；冲突双方均取得。小型资料集上的结果不代表复杂知识库效果，详情及实际记录见 [评估](docs/03-evaluation.md#独立检索工具bm25)。
 
-### 独立读取工具（本次开发入口）
+### 独立读取工具
 
 ```sh
 PYTHONPATH=src python -m knowledge_agent.reading \
@@ -115,7 +134,7 @@ PYTHONPATH=src python -m knowledge_agent --help
 
 配置全部集中在 `src/knowledge_agent/config.py`，每次启动加载一次并显式传给各组件。优先级：**CLI 参数 > 系统环境变量 > 当前工作目录的 `.env` > 默认值**。路径相对于启动目录；建议始终在仓库根目录运行。配置导出只显示密钥是否存在，不输出密钥值。
 
-主要配置见 `.env.example`：模型、资料及输出路径、模型轮次、HTTP 尝试、工具次数、输出修正、单次及整轮超时。上述边界已有本地受控验证；模型传输最多重试一次，超限返回 incomplete，取消时尽力保存已有证据。工具超时目前覆盖可取消的异步调用；后续本地 embedding 仍需可终止的工作进程。Agent 入口仍只有 `smoke` 与 `config`；工具的独立准备、搜索和读取入口不等于 solution 规划的统一 `chat / prepare / evaluate`。
+主要配置见 `.env.example`：模型、资料及派生块路径、模型轮次、HTTP 尝试、工具次数、输出修正、单次及整轮超时。上述边界已有本地受控验证；模型传输最多重试一次，超限返回 incomplete，取消时尽力保存已有证据。同步 BM25／读取不会因异步 timeout 获得强制 CPU 中断能力；后续本地 embedding 仍需可终止的工作进程。Agent 入口仍为 `smoke` 与 `config`，新增 `--prepared` 正式工具选项，不等于 solution 规划的完整 `chat / prepare / evaluate`。
 
 退出码：0 表示本轮正常交付（包括正常的未解决／待补充）；1 表示未完成；2 表示配置、输入或材料读写失败；130 表示用户中断。
 
@@ -161,6 +180,8 @@ src/knowledge_agent/
   document_loader.py       # 元数据校验、Markdown 原文加载
   corpus.py                # 只读资料接口及冒烟资料源
   tools.py                 # 框架工具与资料接口适配
+  knowledge_base.py        # 原文派生快照和 BM25 索引装配
+  tool_binding.py          # 标准函数工具注册；复用既有请求 schema 与实际工具
   evidence.py              # 本轮证据登记、原文引用校验
   agent.py                 # Agent 装配、指令及引用校验
   output_validation.py     # 结构错误反馈、混合终态拒绝、共享修正额度
@@ -177,6 +198,7 @@ tests/
   reading/                 # 内部分 smoke、contract、business、boundary
   agent_loop/              # 内部分 contract、boundary
   integration/smoke/       # CLI、主循环与占位工具接入冒烟
+  integration/tool_calls/  # 正式工具 FC → 执行 → 观察反馈；不验收业务终态
   e2e/                     # 最终完整业务验收，当前仅说明
   support/                 # 共享隔离与材料导出
 data/
@@ -204,9 +226,9 @@ PYTHONPATH=src python -m knowledge_agent smoke --mode mock --output-dir runtime/
 
 ## 未完成范围
 
-当前已通过一次历史真实模型冒烟；六类 Agent 业务验收、至少两条真实差异路径、正式工具接入、向量／混合检索、多轮历史和完整评估器均未完成。简单引用校验仅保证出处与文字一致，不保证结论受引用支持。
+当前已通过一次历史真实模型冒烟及正式工具受控 FC 接入；六类 Agent 业务验收、至少两条真实差异路径、正式工具的真实服务验证、向量／混合检索、多轮历史和完整评估器均未完成。简单引用校验仅保证出处与文字一致，不保证结论受引用支持。
 
-当前独立 BM25 搜索与读取工具均已有单工具验证，并直接验证搜索定位到章节／块读取的契约兼容；Agent 仍使用原有占位工具。下一步另行接入主循环并回归。
+当前正式工具通过 IndexedCorpus 与 tool_binding 接入相同的 Agent／运行器；原 smoke_fixture 仅作为显式保留的旧基线。后续再开展真实模型行为、多轮会话和完整业务验收，本次 FC 测试不替代这些工作。
 
 [PRD](docs/01-requirements.md) · [技术方案](docs/02-solution.md) · [AI 使用记录](docs/04-ai-usage.md)
 

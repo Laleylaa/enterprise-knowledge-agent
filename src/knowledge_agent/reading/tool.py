@@ -55,7 +55,7 @@ class ReadTool:
     locator_page_size = 20
 
     def __init__(self, snapshot: RetrievalSnapshot, settings: Settings,
-                 evidence: EvidenceStore, recorder: RunRecorder):
+                 evidence: EvidenceStore, recorder: RunRecorder, *, standalone: bool = True):
         if evidence.corpus_hash != snapshot.corpus_hash:
             raise ValueError("Evidence store and reader must use the same snapshot")
         if any(len(c.text) + len(snapshot.sections[c.section_id].heading or "") > settings.max_tool_chars
@@ -63,13 +63,15 @@ class ReadTool:
             raise CorpusError("返回正文预算无法容纳单块及其标题，请调整 max_tool_chars 或重新 prepare。")
         self.snapshot, self.settings = snapshot, settings
         self.evidence, self.recorder = evidence, recorder
+        self.standalone = standalone
         self._cursors: OrderedDict[str, LocatorPage] = OrderedDict()
 
     def execute(self, arguments: dict, *, call_id: str) -> dict:
         recorded = {"tool": self.name, "tool_call_id": call_id, "arguments": arguments}
         self.recorder.append("tool-inputs.jsonl", recorded)
-        self.recorder.write("input.json", recorded)
-        self.recorder.event("tool_started", **recorded)
+        if self.standalone:
+            self.recorder.write("input.json", recorded)
+            self.recorder.event("tool_started", **recorded)
         try:
             request = ReadRequest.model_validate(arguments)
         except ValidationError:
@@ -164,6 +166,7 @@ class ReadTool:
         self.recorder.event("tool_result", tool=self.name, tool_call_id=call_id, status=result["status"],
                             doc_ids=list(dict.fromkeys(s["doc_id"] for s in result["data"]["segments"])),
                             error_codes=[e["code"] for e in result["errors"]])
-        self.recorder.write("output.json", result)
+        if self.standalone:
+            self.recorder.write("output.json", result)
         self.recorder.write("observed-evidence.json", [e.model_dump(mode="json") for e in self.evidence.snapshot()])
         return result

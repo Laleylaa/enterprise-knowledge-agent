@@ -1,0 +1,2 @@
+{"tool": "search_knowledge", "tool_call_id": "fc-page-1", "arguments": {"query": "", "purpose": "按来源顺序取块", "doc_ids": ["D01"], "limit": 1, "cursor": null}}
+{"tool": "search_knowledge", "tool_call_id": "fc-page-2", "arguments": {"query": "", "purpose": "按来源顺序取块", "doc_ids": ["D01"], "limit": 1, "cursor": "YPCAs4a0XkHZdTIl_4yCSlQ9W7B_IJrs"}}

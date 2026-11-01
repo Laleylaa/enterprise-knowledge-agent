@@ -75,8 +75,8 @@ class Usage(StrictModel):
 class RunResult(StrictModel):
     run_id: str
     mode: Literal["real", "mock"]
-    stage: Literal["integration_smoke"] = "integration_smoke"
-    requested_retrieval: Literal["smoke_fixture"] = "smoke_fixture"
+    stage: Literal["integration_smoke", "tool_integration"] = "integration_smoke"
+    requested_retrieval: Literal["smoke_fixture", "bm25"] = "smoke_fixture"
     result_origin: Literal["model", "mock", "runtime_fallback"]
     termination_reason: str
     result: Answer

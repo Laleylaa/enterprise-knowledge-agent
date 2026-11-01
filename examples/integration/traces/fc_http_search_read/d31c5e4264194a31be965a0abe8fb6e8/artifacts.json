@@ -1,0 +1,58 @@
+{
+  "case_id": "fc_http_search_read",
+  "run_id": "d31c5e4264194a31be965a0abe8fb6e8",
+  "artifacts": [
+    {
+      "path": "inputs/fc_http_search_read/d31c5e4264194a31be965a0abe8fb6e8/corpus.json",
+      "sha256": "4bd435e2a464789b71c33806c8f76adf1cc33c96daf31e3ed020e59381751564"
+    },
+    {
+      "path": "inputs/fc_http_search_read/d31c5e4264194a31be965a0abe8fb6e8/index-manifest.json",
+      "sha256": "fc352ae2fe1e76e94c2be43ec08921b2f373b13b566ca1474da855ec288d931e"
+    },
+    {
+      "path": "inputs/fc_http_search_read/d31c5e4264194a31be965a0abe8fb6e8/input.json",
+      "sha256": "e18e7f30ff649a3d496fe0201fb31e7ec40f3d3c89e4979641302023a1e92131"
+    },
+    {
+      "path": "traces/fc_http_search_read/d31c5e4264194a31be965a0abe8fb6e8/model-inputs.jsonl",
+      "sha256": "d123a6b6a79687ec8276e2bf04ef9bc7b6ae499ef262681d96d0cc09fc27fa69"
+    },
+    {
+      "path": "traces/fc_http_search_read/d31c5e4264194a31be965a0abe8fb6e8/observed-evidence.json",
+      "sha256": "5a8983058d5d6cc2761e3773a201b46cb41ff5e47718fd9e20430823b65d657f"
+    },
+    {
+      "path": "outputs/fc_http_search_read/d31c5e4264194a31be965a0abe8fb6e8/output.json",
+      "sha256": "31b8f2ce79302d23c0445495d7756b6fe96ccd5de596fa10ba18b76ac9857d66"
+    },
+    {
+      "path": "traces/fc_http_search_read/d31c5e4264194a31be965a0abe8fb6e8/provider-requests.jsonl",
+      "sha256": "3b7a31bc94ada77ac0bd89475a334c6980529f5192c378eae8d0f700be9b2e73"
+    },
+    {
+      "path": "traces/fc_http_search_read/d31c5e4264194a31be965a0abe8fb6e8/provider-responses.jsonl",
+      "sha256": "cf1b6b7234d9f904f03e402472d3e7575f1aa7c4d3bf66df61e7ce39864d887d"
+    },
+    {
+      "path": "traces/fc_http_search_read/d31c5e4264194a31be965a0abe8fb6e8/run.json",
+      "sha256": "c0201f2cbbe5a89ef794b3093b8338fd30680e37aeaced3cb19065aee49aa57e"
+    },
+    {
+      "path": "traces/fc_http_search_read/d31c5e4264194a31be965a0abe8fb6e8/tool-inputs.jsonl",
+      "sha256": "b77cda4fa2e4399d2322ec0c3995a301e79a7409cceca9731831f72f68555d77"
+    },
+    {
+      "path": "reports/fc_http_search_read/d31c5e4264194a31be965a0abe8fb6e8/tool-integration-evaluation.json",
+      "sha256": "6de70d7b5fc80b86e3ce2e78a3bc4f3b2efa43f14208fa9b301b63139104057e"
+    },
+    {
+      "path": "traces/fc_http_search_read/d31c5e4264194a31be965a0abe8fb6e8/tool-results.jsonl",
+      "sha256": "f86ef19e7a4a24fbf4cb162dc57aac82170f1fd13613d3937c39646635633482"
+    },
+    {
+      "path": "traces/fc_http_search_read/d31c5e4264194a31be965a0abe8fb6e8/trace.jsonl",
+      "sha256": "16e0e753ec7cbfcba3a0f6f132058e993dfa3ac392e7ea696b34439765707c8d"
+    }
+  ]
+}

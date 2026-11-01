@@ -13,7 +13,7 @@ def artifact_group(name: str) -> str:
         return "inputs"
     if name in {"output.json", "run-summary.json"}:
         return "outputs"
-    if name in {"retrieval-evaluation.json", "reading-evaluation.json"}:
+    if name in {"retrieval-evaluation.json", "reading-evaluation.json", "tool-integration-evaluation.json"}:
         return "reports"
     return "traces"
 

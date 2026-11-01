@@ -1,0 +1,19 @@
+{
+  "index_hash": "4c49b228b858e9b1a4a15dbbd1920bf1da65841362f3daba2e1301dce907d574",
+  "corpus_hash": "206bb6a754343e60df827b453f6e3e90096d94b123e522887d2aa3007ea54b53",
+  "chunks_hash": "99befaacb21a2e040d3e9ea705e775a319ea9cb1ccdc49448b3331140b979b54",
+  "bm25_config": {
+    "implementation": "rank_bm25.BM25Okapi",
+    "version": "0.2.2",
+    "k1": 1.5,
+    "b": 0.75,
+    "epsilon": 0.25
+  },
+  "tokenization": {
+    "jieba_version": "0.42.1",
+    "dictionary_sha256": "7197c3211ddd98962b036cdf40324d1ea2bfaa12bd028e68faa70111a88e12a8",
+    "normalization": "NFKC-lower-alphanumeric-v1",
+    "hmm": false,
+    "stopwords": []
+  }
+}

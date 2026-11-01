@@ -1,0 +1,1 @@
+{"tool": "read_document", "tool_call_id": "provider-call-1", "arguments": {"doc_id": "D10", "purpose": "读取原文块", "section_id": null, "chunk_id": "D10-C0002", "cursor": null}}

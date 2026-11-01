@@ -1,0 +1,97 @@
+{
+  "stage": "agent_tool_calls",
+  "model_origin": "scripted_function_model",
+  "live_model": false,
+  "stopped_after": "tool_observation",
+  "usage": {
+    "model_turns": 3,
+    "http_attempts": 0,
+    "tool_calls": 2
+  },
+  "tool_results": [
+    {
+      "schema_version": 1,
+      "tool": "search_knowledge",
+      "tool_call_id": "fc-search",
+      "corpus_hash": "206bb6a754343e60df827b453f6e3e90096d94b123e522887d2aa3007ea54b53",
+      "status": "ok",
+      "data": {
+        "hits": [
+          {
+            "evidence_id": "d7e2a2d763844b74afdb43920dd34001:E1",
+            "doc_id": "D10",
+            "title": "合成差旅报销办理说明",
+            "version_date": "2026-01-01",
+            "content_hash": "20aae3dded91d77d05bbb6b4604921425acf7bfcca99b5b5f16c655ed1e59abe",
+            "section_id": "D10-S0002",
+            "section_heading": "提交与补充材料",
+            "heading_span": {
+              "start": 45,
+              "end": 52
+            },
+            "chunk_id": "D10-C0002",
+            "source_span": {
+              "start": 42,
+              "end": 303
+            },
+            "text": "## 提交与补充材料\n\n1. 差旅报销申请须在行程结束后 30 天内提交。提交时间以系统收到申请的时间为准，草稿保存时间不作为提交时间。\n\n2. 申请应注明行程起止日期、出发地点、目的地点和出差事项。每项费用单独填写金额及用途，相关凭证与费用明细对应保存。\n\n3. 行程信息填写有误时，申请人应在说明栏记录更正内容和原因。更正记录与原申请关联保存，不能用新的草稿覆盖已经提交的申请记录。\n\n4. 同一次行程包含多项费用时，各项费用可以在同一申请中列明。附件应能够对应费用项目，不能将不同费用项目的凭证合并标记为同一项。\n\n"
+          }
+        ],
+        "segments": [],
+        "locators": []
+      },
+      "errors": [],
+      "execution": {
+        "strategy": "bm25",
+        "requested_mode": "bm25",
+        "effective_branches": [
+          "bm25"
+        ],
+        "next_cursor": "RGlfDmh_OhTt5Rm2qLtDU4eLnpD8H1Jj",
+        "has_more": true,
+        "return_limited": false
+      }
+    },
+    {
+      "schema_version": 1,
+      "tool": "read_document",
+      "tool_call_id": "fc-section",
+      "corpus_hash": "206bb6a754343e60df827b453f6e3e90096d94b123e522887d2aa3007ea54b53",
+      "status": "ok",
+      "data": {
+        "hits": [],
+        "segments": [
+          {
+            "evidence_id": "d7e2a2d763844b74afdb43920dd34001:E2",
+            "doc_id": "D10",
+            "title": "合成差旅报销办理说明",
+            "version_date": "2026-01-01",
+            "content_hash": "20aae3dded91d77d05bbb6b4604921425acf7bfcca99b5b5f16c655ed1e59abe",
+            "section_id": "D10-S0002",
+            "section_heading": "提交与补充材料",
+            "heading_span": {
+              "start": 45,
+              "end": 52
+            },
+            "chunk_id": null,
+            "source_span": {
+              "start": 42,
+              "end": 633
+            },
+            "text": "## 提交与补充材料\n\n1. 差旅报销申请须在行程结束后 30 天内提交。提交时间以系统收到申请的时间为准，草稿保存时间不作为提交时间。\n\n2. 申请应注明行程起止日期、出发地点、目的地点和出差事项。每项费用单独填写金额及用途，相关凭证与费用明细对应保存。\n\n3. 行程信息填写有误时，申请人应在说明栏记录更正内容和原因。更正记录与原申请关联保存，不能用新的草稿覆盖已经提交的申请记录。\n\n4. 同一次行程包含多项费用时，各项费用可以在同一申请中列明。附件应能够对应费用项目，不能将不同费用项目的凭证合并标记为同一项。\n\n5. 系统显示已提交，表示申请已经进入处理队列。该状态不代表审核通过，也不代表付款完成。申请人查询进度时应分别查看审核记录和付款记录。\n\n6. 审核人员要求补充说明时，应在申请记录中列出需要核对的事项。申请人提交的说明须与原行程关联，不应删除原申请中已经保存的行程信息。\n\n7. 申请人需要修改收款账户时，应使用账户信息维护入口，并确认修改对应的账户。账户信息维护与申请审核分别记录，不根据其中一个状态推断另一个状态。\n\n8. 对办理状态存在疑问时，应提供申请编号供工作人员核对。申请编号只能用于定位办理记录，不能作为制度适用范围或优先级的判断依据。\n\n9. 本节上述提交期限仅适用于国内差旅。海外差旅的提交期限须另查相应制度，不能据本节推定为 30 天。\n\n"
+          }
+        ],
+        "locators": []
+      },
+      "errors": [],
+      "execution": {
+        "strategy": "section",
+        "requested_mode": null,
+        "effective_branches": [],
+        "next_cursor": null,
+        "has_more": false,
+        "return_limited": false
+      }
+    }
+  ]
+}

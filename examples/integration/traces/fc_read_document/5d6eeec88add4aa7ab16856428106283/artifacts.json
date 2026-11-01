@@ -1,0 +1,50 @@
+{
+  "case_id": "fc_read_document",
+  "run_id": "5d6eeec88add4aa7ab16856428106283",
+  "artifacts": [
+    {
+      "path": "inputs/fc_read_document/5d6eeec88add4aa7ab16856428106283/corpus.json",
+      "sha256": "758cfd629aa76666a489e86868e3c52584f606df4c0e6fba130b00b30347cd60"
+    },
+    {
+      "path": "inputs/fc_read_document/5d6eeec88add4aa7ab16856428106283/index-manifest.json",
+      "sha256": "092039b10911289c54acb61d0b10ddd847e659568fac56a2ed995a4acc9db3e6"
+    },
+    {
+      "path": "inputs/fc_read_document/5d6eeec88add4aa7ab16856428106283/input.json",
+      "sha256": "6918c8a13a99efa65f976dcd7f5806b99fde10723f9706452897dc2f0e5255af"
+    },
+    {
+      "path": "traces/fc_read_document/5d6eeec88add4aa7ab16856428106283/model-inputs.jsonl",
+      "sha256": "eaba70141cc52ec401732c54b7c5dde1dfa1723ccb399b2398261516e490cbd5"
+    },
+    {
+      "path": "traces/fc_read_document/5d6eeec88add4aa7ab16856428106283/observed-evidence.json",
+      "sha256": "e0e9391b57d75c6b1ed5d34e09ea802d20a574aa01f757b5b9643a6a6d8ec6ca"
+    },
+    {
+      "path": "outputs/fc_read_document/5d6eeec88add4aa7ab16856428106283/output.json",
+      "sha256": "abc02c3097d9a7b38d157bb0af74dcf2cf2d3ff5b62bf3520f9174da381cfaee"
+    },
+    {
+      "path": "traces/fc_read_document/5d6eeec88add4aa7ab16856428106283/run.json",
+      "sha256": "4ec877337cb88dae0d0fd20cf78e0890d50001dc6a6eeb8f0c59ac01df4370da"
+    },
+    {
+      "path": "traces/fc_read_document/5d6eeec88add4aa7ab16856428106283/tool-inputs.jsonl",
+      "sha256": "f19f50f32cb5c8fe3cb944f8ae7d6a46c295ce4a74c5a4c754562471d9194086"
+    },
+    {
+      "path": "reports/fc_read_document/5d6eeec88add4aa7ab16856428106283/tool-integration-evaluation.json",
+      "sha256": "8cc8de680924d8ebf42c2390fe8f15ea8027ce1a580b43c5253f40653410e142"
+    },
+    {
+      "path": "traces/fc_read_document/5d6eeec88add4aa7ab16856428106283/tool-results.jsonl",
+      "sha256": "264c01c186be50a1a291196ac3c398d29244a56a2c3749dad27d44013429b950"
+    },
+    {
+      "path": "traces/fc_read_document/5d6eeec88add4aa7ab16856428106283/trace.jsonl",
+      "sha256": "6edb71d0b35bdafdbf60402b97cc86dceeeb6ffcf10024a5ba2dc01ac7b46eb3"
+    }
+  ]
+}

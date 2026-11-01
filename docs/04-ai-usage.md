@@ -69,6 +69,14 @@ AI 辅助核对了原文锚点、跨轮历史来源、分类及需求覆盖。�
 
 读取 47 项通过，搜索回归 47 项通过，收紧后的补读用例另复测 1 项通过；本次无跳过。测试封锁 Agent 与网络，不调用模型，不执行主循环联调。作用范围仅是组件行为与契约，不能将测试指定的补读、故障后局部读取视为真实模型决策或用户人工验收。实际输出、报告、验证限制见 [03-evaluation.md](03-evaluation.md)。
 
+## 正式工具 FC 接入
+
+用户要求以标准 name／description／参数 schema 接入两个工具，仅验证模型 FC 到工具结果反馈，不做业务 E2E。Codex 基于本地锁定框架源码核对 agent.tool、单 Pydantic 参数展开、Agent.iter 和当前错误反馈格式；新增 IndexedCorpus／tool_binding，复用原 SearchRequest／ReadRequest 及工具执行逻辑，没有手写 FC 解析器。
+
+共享每轮快照、证据、调用 ID 与 recorder；新增 standalone=False 隔离工具级和整轮材料职责。CLI --prepared 显式选择正式工具，旧 smoke_fixture 与 Mock 边界保留。测试按 integration/tool_calls 组织，公共驱动放 tests/support，材料继续由统一导出器归档。模型观察后停止，不生成业务终态或虚构真实模型决策。
+
+12 项框架接入、2 项实际 SDK／本地 HTTP 注入测试通过；原主循环、原 CLI 冒烟和两个工具回归 156 passed／1 skipped。测试草稿修正了 schema title 和参数错误反馈类型的假设，未放宽生产校验。未连接真实服务，未新增依赖、业务 E2E 或会话能力，真实服务与业务语义仍待验证。具体报告、材料及限制见 [03-evaluation.md](03-evaluation.md)。
+
 ## 个人贡献边界
 
 用户已提供并确认需求、方案及开发约束。代码目前由 AI 辅助生成；用户个人后续的代码修改、理解验证、实际投入时长及最终贡献说明仍需用户本人核实后补充，不由 AI 代填为已完成。

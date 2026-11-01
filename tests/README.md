@@ -19,6 +19,7 @@ tests/
     boundary/       # 预算、传输重试、超时与取消
   integration/
     smoke/          # 正式 CLI → 主循环 → 原占位工具的接入冒烟
+    tool_calls/     # 模型 FC → 真实 BM25／读取 → 工具反馈，停在业务终态之前
   e2e/              # 最终完整业务验收；当前仅有范围说明
   support/          # 可复用 fixture、隔离与材料导出
 ```
@@ -64,7 +65,7 @@ python -m pytest tests/reading/boundary -q --junitxml=examples/reading/reports/b
 
 主循环正常路径 3 项、输出修正 16 项；边界 38 项（预算 8、传输 20、超时与取消 10）。使用 FunctionModel 受控响应或实际 SDK＋本地 MockTransport，禁止真实网络。脚本行为只证明程序控制流与协议。
 
-接入冒烟为 5 个默认离线检查及 1 个需显式启用的真实 API 检查；覆盖配置、正式入口、manifest＋Markdown、原占位工具、引用校验与记录。当前真实检索尚未接入，不能当作题目的完整验收。
+原接入冒烟为 5 个默认离线检查及 1 个需显式启用的真实 API 检查；覆盖配置、正式入口、manifest＋Markdown、原占位工具、引用校验与记录。正式工具的 FC 接入由下方独立测试范围验证，原冒烟不能当作题目的完整验收。
 
 ```sh
 python -m pytest tests/agent_loop/contract -q --junitxml=examples/agent_loop/reports/contract/current-results.xml
@@ -75,6 +76,20 @@ python -m pytest tests/retrieval -m smoke -q
 # 仅在需要显式验证真实接入时运行，会使用 API 额度
 python -m pytest tests/integration/smoke/test_live.py --run-live -q --examples-dir=examples
 ```
+
+## 正式工具 FC 接入
+
+`integration/tool_calls/test_function_binding.py` 有 12 项契约测试：搜索／ID 定位、三种读取范围、搜索后根据实际返回定位读取章节、搜索续页、超限定位到块读取、同批两个工具的 ID／顺序，以及三个无效参数反馈后成功修正的情况。使用 FunctionModel 提交 FC，实际执行正式工具，并在后续模型请求中核对完整返回、调用 ID、证据投递及每次请求的 schema；不直接从测试绕过框架调用工具。
+
+`integration/tool_calls/test_provider_function_calls.py` 有 2 项协议测试：真实生产模型工厂、DeepSeek provider 和 SDK 经过本地 MockTransport，检查每次实际 HTTP 请求中的原生 tools[].function 定义、返回角色及 tool_call_id。HTTP 响应为测试注入，socket／DNS 禁止联网，mode=real 仅用于经过生产适配器，不是实际模型能力证据。
+
+公共驱动在 `support/tool_calls.py`，使用实际 build_agent＋RecordedModel 和公开 Agent.iter，模型收到工具观察后即停止，未接受业务终态；输出仅汇总实际工具结果。调用开始只由执行钩子记录一次，工具不能覆盖运行器 input/output。新测试没有启动 CLI 会话或新增 E2E 业务验收。
+
+```sh
+python -m pytest tests/integration/tool_calls -q --junitxml=examples/integration/reports/tool_calls/current-results.xml --examples-dir=examples
+```
+
+本次 14 项通过；已有主循环、原冒烟、两个独立工具回归 156 passed／1 skipped，真实 API 默认跳过。固定预生成块足以执行全部新增接入测试，无 tokenizer 或模型权重依赖。输入、实际工具返回、模型请求和原生 HTTP 请求／响应见 [FC 材料索引](../examples/integration/tool-calls.md)。
 
 ## 材料保存
 

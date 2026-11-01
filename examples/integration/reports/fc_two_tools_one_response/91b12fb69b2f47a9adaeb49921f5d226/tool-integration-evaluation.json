@@ -1,0 +1,8 @@
+{
+  "scope": "model_function_call_integration",
+  "live_model": false,
+  "model_origin": "scripted_function_model",
+  "observed_requests": 2,
+  "tool_returns": 2,
+  "final_business_answer_evaluated": false
+}

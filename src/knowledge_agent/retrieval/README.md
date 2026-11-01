@@ -1,6 +1,6 @@
 # 独立检索工具
 
-本目录不依赖 Agent runtime，不调用模型。现有 `knowledge_agent.tools` 仍为主循环冒烟适配器；后续联调时由薄适配层复用本目录，不复制检索逻辑。
+本目录不依赖 Agent runtime，不调用模型。`tool_binding.py` 已通过标准函数工具注册复用本组件；`knowledge_agent.tools` 的旧函数只保留作原 smoke_fixture 适配器，不复制检索逻辑。
 
 | 组件 | 职责 |
 |---|---|
@@ -45,3 +45,5 @@ if cursor:
 BM25 索引每次启动从已校验的块重建，不持久化排名索引，避免误用旧索引；派生块文件可缓存。正文预算至少容纳每个块及所属标题，启动时检查；调用层另有 RETURN_BUDGET_TOO_SMALL 防御。当前组件同步执行，未在这里扩展 Agent 超时策略或 CPU worker。
 
 每次执行保存 input/output、tool-inputs/tool-results、Trace 及已有证据；多次调用时 JSONL 保留完整过程，input.json/output.json 为最后一次调用。run.json 标识单工具来源，corpus.json 和 index-manifest.json 保留版本。记录与证据写入失败显式抛出，不把未保存的材料当成功交付。
+
+以上为 standalone=True 的独立入口。Agent 绑定时使用 standalone=False，共享当轮 EvidenceStore／RunRecorder，保留工具 JSONL 和证据，跳过工具层 input/output 写入及 tool_started 事件（由运行器和执行钩子分别负责）。游标实例跨同轮模型请求保留，每个新问题重新创建。接入测试见 [FC 记录](../../../examples/integration/tool-calls.md)。

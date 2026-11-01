@@ -1,0 +1,2 @@
+{"tool": "search_knowledge", "tool_call_id": "fc-search", "arguments": {"query": "期限", "purpose": "查条款", "doc_ids": null, "limit": 5, "cursor": null}}
+{"tool": "read_document", "tool_call_id": "fc-read", "arguments": {"doc_id": "D01", "purpose": "读取文档", "section_id": null, "chunk_id": null, "cursor": null}}

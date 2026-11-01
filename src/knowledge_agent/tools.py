@@ -47,6 +47,22 @@ def _result(ctx: RunContext[TurnContext], tool: str, documents: list[Document],
 
 
 def tool_error(ctx: RunContext[TurnContext], tool: str, code: str, message: str) -> dict:
+    if ctx.deps.knowledge_tools is not None:
+        state = ctx.deps
+        call_id = ctx.tool_call_id
+        # Deadline errors use the same public envelope as the bound tools.
+        result = {"schema_version": 1, "tool": tool, "tool_call_id": call_id,
+                  "corpus_hash": state.source.corpus_hash, "status": "error",
+                  "data": {"hits": [], "segments": [], "locators": []},
+                  "errors": [{"code": code, "message": message, "retryable": True, "target": None}],
+                  "execution": {"strategy": "bm25" if tool == "search_knowledge" else "document",
+                                "requested_mode": "bm25" if tool == "search_knowledge" else None,
+                                "effective_branches": [], "next_cursor": None,
+                                "has_more": False, "return_limited": False}}
+        state.recorder.append("tool-results.jsonl", result)
+        state.recorder.event("tool_result", tool=tool, tool_call_id=call_id, status="error",
+                             doc_ids=[], error_codes=[code])
+        return result
     return _result(ctx, tool, [], error={"code": code, "message": message,
                                        "retryable": True, "target": {"kind": "tool", "id": tool}})
 

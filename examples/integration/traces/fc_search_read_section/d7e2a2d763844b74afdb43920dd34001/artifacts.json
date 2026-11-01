@@ -1,0 +1,50 @@
+{
+  "case_id": "fc_search_read_section",
+  "run_id": "d7e2a2d763844b74afdb43920dd34001",
+  "artifacts": [
+    {
+      "path": "inputs/fc_search_read_section/d7e2a2d763844b74afdb43920dd34001/corpus.json",
+      "sha256": "4bd435e2a464789b71c33806c8f76adf1cc33c96daf31e3ed020e59381751564"
+    },
+    {
+      "path": "inputs/fc_search_read_section/d7e2a2d763844b74afdb43920dd34001/index-manifest.json",
+      "sha256": "fc352ae2fe1e76e94c2be43ec08921b2f373b13b566ca1474da855ec288d931e"
+    },
+    {
+      "path": "inputs/fc_search_read_section/d7e2a2d763844b74afdb43920dd34001/input.json",
+      "sha256": "39debc4a10113635491fd8cc006c9688dcdbea919ef77fc3f50abdf41c359e3d"
+    },
+    {
+      "path": "traces/fc_search_read_section/d7e2a2d763844b74afdb43920dd34001/model-inputs.jsonl",
+      "sha256": "cbcd91a779e352a00a3460648b83ab0fc3e175c81200a02ab37a9a90aac2af9f"
+    },
+    {
+      "path": "traces/fc_search_read_section/d7e2a2d763844b74afdb43920dd34001/observed-evidence.json",
+      "sha256": "545f7cc1cfb49f5d223803e3186bde872f9e882ba2c5c65fdcbe35fabd3d0cd5"
+    },
+    {
+      "path": "outputs/fc_search_read_section/d7e2a2d763844b74afdb43920dd34001/output.json",
+      "sha256": "f3884509ddfa9b149af7d2cda658a4372a1304b417633efd1af4a1afcc4b963f"
+    },
+    {
+      "path": "traces/fc_search_read_section/d7e2a2d763844b74afdb43920dd34001/run.json",
+      "sha256": "b38a281f634fbc820e3c8cb029b4b694d4fb3e44d3f19fc4dd8f70a8e17bdd40"
+    },
+    {
+      "path": "traces/fc_search_read_section/d7e2a2d763844b74afdb43920dd34001/tool-inputs.jsonl",
+      "sha256": "a3ffffd21be004d668fcaa23ba6d055cead1f1ce1e91557ee9b9a9d02e405990"
+    },
+    {
+      "path": "reports/fc_search_read_section/d7e2a2d763844b74afdb43920dd34001/tool-integration-evaluation.json",
+      "sha256": "c5ff20f75b643d0303af923c9def19ab15393bccafa3aab17e626ddf412307d9"
+    },
+    {
+      "path": "traces/fc_search_read_section/d7e2a2d763844b74afdb43920dd34001/tool-results.jsonl",
+      "sha256": "e29aaa9dc6a50561c13a3bdc23a5e5c15af338ee48c880239b4f498b120e7dd3"
+    },
+    {
+      "path": "traces/fc_search_read_section/d7e2a2d763844b74afdb43920dd34001/trace.jsonl",
+      "sha256": "2459a03c713407934df7bb1b077668aefcac92a590aaa2e47885f4cc8215c1f6"
+    }
+  ]
+}

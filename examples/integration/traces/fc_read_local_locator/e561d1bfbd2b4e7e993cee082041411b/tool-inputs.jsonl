@@ -1,0 +1,2 @@
+{"tool": "read_document", "tool_call_id": "fc-too-large", "arguments": {"doc_id": "D10", "purpose": "读取提交章节", "section_id": "D10-S0002", "chunk_id": null, "cursor": null}}
+{"tool": "read_document", "tool_call_id": "fc-local", "arguments": {"doc_id": "D10", "purpose": "读取可容纳的局部原文", "section_id": null, "chunk_id": "D10-C0002", "cursor": null}}

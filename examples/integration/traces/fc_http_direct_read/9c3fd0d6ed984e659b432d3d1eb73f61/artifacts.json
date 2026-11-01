@@ -1,0 +1,58 @@
+{
+  "case_id": "fc_http_direct_read",
+  "run_id": "9c3fd0d6ed984e659b432d3d1eb73f61",
+  "artifacts": [
+    {
+      "path": "inputs/fc_http_direct_read/9c3fd0d6ed984e659b432d3d1eb73f61/corpus.json",
+      "sha256": "4bd435e2a464789b71c33806c8f76adf1cc33c96daf31e3ed020e59381751564"
+    },
+    {
+      "path": "inputs/fc_http_direct_read/9c3fd0d6ed984e659b432d3d1eb73f61/index-manifest.json",
+      "sha256": "fc352ae2fe1e76e94c2be43ec08921b2f373b13b566ca1474da855ec288d931e"
+    },
+    {
+      "path": "inputs/fc_http_direct_read/9c3fd0d6ed984e659b432d3d1eb73f61/input.json",
+      "sha256": "a6fbd53ede7b7e0ce481d00bfe44e9b145834495dc7bae24589fc15535fce732"
+    },
+    {
+      "path": "traces/fc_http_direct_read/9c3fd0d6ed984e659b432d3d1eb73f61/model-inputs.jsonl",
+      "sha256": "0e547213739e1d500b8824e095d96e1629f93032b78a5266552930fcf3d847d9"
+    },
+    {
+      "path": "traces/fc_http_direct_read/9c3fd0d6ed984e659b432d3d1eb73f61/observed-evidence.json",
+      "sha256": "70dd677a8098fce1ff89509b1c70ec2e5acb4014aa33176692d3ca8f9b90ffb4"
+    },
+    {
+      "path": "outputs/fc_http_direct_read/9c3fd0d6ed984e659b432d3d1eb73f61/output.json",
+      "sha256": "0e04cadf4b5b06a86d7f53f8f89d25a1a9d92a01ebe3b21c38742dda5f07c522"
+    },
+    {
+      "path": "traces/fc_http_direct_read/9c3fd0d6ed984e659b432d3d1eb73f61/provider-requests.jsonl",
+      "sha256": "efcd366421ae5442e88af1cae9d11aba711a9bd7aa1ee7074b27178c6d234281"
+    },
+    {
+      "path": "traces/fc_http_direct_read/9c3fd0d6ed984e659b432d3d1eb73f61/provider-responses.jsonl",
+      "sha256": "3d5d759d3f5a9ca96e441124ed6e0ba1bfa37472eb0a6165801d0bb1756b6171"
+    },
+    {
+      "path": "traces/fc_http_direct_read/9c3fd0d6ed984e659b432d3d1eb73f61/run.json",
+      "sha256": "80b9807dce519263759544ab9bdb500564ebd69de0d2e3047291d7206aa637b9"
+    },
+    {
+      "path": "traces/fc_http_direct_read/9c3fd0d6ed984e659b432d3d1eb73f61/tool-inputs.jsonl",
+      "sha256": "84fae80cc5fbcd5eb70f04ee6e6c8a5516db8cda2146009c349b4ff809c00dc4"
+    },
+    {
+      "path": "reports/fc_http_direct_read/9c3fd0d6ed984e659b432d3d1eb73f61/tool-integration-evaluation.json",
+      "sha256": "ec20c19ec4be15156dbef79e0682a49e97e214751f4160490e5d5d5e951707eb"
+    },
+    {
+      "path": "traces/fc_http_direct_read/9c3fd0d6ed984e659b432d3d1eb73f61/tool-results.jsonl",
+      "sha256": "1cea5a9483cb2de3117a6b63f43ac7cc996f916ce2695f6f39edb349ef5389bf"
+    },
+    {
+      "path": "traces/fc_http_direct_read/9c3fd0d6ed984e659b432d3d1eb73f61/trace.jsonl",
+      "sha256": "e77ba93dbf756f91d60493bccdfc0a65500276646c0cef819edd57f3b1617914"
+    }
+  ]
+}

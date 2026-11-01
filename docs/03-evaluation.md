@@ -1,6 +1,6 @@
 # 开发评估记录
 
-记录日期：2026-11-01。当前维护接入底座、主循环基线及独立检索／读取工具验证，不代表 PRD 业务验收通过。
+记录日期：2026-11-01。当前维护接入底座、主循环基线、独立检索／读取工具及正式工具 FC 接入验证，不代表 PRD 业务验收通过。
 
 ## 环境
 
@@ -237,11 +237,33 @@ python -m pytest tests/integration/smoke -q --junitxml=examples/integration/repo
 
 **限制：** 所有运行 model_calls=0、delivered_to_model=false（引用校验单元测试仅在内存模拟投递标记）。不提供最终 Agent 答案，不计入真实 P2、冲突查证、工具恢复或六类题目验收。章节沿用现有 ATX Section 划分，没有新增章节树；同步内存工具未验证 Agent 异步超时。独立入口多次调用时 input/output 为最后一次，JSONL 保留全部过程；正式接入需将整轮材料写入职责交由运行器管理。
 
+## 正式工具的标准 FC 接入
+
+用户要求只验证模型调用工具、工具执行成功和返回，不新增业务 E2E。实现使用锁定 PydanticAI 2.64.0 的 agent.tool：注册两个工具的名称和说明，直接复用 SearchRequest／ReadRequest，框架展开顶层参数 schema、校验 FC 并路由到既有工具。SDK负责原生 tools／tool_calls／tool 消息，无手写 FC 解析器。逐请求保存的工具定义与实际 SDK 请求均验证名称、描述、参数类型、必填、默认值及限制。
+
+IndexedCorpus 提供真实索引和一致快照，create_turn_context 在同轮绑定 SearchTool／ReadTool，共用证据和日志，游标跨同轮请求保留。standalone=False 防止工具覆盖 input/output 或重复记录 tool_started；框架调用 ID 对应实际工具返回，并在下一请求中标记证据已投递。原 CLI smoke_fixture 基线保留，通过 --prepared 显式启用正式工具；现有 CLI Mock 不支持新资料配置时明确拒绝。
+
+| 验证范围 | 实际结果 | 报告 |
+|---|---|---|
+| 框架函数工具接入 | 12 passed，3.20s | [function-binding-results.xml](../examples/integration/reports/tool_calls/function-binding-results.xml) |
+| 生产 SDK／provider 原生 FC 协议（本地 HTTP 注入） | 2 passed，0.60s | [provider-function-results.xml](../examples/integration/reports/tool_calls/provider-function-results.xml) |
+| 原主循环、原 CLI 冒烟、检索与读取回归 | 156 passed、1 skipped，13.69s | [existing-components-regression.xml](../examples/integration/reports/tool_calls/existing-components-regression.xml) |
+
+新测试 14 项全部执行；回归跳过显式真实 API 测试。新增测试在同一正式 Agent、记录适配器和执行策略下运行，使用 Agent.iter 在观察送达后的响应处停止，不运行最终答案处理、不进行状态或回答语义验收。12 项模型响应由 FunctionModel 控制；2 项通过生产 open_model 与 SDK，只有 HTTP transport 用 MockTransport 替换，使用假密钥并禁用 socket／DNS。没有实际 API 请求或费用，不将 mode=real 误称真实模型调用。
+
+覆盖：关键词搜索与空 query＋doc_ids 定位；全文／章节／块读取；模型适配器按真实命中定位请求章节；使用返回游标续搜；超大章节返回定位后局部读取成功；同批两工具正确关联调用 ID；无效 limit、空 ID 集合、互斥读取选择器均在执行前被框架拒绝，随后合法 FC 可正常执行。每次请求均检查工具定义。结果回传的正文、定位、证据和日志均来自实际工具，不使用理想工具输出。
+
+14 组输入、过程、实际结果及指标见 [FC 接入记录](../examples/integration/tool-calls.md)。SDK 用例额外保存 provider-requests／provider-responses，不保存认证头或密钥。output.json 明确 stage=agent_tool_calls、live_model=false、stopped_after=tool_observation；它是测试切片的实际结果汇总，不是业务 Answer。测试预期只留在脚本／评估，不传给模型。
+
+测试草稿首次将普通 Pydantic JSON schema 与工具 schema 直接比较，因框架省略展示用 title 导致 12 项断言失败；改为使用框架公开的 GenerateToolJsonSchema 对照契约。随后参数错误反馈类型断言发现当前版本使用携带字段错误的 ToolReturnPart，而非假定的 RetryPromptPart；按实际协议修正后全部通过。这些为测试对锁定版本的假设错误，没有通过删除参数约束或绕过框架解决。
+
+**验证边界：** 只证明程序与协议接通，模型动作由受控响应决定；未证明真实服务接受当前 schema 或自主选择补读的质量。默认 CLI 仍保留旧 smoke，正式工具需显式指定 --prepared；没有把旧真实冒烟记录重新命名为新检索结果。此次没有运行新业务 E2E、增加会话或向量能力。同步本地计算仍不能由异步 timeout 强制打断，原有超时回归只证明先前受控异步边界。
+
 ## 限制与下一阶段
 
-- 独立检索阶段只验证单工具；目录整理时额外复跑原主循环与接入基线，仍未联通新检索。Q01～Q18 的完整 Agent 场景尚未验收，不报告 Agent 业务通过率。
-- Agent 的 `smoke_fixture` 仍直接返回小型资料集；独立搜索已实现 BM25，尚未接入 Agent，不能把原冒烟描述为新检索联调。
-- 独立搜索实现 BM25 搜索契约，独立读取已实现全文／章节／块及超限定位契约；两者尚未接入主循环，向量及混合搜索尚未实现。
+- Q01～Q18 的完整 Agent 场景尚未验收，不报告 Agent 业务通过率；最新 FC 集成只证明工具调用和观察反馈。
+- 原 smoke_fixture 基线仍直接返回小型资料集；--prepared 启用正式工具，不能把原冒烟记录描述为新工具的真实模型验收。
+- BM25 与全文／章节／块读取已接入主循环并完成受控 FC 验证；真实服务验证、向量及混合搜索尚未完成。
 - 真实接入已通过一次实际工具闭环；当前版本仍仅作为冒烟环境基线，完整接入契约待验证。
 - 同批工具与终态、共享输出修正额度、模型／工具预算、错误参数计数、传输重试及异步超时／取消已受控验证；完整工具协议、CPU 工作进程及 CLI 中断展示仍待对应模块开发。
 - 当前仅单题 CLI，没有历史、多轮问答或完整离线场景集合。

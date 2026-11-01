@@ -19,6 +19,7 @@ class Settings(BaseSettings):
     # This initial integration deliberately has no thinking-mode switch.
     thinking: Literal[False] = False
     corpus_path: Path = Path("data/smoke/manifest.json")
+    prepared_path: Path | None = None
     output_dir: Path = Path("runtime/runs")
     max_model_turns: int = Field(default=10, ge=1)
     max_http_attempts: int = Field(default=20, ge=1)
@@ -30,7 +31,7 @@ class Settings(BaseSettings):
     turn_timeout: float = Field(default=120, gt=0)
     max_input_chars: int = Field(default=100_000, ge=1)
     max_tool_chars: int = Field(default=12_000, ge=1)
-    # Shared retrieval configuration; the existing agent smoke source is unchanged.
+    # Shared retrieval configuration; prepared_path selects indexed tool integration.
     tokenizer_path: Path = Path("runtime/models/bge-small-zh-v1.5-tokenizer/tokenizer.json")
     retrieval_cache_dir: Path = Path("runtime/cache/retrieval")
     chunk_target_tokens: int = Field(default=320, ge=32, le=480)
@@ -59,8 +60,8 @@ class Settings(BaseSettings):
         return {
             **self.model_dump(mode="json", exclude={"deepseek_api_key"}),
             "api_key_present": self.has_api_key,
-            "stage": "integration_smoke",
-            "retrieval": "smoke_fixture",
+            "stage": "tool_integration" if self.prepared_path else "integration_smoke",
+            "retrieval": "bm25" if self.prepared_path else "smoke_fixture",
         }
 
 

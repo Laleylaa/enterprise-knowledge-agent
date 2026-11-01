@@ -1,0 +1,50 @@
+{
+  "case_id": "fc_argument_correction_limit",
+  "run_id": "524ba3a2fae14f5abb80f6ceaf9e2298",
+  "artifacts": [
+    {
+      "path": "inputs/fc_argument_correction_limit/524ba3a2fae14f5abb80f6ceaf9e2298/corpus.json",
+      "sha256": "758cfd629aa76666a489e86868e3c52584f606df4c0e6fba130b00b30347cd60"
+    },
+    {
+      "path": "inputs/fc_argument_correction_limit/524ba3a2fae14f5abb80f6ceaf9e2298/index-manifest.json",
+      "sha256": "092039b10911289c54acb61d0b10ddd847e659568fac56a2ed995a4acc9db3e6"
+    },
+    {
+      "path": "inputs/fc_argument_correction_limit/524ba3a2fae14f5abb80f6ceaf9e2298/input.json",
+      "sha256": "e4eb9372021f5ce94d45d0d9419fd1911706a0a0b29cca92a7b5ffa2561569fd"
+    },
+    {
+      "path": "traces/fc_argument_correction_limit/524ba3a2fae14f5abb80f6ceaf9e2298/model-inputs.jsonl",
+      "sha256": "37abfdf857778ff5e1959b95f11abecbe36c1b22aea714db4efac67b745bb910"
+    },
+    {
+      "path": "traces/fc_argument_correction_limit/524ba3a2fae14f5abb80f6ceaf9e2298/observed-evidence.json",
+      "sha256": "c63e7462ec62612b2467e5a2257f44b9e7c1f3831cb3433a45c89a029bfb783e"
+    },
+    {
+      "path": "outputs/fc_argument_correction_limit/524ba3a2fae14f5abb80f6ceaf9e2298/output.json",
+      "sha256": "2c17fd7b7015594f45ed67dca5cf9ab9b2106fd95419a3421c8f121b2618c60d"
+    },
+    {
+      "path": "traces/fc_argument_correction_limit/524ba3a2fae14f5abb80f6ceaf9e2298/run.json",
+      "sha256": "a150473d4dc4653e054a438e0845b1d1065b63c95171f9e38a3667539008a45b"
+    },
+    {
+      "path": "traces/fc_argument_correction_limit/524ba3a2fae14f5abb80f6ceaf9e2298/tool-inputs.jsonl",
+      "sha256": "dca8d35fb891b4e7967403ebbe47498ca8bd5ab7b3a70c12ccd8fc1a4dfe42ef"
+    },
+    {
+      "path": "reports/fc_argument_correction_limit/524ba3a2fae14f5abb80f6ceaf9e2298/tool-integration-evaluation.json",
+      "sha256": "3453d48ec4224a9537ffdc07f77ccfcbc32dc0cf3d81e5a8c599faf95b6d4baa"
+    },
+    {
+      "path": "traces/fc_argument_correction_limit/524ba3a2fae14f5abb80f6ceaf9e2298/tool-results.jsonl",
+      "sha256": "5b52ef67014f7ffee2cf385b4a76dcdddbcbaeabfbfa055050a6d179e2c13f2c"
+    },
+    {
+      "path": "traces/fc_argument_correction_limit/524ba3a2fae14f5abb80f6ceaf9e2298/trace.jsonl",
+      "sha256": "d1e2f1f1cf54e146eb941cd8ee78a87a5ad22006771ae99e0c03fb9be12fb2f5"
+    }
+  ]
+}
