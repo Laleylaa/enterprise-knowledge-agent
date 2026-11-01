@@ -3,7 +3,7 @@
 from pathlib import Path
 from typing import Literal
 
-from pydantic import Field, SecretStr
+from pydantic import Field, SecretStr, model_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -30,6 +30,24 @@ class Settings(BaseSettings):
     turn_timeout: float = Field(default=120, gt=0)
     max_input_chars: int = Field(default=100_000, ge=1)
     max_tool_chars: int = Field(default=12_000, ge=1)
+    # Shared retrieval configuration; the existing agent smoke source is unchanged.
+    tokenizer_path: Path = Path("runtime/models/bge-small-zh-v1.5-tokenizer/tokenizer.json")
+    retrieval_cache_dir: Path = Path("runtime/cache/retrieval")
+    chunk_target_tokens: int = Field(default=320, ge=32, le=480)
+    chunk_max_tokens: int = Field(default=480, ge=32, le=480)
+    chunk_overlap_tokens: int = Field(default=48, ge=0)
+    bm25_k1: float = Field(default=1.5, gt=0)
+    bm25_b: float = Field(default=0.75, ge=0, le=1)
+    bm25_epsilon: float = Field(default=0.25, ge=0)
+    search_cursor_capacity: int = Field(default=256, ge=1)
+
+    @model_validator(mode="after")
+    def consistent_chunk_limits(self) -> "Settings":
+        if self.chunk_target_tokens > self.chunk_max_tokens:
+            raise ValueError("chunk target must not exceed the hard limit")
+        if self.chunk_overlap_tokens >= self.chunk_target_tokens // 2:
+            raise ValueError("chunk overlap must be less than half the target")
+        return self
 
     @property
     def has_api_key(self) -> bool:

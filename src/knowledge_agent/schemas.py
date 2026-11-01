@@ -45,6 +45,12 @@ class Answer(StrictModel):
         return self
 
 
+class EvidenceSpan(StrictModel):
+    start: int
+    end: int
+    text: str
+
+
 class Evidence(StrictModel):
     evidence_id: str
     tool_call_id: str
@@ -56,6 +62,7 @@ class Evidence(StrictModel):
     start: int
     end: int
     text: str
+    source_spans: list[EvidenceSpan] = Field(default_factory=list)
     delivered_to_model: bool = False
 
 

@@ -42,9 +42,11 @@
 |---|---|
 | [smoke/manifest.json](smoke/manifest.json) | 最小冒烟资料也采用正式格式；原有单句正文及脚本前提保持不变 |
 | [F1 清单](fixtures/F1_single_rule/manifest.json)、[D01 原文](fixtures/F1_single_rule/documents/D01.md) | 已准备一份有章节的制度，包含提交期限及处理状态说明；没有凭证要求 |
+| [F2 清单](fixtures/F2_conflicting_rules/manifest.json) | 独立冲突资料：D01 为 30 天，D02 为 15 天；相同日期，不提供优先级或范围解释 |
+| [prepared](prepared/README.md) | F1、F2 的正式 tokenizer 预生成块，支持无网络、无 tokenizer 文件的基础搜索 |
 
-F1 是后续开发可使用的原文样例，不表示 Q01 已验收，也不是当前固定 Mock 脚本的输入。当前冒烟只使用 smoke/manifest.json。
+F1 和 F2 已用于独立搜索工具的测试，不表示 Q01／Q02 的 Agent 行为已验收，也不是当前固定 Mock 脚本的输入。原有 Agent 冒烟仍只使用 smoke/manifest.json。
 
 已删除旧格式的 F2～F6 条款草稿及提前建立的全量评估索引。后续按实际开发需要逐组编写文档与对应测试；关键条款及冲突、缺口等场景仍以 solution §11.4 为准。
 
-每次只加载一套资料，禁止把互斥场景合并。加载后现有 corpus_hash 包含原文和文档元数据；正式分块、索引及其验证尚未完成。预期答案和故障计划不进入知识原文或模型输入。
+每次只加载一套资料，禁止把互斥场景合并。原有冒烟指纹保持其原有定义；新检索快照的 corpus_hash 包括来源、分块配置和 tokenizer 身份，索引另记录分词字典及 BM25 参数指纹。派生块经过原文位置、覆盖范围和预算检查。预期答案和故障计划不进入知识原文或模型输入。
