@@ -26,7 +26,10 @@ class RunRecorder:
     def event(self, event_type: str, origin: str = "runtime", **payload: Any) -> None:
         self.sequence += 1
         self.append("trace.jsonl", {
+            "event_id": f"{self.run_id}:{self.sequence}",
             "run_id": self.run_id,
+            "model_turn": payload.get("model_turn"),
+            "tool_call_id": payload.get("tool_call_id"),
             "sequence": self.sequence,
             "timestamp": datetime.now(timezone.utc).isoformat(),
             "event_type": event_type,

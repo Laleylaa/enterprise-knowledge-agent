@@ -15,6 +15,8 @@ from knowledge_agent.retrieval.snapshot import RetrievalSnapshot
 
 
 class Bm25Index:
+    strategy = "bm25"
+
     def __init__(self, snapshot: RetrievalSnapshot, settings: Settings):
         self.snapshot = snapshot
         dictionary = Path(jieba.__file__).with_name("dict.txt")

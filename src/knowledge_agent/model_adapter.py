@@ -1,6 +1,7 @@
 """Model construction, bounded requests and observable protocol messages."""
 
 import asyncio
+import json
 from contextlib import asynccontextmanager
 from dataclasses import asdict
 from typing import AsyncIterator
@@ -36,7 +37,11 @@ def public_messages(messages: list[ModelMessage]) -> list[dict]:
 @asynccontextmanager
 async def open_model(settings: Settings) -> AsyncIterator[Model]:
     if settings.mode == "mock":
-        yield create_smoke_model()
+        if settings.mock_scenario:
+            from knowledge_agent.offline_scenarios import create_scenario_model
+            yield create_scenario_model(settings.mock_scenario)
+        else:
+            yield create_smoke_model()
         return
     if not settings.has_api_key:
         raise RunStopped("missing_api_key", "真实模式缺少 DEEPSEEK_API_KEY，未调用模型，也未切换 Mock。")
@@ -46,7 +51,7 @@ async def open_model(settings: Settings) -> AsyncIterator[Model]:
                            timeout=settings.model_timeout) as client:
         yield OpenAIChatModel(settings.model_name,
                               provider=DeepSeekProvider(openai_client=client),
-                              settings=OpenAIChatModelSettings(thinking=False))
+                              settings=OpenAIChatModelSettings(thinking=False, max_tokens=settings.model_output_tokens))
 
 
 class RecordedModel(WrapperModel):
@@ -58,12 +63,27 @@ class RecordedModel(WrapperModel):
 
     async def request(self, messages, model_settings, model_request_parameters):
         state, settings = self.state, self.state.settings
+        # Count the full observable payload, including history, tool schemas and observations.
+        # UTF-8 bytes plus protocol allowance are a deliberately conservative BPE estimate,
+        # not an exact DeepSeek tokenizer count. The configured cap must fit the endpoint.
+        payload = {"messages": public_messages(messages),
+                   "instructions": [asdict(p) for p in model_request_parameters.instruction_parts or []],
+                   "tools": [asdict(t) for t in model_request_parameters.function_tools + model_request_parameters.output_tools]}
+        estimated_tokens = len(json.dumps(payload, ensure_ascii=False).encode("utf-8")) + 1024
+        profile_limit = self.wrapped.context_window
+        capacity = min(settings.model_context_tokens, profile_limit) if profile_limit else settings.model_context_tokens
+        if estimated_tokens + settings.model_output_tokens > capacity:
+            state.recorder.event("model_context_rejected", estimated_tokens=estimated_tokens,
+                                 estimate_method="utf8_bytes_plus_1024", capacity=capacity,
+                                 output_reserve=settings.model_output_tokens)
+            raise RunStopped("model_context_limit", "本轮模型上下文超出保守预算；请缩短历史或开始新会话。未截断消息，也未发送本次请求。")
         begin_model_turn(state)
         turn = state.usage.model_turns
         for attempt in range(settings.transport_retries + 1):
             begin_attempt(state)
+            request_id = f"{state.recorder.run_id}:M{turn}:A{attempt + 1}"
             state.recorder.append("model-inputs.jsonl", {
-                "model_turn": turn, "attempt": attempt + 1,
+                "request_id": request_id, "model_turn": turn, "attempt": attempt + 1,
                 "messages": public_messages(messages),
                 "instructions": [asdict(p) for p in model_request_parameters.instruction_parts or []],
                 "tools": [{"name": t.name, "description": t.description, "schema": t.parameters_json_schema}
@@ -74,7 +94,7 @@ class RecordedModel(WrapperModel):
                                            for p in m.parts if isinstance(p, ToolReturnPart)})
             if state.knowledge_tools is not None:
                 state.recorder.write("observed-evidence.json", [e.model_dump(mode="json") for e in state.evidence.snapshot()])
-            state.recorder.event("model_request_started", origin=settings.mode, model_turn=turn, attempt=attempt + 1)
+            state.recorder.event("model_request_started", origin=settings.mode, request_id=request_id, model_turn=turn, attempt=attempt + 1)
             try:
                 async with asyncio.timeout(settings.model_timeout):
                     response = await self.wrapped.request(messages, model_settings, model_request_parameters)
@@ -98,5 +118,13 @@ class RecordedModel(WrapperModel):
         state.mixed_response = bool(business and any(p.tool_name in output_names for p in calls))
         if state.mixed_response:
             reject_output(state, MIXED_OUTPUT_REASON, "mixed_response")
+        for call in business:
+            try:
+                args = call.args_as_dict()
+            except (ValueError, TypeError):
+                continue
+            if isinstance(args.get("purpose"), str):
+                state.action_summaries.append({"model_turn": turn, "tool": call.tool_name,
+                                               "tool_call_id": call.tool_call_id, "purpose": args["purpose"]})
         admit_tools(state, business)
         return response

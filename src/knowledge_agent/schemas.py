@@ -27,11 +27,12 @@ class Citation(StrictModel):
 
 
 class Answer(StrictModel):
-    status: Status
-    answer: NonEmpty
-    citations: list[Citation]
-    gaps: list[NonEmpty]
-    clarification: NonEmpty | None
+    # Select evidence before composing claims; the public fields and types stay the same.
+    citations: list[Citation] = Field(description="逐项支持 answer 中所有制度性结论的本轮原文；只引用实际需要的连续片段。状态结论须引状态定义，不能用文档用途或期限条款替代。")
+    answer: NonEmpty = Field(description="仅依据上面已选引文组织本轮的最小充分答案，不是文档摘要。只问国内期限时，只写国内适用依据、起算条件和期限；不写海外期限、申请状态或其他未问事项，即使有引用也省略。没有选入引文的制度结论不要写。只按用户原话描述通知，不推断通知形式。")
+    gaps: list[NonEmpty] = Field(description="仅列本轮已问但尚未回答的事项，或阻碍必要核实的实际故障；未询问的日期、材料、状态等不列入。无相关缺口时为空列表。")
+    clarification: NonEmpty | None = Field(description="为解决当前问题所需的具体追问；用户已说明没有更多可核实线索时为 null，不在 answer 中重复追问。")
+    status: Status = Field(description="根据上述答案和实际缺口选择：resolved：本轮所问均有依据；needs_info：需要具体追问；unresolved：所问信息缺少依据或冲突无法确定；incomplete：实际故障或执行限制打断了必要处理。只因资料未写生效日期、凭证等所问内容，应为 unresolved 或 needs_info，不能为 incomplete。")
     decision_summary: NonEmpty
 
     @model_validator(mode="after")
@@ -73,12 +74,17 @@ class Usage(StrictModel):
 
 
 class RunResult(StrictModel):
+    mock_scenario: str | None = None
     run_id: str
     mode: Literal["real", "mock"]
     stage: Literal["integration_smoke", "tool_integration"] = "integration_smoke"
-    requested_retrieval: Literal["smoke_fixture", "bm25"] = "smoke_fixture"
+    requested_retrieval: Literal["smoke_fixture", "bm25", "vector", "hybrid"] = "smoke_fixture"
     result_origin: Literal["model", "mock", "runtime_fallback"]
     termination_reason: str
     result: Answer
     observed_evidence: list[Evidence]
+    session_id: str | None = None
+    turn_id: int | None = None
+    previous_run_id: str | None = None
+    action_summaries: list[dict] = Field(default_factory=list)
     usage: Usage

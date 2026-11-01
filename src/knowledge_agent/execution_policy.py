@@ -1,6 +1,7 @@
 """Cancellable tool execution using public PydanticAI capability hooks."""
 
 import asyncio
+from time import monotonic
 from typing import Any
 
 from pydantic import ValidationError
@@ -32,6 +33,7 @@ class ToolExecutionPolicy(AbstractCapability[TurnContext]):
         state.recorder.event("tool_started", tool=call.tool_name,
                              tool_call_id=call.tool_call_id, arguments=call.args)
         timeout = asyncio.timeout(state.settings.tool_timeout)
+        state.tool_deadline = min(state.deadline, monotonic() + state.settings.tool_timeout)
         try:
             async with timeout:
                 result = await handler(args)
@@ -45,3 +47,5 @@ class ToolExecutionPolicy(AbstractCapability[TurnContext]):
         except asyncio.CancelledError:
             state.recorder.event("tool_cancelled", tool=call.tool_name, tool_call_id=call.tool_call_id)
             raise
+        finally:
+            state.tool_deadline = None

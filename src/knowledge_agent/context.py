@@ -27,3 +27,6 @@ class TurnContext:
     output_retries_used: int = 0
     rejected_output_turn: int | None = None
     knowledge_tools: "KnowledgeTools | None" = None
+    action_summaries: list[dict] = field(default_factory=list)
+    history_message_count: int = 0
+    tool_deadline: float | None = None

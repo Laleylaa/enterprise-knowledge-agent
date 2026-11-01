@@ -55,8 +55,8 @@ def tool_error(ctx: RunContext[TurnContext], tool: str, code: str, message: str)
                   "corpus_hash": state.source.corpus_hash, "status": "error",
                   "data": {"hits": [], "segments": [], "locators": []},
                   "errors": [{"code": code, "message": message, "retryable": True, "target": None}],
-                  "execution": {"strategy": "bm25" if tool == "search_knowledge" else "document",
-                                "requested_mode": "bm25" if tool == "search_knowledge" else None,
+                  "execution": {"strategy": state.source.strategy if tool == "search_knowledge" else "document",
+                                "requested_mode": state.source.strategy if tool == "search_knowledge" else None,
                                 "effective_branches": [], "next_cursor": None,
                                 "has_more": False, "return_limited": False}}
         state.recorder.append("tool-results.jsonl", result)

@@ -4,6 +4,7 @@ from collections import OrderedDict
 from copy import deepcopy
 from dataclasses import dataclass
 from secrets import token_urlsafe
+from time import monotonic
 from typing import Annotated
 
 from pydantic import Field, ValidationError, model_validator
@@ -13,7 +14,7 @@ from knowledge_agent.corpus import fingerprint
 from knowledge_agent.evidence import EvidenceStore
 from knowledge_agent.schemas import NonEmpty, StrictModel
 from knowledge_agent.trace import RunRecorder
-from knowledge_agent.retrieval.bm25 import Bm25Index
+from knowledge_agent.retrieval.backend import RetrievalIndex, RankResult, rank_sync, rank_async, failed_rank
 from knowledge_agent.retrieval.models import Chunk, digest
 
 
@@ -38,6 +39,15 @@ class CursorPage:
     offset: int
     strategy: str
     errors: tuple[dict, ...]
+    branches: tuple[str, ...]
+
+
+@dataclass(frozen=True)
+class SearchPlan:
+    request: SearchRequest
+    binding: str
+    doc_ids: tuple[str, ...] | None
+    errors: tuple[dict, ...]
 
 
 def tool_error(code: str, message: str, *, retryable: bool = False,
@@ -48,18 +58,46 @@ def tool_error(code: str, message: str, *, retryable: bool = False,
 
 class SearchTool:
     name = "search_knowledge"
-    description = "按关键词检索原文块；可过滤文档、按明确 ID 定位或沿游标翻页。候选不代表结论。"
+    description = "检索原文块；可过滤文档、按明确 ID 定位或沿游标翻页。候选不代表结论。"
 
-    def __init__(self, index: Bm25Index, settings: Settings, evidence: EvidenceStore, recorder: RunRecorder,
+    def __init__(self, index: RetrievalIndex, settings: Settings, evidence: EvidenceStore, recorder: RunRecorder,
                  *, standalone: bool = True):
         if evidence.corpus_hash != index.snapshot.corpus_hash:
             raise ValueError("Evidence store and index must use the same snapshot")
         self.index, self.settings, self.evidence, self.recorder = index, settings, evidence, recorder
         self.standalone = standalone
+        self.strategy = getattr(index, "strategy", "bm25")
+        worker = getattr(index, "worker", None)
+        self._worker_event_offset = 0 if standalone or worker is None else len(worker.events)
         self._cursors: OrderedDict[str, CursorPage] = OrderedDict()
 
     def execute(self, arguments: dict, *, call_id: str) -> dict:
         """call_id is supplied by the caller, never included in model arguments."""
+        prepared = self._prepare(arguments, call_id)
+        if isinstance(prepared, dict):
+            return prepared
+        if isinstance(prepared, CursorPage):
+            return self._page(prepared, arguments["limit"] if "limit" in arguments else 5, call_id)
+        ranked = (self._lookup(prepared) if not prepared.request.query.strip() else
+                  rank_sync(self.index, prepared.request.query, prepared.doc_ids))
+        return self._ranked(prepared, ranked, call_id)
+
+    async def aexecute(self, arguments: dict, *, call_id: str, deadline=None) -> dict:
+        """Same contract/paging as execute; awaits cancellable vector computation."""
+        prepared = self._prepare(arguments, call_id)
+        if isinstance(prepared, dict):
+            return prepared
+        if isinstance(prepared, CursorPage):
+            return self._page(prepared, arguments.get("limit", 5), call_id)
+        try:
+            ranked = (self._lookup(prepared) if not prepared.request.query.strip() else
+                      await rank_async(self.index, prepared.request.query, prepared.doc_ids, deadline=deadline))
+            return self._ranked(prepared, ranked, call_id)
+        finally:
+            # Also flush actual stop events when cancellation prevents a tool result.
+            self._record_worker_events()
+
+    def _prepare(self, arguments, call_id):
         recorded_input = {"tool": self.name, "tool_call_id": call_id, "arguments": arguments}
         self.recorder.append("tool-inputs.jsonl", recorded_input)
         if self.standalone:
@@ -78,26 +116,38 @@ class SearchTool:
             if page is None or page.binding != binding:
                 return self._return(call_id, "error", errors=[tool_error("INVALID_CURSOR", "游标无效、已失效或与本次参数不匹配。",
                                                                          kind="cursor", identity=request.cursor)])
-        else:
-            errors = []
-            valid_ids = None
-            if doc_ids is not None:
-                valid_ids = tuple(doc_id for doc_id in doc_ids if self.index.snapshot.get(doc_id) is not None)
-                errors = [tool_error("NOT_FOUND", "文档 ID 不在本次资料快照中。", kind="doc", identity=doc_id)
-                          for doc_id in doc_ids if doc_id not in valid_ids]
-                if not valid_ids:
-                    return self._return(call_id, "error", strategy="id_lookup" if not request.query.strip() else "bm25", errors=errors)
-            strategy = "bm25" if request.query.strip() else "id_lookup"
-            try:
-                candidates = self.index.rank(request.query, valid_ids) if strategy == "bm25" else self.index.lookup(valid_ids)
-            except Exception as exc:
-                self.recorder.event("retrieval_failed", tool_call_id=call_id, error_type=type(exc).__name__)
-                errors.append(tool_error("SEARCH_FAILED", "本次检索执行失败，未能取得候选。", retryable=True,
-                                         kind="branch", identity=strategy))
-                return self._return(call_id, "error", strategy=strategy, errors=errors)
-            page = CursorPage(binding, tuple(candidates), 0, strategy, tuple(errors))
+            return page
+        errors, valid_ids = [], None
+        if doc_ids is not None:
+            valid_ids = tuple(doc_id for doc_id in doc_ids if self.index.snapshot.get(doc_id) is not None)
+            errors = [tool_error("NOT_FOUND", "文档 ID 不在本次资料快照中。", kind="doc", identity=doc_id)
+                      for doc_id in doc_ids if doc_id not in valid_ids]
+            if not valid_ids:
+                return self._return(call_id, "error", strategy="id_lookup" if not request.query.strip() else self.strategy, errors=errors)
+        return SearchPlan(request, binding, valid_ids, tuple(errors))
+
+    def _lookup(self, plan):
+        started = monotonic()
+        try:
+            return RankResult(tuple(self.index.lookup(plan.doc_ids)))
+        except Exception as exc:
+            return failed_rank("id_lookup", exc, started)
+
+    def _ranked(self, plan, ranked, call_id):
+        strategy = self.strategy if plan.request.query.strip() else "id_lookup"
+        errors = (*plan.errors, *ranked.errors)
+        self.recorder.event("retrieval_ranked", tool_call_id=call_id, strategy=strategy,
+                            effective_branches=list(ranked.branches), branch_details=list(ranked.details),
+                            candidate_chunk_ids=[chunk.chunk_id for chunk in ranked.candidates])
+        failed = bool(ranked.errors) if strategy == "id_lookup" else not ranked.branches
+        if failed:
+            return self._return(call_id, "error", strategy=strategy, errors=list(errors))
+        page = CursorPage(plan.binding, ranked.candidates, 0, strategy, errors, ranked.branches)
+        return self._page(page, plan.request.limit, call_id)
+
+    def _page(self, page, limit, call_id):
         selected, used, offset, limited = [], 0, page.offset, False
-        while offset < len(page.candidates) and len(selected) < request.limit:
+        while offset < len(page.candidates) and len(selected) < limit:
             chunk = page.candidates[offset]
             section = self.index.snapshot.sections[chunk.section_id]
             size = len(chunk.text) + len(section.heading or "")
@@ -110,17 +160,17 @@ class SearchTool:
         if not selected and offset < len(page.candidates):
             return self._return(call_id, "error", strategy=page.strategy, errors=[*page.errors, tool_error(
                 "RETURN_BUDGET_TOO_SMALL", "正文预算无法容纳首块及其标题，请调整配置。")], limited=True,
-                branches=["bm25"] if page.strategy == "bm25" else [])
+                branches=list(page.branches))
         hits = [self._hit(chunk, call_id) for chunk in selected]
         cursor = None
         if offset < len(page.candidates):
             cursor = token_urlsafe(24)
-            self._cursors[cursor] = CursorPage(binding, page.candidates, offset, page.strategy, page.errors)
+            self._cursors[cursor] = CursorPage(page.binding, page.candidates, offset, page.strategy, page.errors, page.branches)
             while len(self._cursors) > self.settings.search_cursor_capacity:
                 self._cursors.popitem(last=False)
         status = "partial" if page.errors else "ok" if hits else "empty"
         return self._return(call_id, status, hits=hits, strategy=page.strategy, errors=list(page.errors),
-                            cursor=cursor, limited=limited, branches=["bm25"] if page.strategy == "bm25" else [])
+                            cursor=cursor, limited=limited, branches=list(page.branches))
 
     def _hit(self, chunk: Chunk, call_id: str) -> dict:
         snapshot = self.index.snapshot
@@ -136,12 +186,13 @@ class SearchTool:
                 "heading_span": heading.model_dump() if heading else None, "chunk_id": chunk.chunk_id,
                 "source_span": {"start": chunk.start, "end": chunk.end}, "text": chunk.text}
 
-    def _return(self, call_id, status, *, hits=None, strategy="bm25", errors=None,
+    def _return(self, call_id, status, *, hits=None, strategy=None, errors=None,
                 cursor=None, limited=False, branches=None) -> dict:
+        self._record_worker_events()
         response = {"schema_version": 1, "tool": self.name, "tool_call_id": call_id,
                     "corpus_hash": self.index.snapshot.corpus_hash, "status": status,
                     "data": {"hits": hits or [], "segments": [], "locators": []}, "errors": deepcopy(errors or []),
-                    "execution": {"strategy": strategy, "requested_mode": "bm25",
+                    "execution": {"strategy": strategy or self.strategy, "requested_mode": self.strategy,
                                   "effective_branches": branches or [],
                                   "next_cursor": cursor, "has_more": cursor is not None, "return_limited": limited}}
         self.recorder.append("tool-results.jsonl", response)
@@ -152,3 +203,24 @@ class SearchTool:
             self.recorder.write("output.json", response)
         self.recorder.write("observed-evidence.json", [e.model_dump(mode="json") for e in self.evidence.snapshot()])
         return response
+
+    def _record_worker_events(self):
+        worker = getattr(self.index, "worker", None)
+        if worker is not None:
+            for event in worker.events[self._worker_event_offset:]:
+                self.recorder.event(event["event"], **{k: v for k, v in event.items() if k != "event"})
+            self._worker_event_offset = len(worker.events)
+
+    def close(self):
+        close = getattr(self.index, "close", None)
+        try:
+            if close is not None:
+                close()
+        finally:
+            self._record_worker_events()
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, *exc):
+        self.close()

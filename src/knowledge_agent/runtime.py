@@ -15,11 +15,12 @@ from knowledge_agent.budgets import check_time
 from knowledge_agent.config import Settings
 from knowledge_agent.context import TurnContext
 from knowledge_agent.corpus import KnowledgeSource
-from knowledge_agent.errors import RunStopped
+from knowledge_agent.errors import RunStopped, TurnCancelled
 from knowledge_agent.knowledge_base import IndexedCorpus
 from knowledge_agent.evidence import EvidenceStore
 from knowledge_agent.model_adapter import RecordedModel, open_model
 from knowledge_agent.schemas import Answer, RunResult, Usage
+from knowledge_agent.session import ConversationSession, SessionTurn, validate_input
 from knowledge_agent.trace import RunRecorder
 from knowledge_agent.tool_binding import KnowledgeTools
 
@@ -32,24 +33,28 @@ def incomplete(message: str) -> Answer:
                   decision_summary="程序记录执行中断事实，未生成后续模型决策。")
 
 
-def create_turn_context(question: str, settings: Settings, source: KnowledgeSource | IndexedCorpus) -> TurnContext:
+def create_turn_context(question: str, settings: Settings, source: KnowledgeSource | IndexedCorpus,
+                        *, session_turn: SessionTurn | None = None) -> TurnContext:
     """Prepare real tools and run-scoped state without starting any model requests."""
-    if not question.strip() or len(question) > settings.max_input_chars:
-        raise ValueError("问题不能为空，且不得超过配置的字符上限。")
+    validate_input(question, session_turn.effective_history if session_turn else [], settings.max_input_chars)
     started = monotonic()
     run_id = uuid4().hex
     recorder = RunRecorder(settings.output_dir / settings.mode / run_id, run_id)
     state = TurnContext(settings, source, EvidenceStore(run_id, source.corpus_hash), recorder, Usage(),
                         deadline=started + settings.turn_timeout)
+    state.history_message_count = len(session_turn.effective_history) if session_turn else 0
     indexed = isinstance(source, IndexedCorpus)
     config = {**settings.public_config(), "stage": "tool_integration" if indexed else "integration_smoke",
               "retrieval": source.strategy}
-    recorder.write("input.json", {"question": question, "effective_history": [], "config": config})
+    recorder.write("input.json", {"question": question, "effective_history": [], "config": config,
+                                  **(session_turn.metadata() if session_turn else {})})
     corpus = {"corpus_hash": source.corpus_hash, "documents": source.snapshot()}
     if indexed:
         corpus["prepared"] = source.retrieval_snapshot.prepared.model_dump(mode="json")
         recorder.write("index-manifest.json", {"index_hash": source.index.index_hash, **source.index.manifest})
         state.knowledge_tools = KnowledgeTools.bind(source, state)
+        recorder.event("retrieval_initialized", requested_mode=source.strategy,
+                       startup_errors=list(getattr(source.index, "startup_errors", ())))
     recorder.write("corpus.json", corpus)
     recorder.event("input_accepted")
     return state
@@ -57,12 +62,20 @@ def create_turn_context(question: str, settings: Settings, source: KnowledgeSour
 
 async def run_turn(
     question: str, settings: Settings, source: KnowledgeSource | IndexedCorpus,
-    *, model_factory: ModelFactory | None = None,
+    *, model_factory: ModelFactory | None = None, session: ConversationSession | None = None,
 ) -> RunResult:
     """Run the framework loop with indexed tools or the explicit legacy smoke source."""
+    if settings.mode == "mock" and settings.mock_scenario:
+        from knowledge_agent.offline_scenarios import validate_scenario_input
+        validate_scenario_input(settings.mock_scenario, question)
+        if not isinstance(source, IndexedCorpus):
+            raise ValueError("正式 Mock 场景需要实际 BM25 资料与派生块。")
     started = monotonic()
-    state = create_turn_context(question, settings, source)
+    session_turn = session.prepare(question, settings.max_input_chars) if session else None
+    state = create_turn_context(question, settings, source, session_turn=session_turn)
     recorder, run_id = state.recorder, state.recorder.run_id
+    if session is not None:
+        session.accept(question, run_id, session_turn)
     origin = "model" if settings.mode == "real" else "mock"
     reason = "completed"
     cancelled = False
@@ -71,6 +84,7 @@ async def run_turn(
             async with (model_factory or open_model)(settings) as model:
                 agent = build_agent(RecordedModel(model, state), state)
                 result = await agent.run(question, deps=state,
+                                         message_history=session_turn.messages() if session_turn else None,
                                          usage_limits=UsageLimits(request_limit=None))
                 check_time(state)
                 answer = result.output
@@ -90,16 +104,27 @@ async def run_turn(
     except Exception as exc:
         recorder.event("runtime_error", error_type=type(exc).__name__)
         reason, origin, answer = "runtime_error", "runtime_fallback", incomplete("运行发生内部错误，处理尚未完成。")
+    finally:
+        if state.knowledge_tools is not None:
+            state.knowledge_tools.search._record_worker_events()
     outcome = RunResult(run_id=run_id, mode=settings.mode, result_origin=origin,
                         stage="tool_integration" if state.knowledge_tools else "integration_smoke",
                         requested_retrieval=source.strategy,
                         termination_reason=reason, result=answer,
-                        observed_evidence=state.evidence.snapshot(), usage=state.usage)
+                        observed_evidence=state.evidence.snapshot(), usage=state.usage,
+                        action_summaries=state.action_summaries, mock_scenario=settings.mock_scenario,
+                        session_id=session_turn.session_id if session_turn else None,
+                        turn_id=session_turn.turn_id if session_turn else None,
+                        previous_run_id=session_turn.previous_run_id if session_turn else None)
     recorder.event("final_result", status=answer.status, termination_reason=reason, result_origin=origin)
     recorder.write("output.json", outcome.model_dump(mode="json"))
     recorder.write("run-summary.json", {"run_id": run_id, "elapsed_seconds": monotonic() - started,
                                        "usage": state.usage.model_dump(), "artifacts_saved": True,
-                                       "mode": settings.mode, "stage": outcome.stage})
+                                       "mode": settings.mode, "stage": outcome.stage,
+                                       "session_id": outcome.session_id, "turn_id": outcome.turn_id,
+                                       "previous_run_id": outcome.previous_run_id})
+    if session is not None:
+        session.finish(outcome)
     if cancelled:
-        raise asyncio.CancelledError
+        raise TurnCancelled(outcome)
     return outcome
