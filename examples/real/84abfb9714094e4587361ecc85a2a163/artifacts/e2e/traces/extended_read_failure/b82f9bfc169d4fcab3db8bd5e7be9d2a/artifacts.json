@@ -1,0 +1,58 @@
+{
+  "case_id": "extended_read_failure",
+  "run_id": "b82f9bfc169d4fcab3db8bd5e7be9d2a",
+  "artifacts": [
+    {
+      "path": "reports/extended_read_failure/b82f9bfc169d4fcab3db8bd5e7be9d2a/business-evaluation.json",
+      "sha256": "095587d0729feab1aa0fef22b63dc29b129733fc525b55d2acaaf16d07edf04c"
+    },
+    {
+      "path": "inputs/extended_read_failure/b82f9bfc169d4fcab3db8bd5e7be9d2a/corpus.json",
+      "sha256": "758cfd629aa76666a489e86868e3c52584f606df4c0e6fba130b00b30347cd60"
+    },
+    {
+      "path": "inputs/extended_read_failure/b82f9bfc169d4fcab3db8bd5e7be9d2a/fault-injection.json",
+      "sha256": "217f33ecbce95baffa1f813557bed2b5884092b60b0d69ddab231f9a6e86eb0e"
+    },
+    {
+      "path": "inputs/extended_read_failure/b82f9bfc169d4fcab3db8bd5e7be9d2a/index-manifest.json",
+      "sha256": "6da37e7e6a90d527093ff16a71e4e4c0a0616e214693c839f6481bd14b1b7a69"
+    },
+    {
+      "path": "inputs/extended_read_failure/b82f9bfc169d4fcab3db8bd5e7be9d2a/input.json",
+      "sha256": "eafe1ccb014d975ffb91eba22ef03ba72cfdbccaf500b1c9464e4978e3666ec0"
+    },
+    {
+      "path": "traces/extended_read_failure/b82f9bfc169d4fcab3db8bd5e7be9d2a/model-inputs.jsonl",
+      "sha256": "a358ee02e8cff9b777604767fb77fb12e2658aef9de316b1f4b1dae55582b35e"
+    },
+    {
+      "path": "traces/extended_read_failure/b82f9bfc169d4fcab3db8bd5e7be9d2a/observed-evidence.json",
+      "sha256": "692568f1f0951407fa4944c6e185df7d057c82944ca461881ee467368e49a29d"
+    },
+    {
+      "path": "outputs/extended_read_failure/b82f9bfc169d4fcab3db8bd5e7be9d2a/output.json",
+      "sha256": "18ab2fcdea9c626d14bff78eefe0405caf0f649b6d2abe304612d350ddcec08e"
+    },
+    {
+      "path": "outputs/extended_read_failure/b82f9bfc169d4fcab3db8bd5e7be9d2a/run-summary.json",
+      "sha256": "a8e9e6bcf8f25ecbf06126c5583c2dd92de2eada3aa76189fae9a67d226fa777"
+    },
+    {
+      "path": "traces/extended_read_failure/b82f9bfc169d4fcab3db8bd5e7be9d2a/run.json",
+      "sha256": "f2ba3a781ea1c02c53dfb674a6035ddab2a0afe09902ef39733af1d18ad8552b"
+    },
+    {
+      "path": "traces/extended_read_failure/b82f9bfc169d4fcab3db8bd5e7be9d2a/tool-inputs.jsonl",
+      "sha256": "77cf885018bc1ef046c8406692a3eb2d00b55dbdeb9f715d998fb008243b7d7c"
+    },
+    {
+      "path": "traces/extended_read_failure/b82f9bfc169d4fcab3db8bd5e7be9d2a/tool-results.jsonl",
+      "sha256": "d970c61ef11d3077de7f22696a44c431636602597e768869ade8f2bb6b8346e8"
+    },
+    {
+      "path": "traces/extended_read_failure/b82f9bfc169d4fcab3db8bd5e7be9d2a/trace.jsonl",
+      "sha256": "ad90c78a3cd7b1b452432df65b4d01c63cf4f113b158cc91283396f883720e64"
+    }
+  ]
+}

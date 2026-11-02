@@ -1,0 +1,15 @@
+{
+  "run_id": "2a2de31ace564c4985fde230ec981f4a",
+  "elapsed_seconds": 3.5065519160125405,
+  "usage": {
+    "model_turns": 3,
+    "http_attempts": 3,
+    "tool_calls": 2
+  },
+  "artifacts_saved": true,
+  "mode": "real",
+  "stage": "tool_integration",
+  "session_id": "683631bde77d4146a4e15f20da499a1e",
+  "turn_id": 1,
+  "previous_run_id": null
+}

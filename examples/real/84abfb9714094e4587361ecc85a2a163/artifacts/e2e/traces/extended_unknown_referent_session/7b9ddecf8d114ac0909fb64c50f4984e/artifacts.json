@@ -1,0 +1,18 @@
+{
+  "case_id": "extended_unknown_referent_session",
+  "run_id": "7b9ddecf8d114ac0909fb64c50f4984e",
+  "artifacts": [
+    {
+      "path": "outputs/extended_unknown_referent_session/7b9ddecf8d114ac0909fb64c50f4984e/history.json",
+      "sha256": "28e3bc6d97a13f2fee68dabccb0fcce7064f41ea73c29a8eefcab101b07bf895"
+    },
+    {
+      "path": "traces/extended_unknown_referent_session/7b9ddecf8d114ac0909fb64c50f4984e/session.json",
+      "sha256": "228077a54d562ab7aa6cf0899d93c372486c48ff87df3de28b8fad9c136376a8"
+    },
+    {
+      "path": "traces/extended_unknown_referent_session/7b9ddecf8d114ac0909fb64c50f4984e/trace.jsonl",
+      "sha256": "008fbf27d1ffb72762293d70a30e53d41fefd66f01a23d7d93a2acbb3032557d"
+    }
+  ]
+}

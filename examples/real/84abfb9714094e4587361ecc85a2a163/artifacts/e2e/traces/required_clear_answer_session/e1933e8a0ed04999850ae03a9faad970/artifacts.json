@@ -1,0 +1,18 @@
+{
+  "case_id": "required_clear_answer_session",
+  "run_id": "e1933e8a0ed04999850ae03a9faad970",
+  "artifacts": [
+    {
+      "path": "outputs/required_clear_answer_session/e1933e8a0ed04999850ae03a9faad970/history.json",
+      "sha256": "5a300aa449f9e5cf0fae53ff2f43e982cc14850bc42839cd08865fd1941668f8"
+    },
+    {
+      "path": "traces/required_clear_answer_session/e1933e8a0ed04999850ae03a9faad970/session.json",
+      "sha256": "cec26ce23a17fb47a975ba2c4c27e3fb624840e5bf112203d53d434a4b726f44"
+    },
+    {
+      "path": "traces/required_clear_answer_session/e1933e8a0ed04999850ae03a9faad970/trace.jsonl",
+      "sha256": "d4a6588af7dacef1c5f82bc881a8e2ae98381388f145a8746c62560a4b7147f3"
+    }
+  ]
+}

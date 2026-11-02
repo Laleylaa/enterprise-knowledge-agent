@@ -1,0 +1,3 @@
+{"tool": "search_knowledge", "tool_call_id": "call_00_qlpc0FirHg7Y8SG4AYco7358", "arguments": {"query": "国内差旅报销期限", "purpose": "查找国内差旅报销期限规定", "doc_ids": ["D01", "D02", "D03"], "limit": 5, "cursor": null}}
+{"tool": "search_knowledge", "tool_call_id": "call_01_wZPgoSoFeOZtNROqVm6z0720", "arguments": {"query": "D01 D02 适用范围 说明", "purpose": "核实 D03 对 D01 与 D02 适用范围的说明", "doc_ids": ["D03"], "limit": 5, "cursor": null}}
+{"tool": "read_document", "tool_call_id": "call_00_TNwghM0pyhcnODSnm8JS4358", "arguments": {"doc_id": "D03", "purpose": "确认 D03 是否还有其他适用范围或优先关系说明", "section_id": null, "chunk_id": null, "cursor": null}}

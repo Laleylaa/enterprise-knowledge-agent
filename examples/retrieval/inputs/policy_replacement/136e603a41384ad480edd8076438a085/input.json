@@ -1,8 +1,0 @@
-{
-  "tool": "search_knowledge",
-  "tool_call_id": "search-1",
-  "arguments": {
-    "query": "国内差旅报销期限多久？",
-    "purpose": "查找可核对的制度原文"
-  }
-}

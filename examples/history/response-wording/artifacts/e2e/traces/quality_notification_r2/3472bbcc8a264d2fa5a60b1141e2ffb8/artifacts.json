@@ -1,0 +1,54 @@
+{
+  "case_id": "quality_notification_r2",
+  "run_id": "3472bbcc8a264d2fa5a60b1141e2ffb8",
+  "artifacts": [
+    {
+      "path": "reports/quality_notification_r2/3472bbcc8a264d2fa5a60b1141e2ffb8/chat-evaluation.json",
+      "sha256": "aca3f693cf54a4f00009af17b8fcf2a192c1700ba86bb0c55ce343d5a8beea02"
+    },
+    {
+      "path": "inputs/quality_notification_r2/3472bbcc8a264d2fa5a60b1141e2ffb8/corpus.json",
+      "sha256": "86f9b79101ccad916c8b9118c42be7abe75d784a405d99fc8130f78bdf6af9b4"
+    },
+    {
+      "path": "inputs/quality_notification_r2/3472bbcc8a264d2fa5a60b1141e2ffb8/index-manifest.json",
+      "sha256": "873934ad2eabe335ee1083c7083fbcd679b1586bda1d3330a90cb6289a399bb5"
+    },
+    {
+      "path": "inputs/quality_notification_r2/3472bbcc8a264d2fa5a60b1141e2ffb8/input.json",
+      "sha256": "a5bc6295ee81b9b98cfa53b60367b0136c80a97f254d6dad6acac2500144b274"
+    },
+    {
+      "path": "traces/quality_notification_r2/3472bbcc8a264d2fa5a60b1141e2ffb8/model-inputs.jsonl",
+      "sha256": "cb6ac60e662fb97661c44e219848ead73173bf41136580ef16ed5b55c2204a9c"
+    },
+    {
+      "path": "traces/quality_notification_r2/3472bbcc8a264d2fa5a60b1141e2ffb8/observed-evidence.json",
+      "sha256": "4591026912667bdf31dade0131511fd5b11d5b024d75cc88fb60fe0a807a5299"
+    },
+    {
+      "path": "outputs/quality_notification_r2/3472bbcc8a264d2fa5a60b1141e2ffb8/output.json",
+      "sha256": "fbdd071c9ef060b988c3d2feb844d23f6175cdacbbe70763c3fbd32b98988804"
+    },
+    {
+      "path": "outputs/quality_notification_r2/3472bbcc8a264d2fa5a60b1141e2ffb8/run-summary.json",
+      "sha256": "02d120134cba9ccde36df9b1aeedd57fc6479355e0cf96243df0e18fdfca049d"
+    },
+    {
+      "path": "traces/quality_notification_r2/3472bbcc8a264d2fa5a60b1141e2ffb8/run.json",
+      "sha256": "0111c1dbeff3be2c492c6381268106fa27e15596e682150609ac5f9fafd2c853"
+    },
+    {
+      "path": "traces/quality_notification_r2/3472bbcc8a264d2fa5a60b1141e2ffb8/tool-inputs.jsonl",
+      "sha256": "ba0aaa711cff0ef3e0d750147c179705dee1cac0cfd86a97334a035751f45ea3"
+    },
+    {
+      "path": "traces/quality_notification_r2/3472bbcc8a264d2fa5a60b1141e2ffb8/tool-results.jsonl",
+      "sha256": "db4e40cf35fe5113f6f12cd0720f4249569a385017cda8aa7ab57f5580828468"
+    },
+    {
+      "path": "traces/quality_notification_r2/3472bbcc8a264d2fa5a60b1141e2ffb8/trace.jsonl",
+      "sha256": "2ce0a86d7c51f0d84c8711e24b6ced7779eeebff1205b406cfc8bc54887f24a1"
+    }
+  ]
+}

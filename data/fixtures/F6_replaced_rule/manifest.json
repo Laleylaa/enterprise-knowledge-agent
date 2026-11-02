@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "documents": [
+    {
+      "doc_id": "D01",
+      "title": "差旅报销规定 D01",
+      "version_date": "2026-01-01",
+      "source_path": "documents/D01.md"
+    }
+  ]
+}

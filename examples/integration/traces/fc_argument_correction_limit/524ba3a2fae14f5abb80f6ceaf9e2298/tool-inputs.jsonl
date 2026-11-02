@@ -1,1 +1,0 @@
-{"tool": "search_knowledge", "tool_call_id": "fc-corrected", "arguments": {"query": "期限", "purpose": "查找", "doc_ids": null, "limit": 1, "cursor": null}}

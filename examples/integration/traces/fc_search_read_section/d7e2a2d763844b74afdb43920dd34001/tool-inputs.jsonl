@@ -1,2 +1,0 @@
-{"tool": "search_knowledge", "tool_call_id": "fc-search", "arguments": {"query": "草稿保存时间", "purpose": "查找提交条款", "doc_ids": null, "limit": 1, "cursor": null}}
-{"tool": "read_document", "tool_call_id": "fc-section", "arguments": {"doc_id": "D10", "purpose": "扩大到所属章节核实条件", "section_id": "D10-S0002", "chunk_id": null, "cursor": null}}

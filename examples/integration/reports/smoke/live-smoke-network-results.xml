@@ -1,1 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="0" skipped="0" tests="1" time="5.576" timestamp="2026-11-01T13:01:32.233181+08:00" hostname="MacBook-Air-4.local"><testcase classname="tests.smoke.test_live" name="test_real_model_tool_observation_and_output" time="5.163" /></testsuite></testsuites>

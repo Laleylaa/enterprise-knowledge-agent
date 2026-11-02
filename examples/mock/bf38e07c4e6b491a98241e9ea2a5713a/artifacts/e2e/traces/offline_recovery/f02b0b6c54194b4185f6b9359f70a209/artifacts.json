@@ -1,0 +1,54 @@
+{
+  "case_id": "offline_recovery",
+  "run_id": "f02b0b6c54194b4185f6b9359f70a209",
+  "artifacts": [
+    {
+      "path": "inputs/offline_recovery/f02b0b6c54194b4185f6b9359f70a209/corpus.json",
+      "sha256": "758cfd629aa76666a489e86868e3c52584f606df4c0e6fba130b00b30347cd60"
+    },
+    {
+      "path": "inputs/offline_recovery/f02b0b6c54194b4185f6b9359f70a209/fault-injection.json",
+      "sha256": "b424bb6665d4f3eb05feb38150c3cf09bab6bc2e434294453d43700d079f6805"
+    },
+    {
+      "path": "inputs/offline_recovery/f02b0b6c54194b4185f6b9359f70a209/index-manifest.json",
+      "sha256": "092039b10911289c54acb61d0b10ddd847e659568fac56a2ed995a4acc9db3e6"
+    },
+    {
+      "path": "inputs/offline_recovery/f02b0b6c54194b4185f6b9359f70a209/input.json",
+      "sha256": "d8c300678fc55d87a5750d3c289c218dfbcfc78ab4780162b2b7dfd92a535b39"
+    },
+    {
+      "path": "traces/offline_recovery/f02b0b6c54194b4185f6b9359f70a209/model-inputs.jsonl",
+      "sha256": "0542c56251279c4ef22f863e496ed1c683bcfe9653c970def13993e161d4123e"
+    },
+    {
+      "path": "traces/offline_recovery/f02b0b6c54194b4185f6b9359f70a209/observed-evidence.json",
+      "sha256": "2f4f0d7fde5f5da20fb0cfbc96163976ef3150bacdab14032a9e9a7d7aaeb9ae"
+    },
+    {
+      "path": "outputs/offline_recovery/f02b0b6c54194b4185f6b9359f70a209/output.json",
+      "sha256": "9ff638367cbafc70bdf322498fcc1cc9fbc21069ebe474c5a0298c2285cd5681"
+    },
+    {
+      "path": "outputs/offline_recovery/f02b0b6c54194b4185f6b9359f70a209/run-summary.json",
+      "sha256": "2beb1420a021eb3310342a313d28b4c7190fe87a2df70e1eec44a73bf175372c"
+    },
+    {
+      "path": "traces/offline_recovery/f02b0b6c54194b4185f6b9359f70a209/run.json",
+      "sha256": "c33c2fbddea95ded66d9ce71205b419aa66db6f2b68030ebcb930e570eac4c63"
+    },
+    {
+      "path": "traces/offline_recovery/f02b0b6c54194b4185f6b9359f70a209/tool-inputs.jsonl",
+      "sha256": "d2a33906151b772beeb17e274fb5b3fedcc5b33a1ba4680c01476d8a26588733"
+    },
+    {
+      "path": "traces/offline_recovery/f02b0b6c54194b4185f6b9359f70a209/tool-results.jsonl",
+      "sha256": "83bbe81acf07b51b560893c5fdb9efab8fec29f95300f75ce2127ed0c4831c88"
+    },
+    {
+      "path": "traces/offline_recovery/f02b0b6c54194b4185f6b9359f70a209/trace.jsonl",
+      "sha256": "21c6bb32feb97c7e5856ce5a6eb40c775a6af7a31a6292d89aa697055d8dde55"
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "collected": 18,
+  "deselected": 0,
+  "passed": 18,
+  "failed": 0,
+  "errors": 0,
+  "skipped": 0,
+  "pytest_exit_code": 0,
+  "items": [
+    "tests/e2e/extended/test_business_edges.py::test_Q02_newer_date_does_not_resolve_conflict",
+    "tests/e2e/extended/test_business_edges.py::test_Q11_unknown_referent",
+    "tests/e2e/extended/test_business_edges.py::test_Q13_partial_answer_preserves_missing_item",
+    "tests/e2e/extended/test_business_edges.py::test_Q18_replacement_ignores_old_answer",
+    "tests/e2e/extended/test_business_edges.py::test_read_backend_failure_can_be_handled",
+    "tests/e2e/extended/test_business_edges.py::test_scope_lookup_does_not_expand_deadline_answer",
+    "tests/e2e/extended/test_business_edges.py::test_notification_without_channel_is_not_classified",
+    "tests/e2e/extended/test_business_edges.py::test_explicit_status_question_is_still_answered",
+    "tests/e2e/extended/test_business_edges.py::test_recover_after_tool_error",
+    "tests/e2e/extended/test_business_edges.py::test_user_corrects_scope",
+    "tests/e2e/extended/test_hybrid_partial.py::test_hybrid_partial_evidence_decision[sufficient]",
+    "tests/e2e/extended/test_hybrid_partial.py::test_hybrid_partial_evidence_decision[section_context]",
+    "tests/e2e/required/test_acceptance.py::test_clear_answer",
+    "tests/e2e/required/test_acceptance.py::test_conflicting_documents",
+    "tests/e2e/required/test_acceptance.py::test_outside_material",
+    "tests/e2e/required/test_acceptance.py::test_paraphrased_question",
+    "tests/e2e/required/test_acceptance.py::test_context_followup",
+    "tests/e2e/required/test_acceptance.py::test_tool_failure"
+  ]
+}

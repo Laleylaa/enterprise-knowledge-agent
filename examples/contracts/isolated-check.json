@@ -1,0 +1,20 @@
+{
+  "copied": [
+    "src",
+    "tests",
+    "data",
+    "pyproject.toml",
+    "requirements.txt"
+  ],
+  "excluded": [
+    "local_validation",
+    "runtime",
+    "models",
+    ".env",
+    ".git"
+  ],
+  "same_installed_dependencies": true,
+  "exit_code": 0,
+  "pytest_output": "........................                                                 [100%]\n24 passed in 2.83s\n",
+  "scope": "Fresh source tree without local files; not a fresh dependency installation."
+}

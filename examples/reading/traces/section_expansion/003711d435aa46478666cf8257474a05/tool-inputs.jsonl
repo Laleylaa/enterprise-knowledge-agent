@@ -1,3 +1,0 @@
-{"tool": "search_knowledge", "tool_call_id": "search-1", "arguments": {"query": "提交期限 30 天", "purpose": "直接调用搜索提供真实块定位"}}
-{"tool": "read_document", "tool_call_id": "read-block", "arguments": {"doc_id": "D10", "purpose": "取得可核对的制度原文", "chunk_id": "D10-C0002"}}
-{"tool": "read_document", "tool_call_id": "read-section", "arguments": {"doc_id": "D10", "purpose": "取得可核对的制度原文", "section_id": "D10-S0002"}}

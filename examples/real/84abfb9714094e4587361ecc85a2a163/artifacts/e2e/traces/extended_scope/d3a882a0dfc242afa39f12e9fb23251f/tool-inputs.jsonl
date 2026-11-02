@@ -1,0 +1,2 @@
+{"tool": "search_knowledge", "tool_call_id": "call_00_RzuL2rAzXGg4vOFPxEQV3466", "arguments": {"query": "国内差旅 报销期限 D01 D02 适用范围", "purpose": "查证预置 D03 是否说明 D01 与 D02 的适用范围及国内差旅报销期限", "doc_ids": null, "limit": 5, "cursor": null}}
+{"tool": "read_document", "tool_call_id": "call_00_q948AqQJtSJuHXuBHLXo4959", "arguments": {"doc_id": "D03", "purpose": "核实 D03 全文是否还有影响适用性的其他条款", "section_id": null, "chunk_id": null, "cursor": null}}

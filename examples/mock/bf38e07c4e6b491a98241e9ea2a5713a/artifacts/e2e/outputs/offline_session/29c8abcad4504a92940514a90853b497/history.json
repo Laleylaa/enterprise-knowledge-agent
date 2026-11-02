@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "messages": [
+    {
+      "role": "user",
+      "content": "国内差旅报销期限多久？"
+    },
+    {
+      "role": "assistant",
+      "content": "运行方式：离线预设脚本（budget），仅验证流程，不证明模型决策能力。\n任务状态：未完成（incomplete）\n中断原因：model_turn_limit\n没有剩余模型轮次继续处理或观察工具结果。\n\n引用与已取得资料\n本轮无最终结论引用。\n\n资料缺口：当前问题的回答或查证尚未完成。"
+    }
+  ]
+}

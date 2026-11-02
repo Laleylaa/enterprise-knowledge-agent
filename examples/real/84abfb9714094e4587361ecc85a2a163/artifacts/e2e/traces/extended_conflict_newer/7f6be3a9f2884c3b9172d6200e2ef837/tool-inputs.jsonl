@@ -1,0 +1,3 @@
+{"tool": "search_knowledge", "tool_call_id": "call_00_jbuV2ECZoh9TqQiJGQct4566", "arguments": {"query": "差旅报销期限", "purpose": "查找差旅报销提交期限规定", "doc_ids": null, "limit": 5, "cursor": null}}
+{"tool": "read_document", "tool_call_id": "call_00_QlfGV47mV4b8L1BnHZFS0889", "arguments": {"doc_id": "D01", "purpose": "核实 D01 提交期限的适用条件与范围", "section_id": null, "chunk_id": null, "cursor": null}}
+{"tool": "read_document", "tool_call_id": "call_01_hpHZMkbfx6oTiLgVyzR62068", "arguments": {"doc_id": "D02", "purpose": "核实 D02 提交期限的适用条件与范围", "section_id": null, "chunk_id": null, "cursor": null}}

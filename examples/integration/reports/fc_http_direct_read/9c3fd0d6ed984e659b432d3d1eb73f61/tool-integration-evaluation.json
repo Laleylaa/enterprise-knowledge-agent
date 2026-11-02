@@ -1,8 +1,0 @@
-{
-  "scope": "model_function_call_integration",
-  "live_model": false,
-  "model_origin": "local_http_injection",
-  "observed_requests": 2,
-  "tool_returns": 1,
-  "final_business_answer_evaluated": false
-}

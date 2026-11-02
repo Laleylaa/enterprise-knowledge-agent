@@ -1,0 +1,18 @@
+{
+  "case_id": "extended_recovery_session",
+  "run_id": "683631bde77d4146a4e15f20da499a1e",
+  "artifacts": [
+    {
+      "path": "outputs/extended_recovery_session/683631bde77d4146a4e15f20da499a1e/history.json",
+      "sha256": "131c3a3e92e1760f9fe6415384d9e575e865655a8bbcb54172748b9b757220c7"
+    },
+    {
+      "path": "traces/extended_recovery_session/683631bde77d4146a4e15f20da499a1e/session.json",
+      "sha256": "9900cbb59ffcbc05374bf093de68c980806f55cd285d1996a9142c33000a132f"
+    },
+    {
+      "path": "traces/extended_recovery_session/683631bde77d4146a4e15f20da499a1e/trace.jsonl",
+      "sha256": "98268a5a91afcf3e0b6de46902bf02af204db9411061d40044a32c80fe60dc75"
+    }
+  ]
+}

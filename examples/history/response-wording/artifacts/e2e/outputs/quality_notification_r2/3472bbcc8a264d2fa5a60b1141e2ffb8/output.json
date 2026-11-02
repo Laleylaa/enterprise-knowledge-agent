@@ -1,0 +1,220 @@
+{
+  "mock_scenario": null,
+  "run_id": "3472bbcc8a264d2fa5a60b1141e2ffb8",
+  "mode": "real",
+  "stage": "tool_integration",
+  "requested_retrieval": "hybrid",
+  "result_origin": "model",
+  "termination_reason": "completed",
+  "result": {
+    "citations": [
+      {
+        "evidence_id": "3472bbcc8a264d2fa5a60b1141e2ffb8:E1",
+        "doc_id": "D01",
+        "quote": "差旅报销须在行程结束后 30 天内提交。"
+      },
+      {
+        "evidence_id": "3472bbcc8a264d2fa5a60b1141e2ffb8:E4",
+        "doc_id": "D02",
+        "quote": "差旅报销须在行程结束后 15 天内提交。"
+      }
+    ],
+    "answer": "现有资料对差旅报销期限有两种规定：《差旅报销规定 D01》为「差旅报销须在行程结束后 30 天内提交」，而《差旅报销规定 D02》为「差旅报销须在行程结束后 15 天内提交」。两份文件均未说明各自的适用范围或与对方的替代关系，因此目前无法确定应按哪一条执行。",
+    "gaps": [
+      "两份差旅报销规定（D01 为 30 天、D02 为 15 天）的适用范围或替代关系缺失，无法确定适用哪一期限"
+    ],
+    "clarification": "请问你的差旅报销适用哪份制度，或是否有可核实的文件（如所属部门、制度编号或通知来源）可用来确定适用哪一条期限？",
+    "status": "needs_info",
+    "decision_summary": "两份差旅报销规定给出不同期限且均未载明适用范围，先请用户提供可判断适用制度的线索。"
+  },
+  "observed_evidence": [
+    {
+      "evidence_id": "3472bbcc8a264d2fa5a60b1141e2ffb8:E1",
+      "tool_call_id": "call_00_3bsVfw85jDUanesQyWjJ0123",
+      "corpus_hash": "c283060df71f135a8009b5a8d3c6a072a798ad705e56ed39c24c6d73d3bc27a8",
+      "doc_id": "D01",
+      "title": "差旅报销规定 D01",
+      "version_date": "2026-01-01",
+      "content_hash": "86e651ca17bf03daef438457ea3075bcc3f5364117abaad88db87efc960dedcc",
+      "start": 29,
+      "end": 59,
+      "text": "## 提交期限\n\n差旅报销须在行程结束后 30 天内提交。\n",
+      "source_spans": [
+        {
+          "start": 29,
+          "end": 59,
+          "text": "## 提交期限\n\n差旅报销须在行程结束后 30 天内提交。\n"
+        }
+      ],
+      "delivered_to_model": true
+    },
+    {
+      "evidence_id": "3472bbcc8a264d2fa5a60b1141e2ffb8:E2",
+      "tool_call_id": "call_00_3bsVfw85jDUanesQyWjJ0123",
+      "corpus_hash": "c283060df71f135a8009b5a8d3c6a072a798ad705e56ed39c24c6d73d3bc27a8",
+      "doc_id": "D02",
+      "title": "差旅报销规定 D02",
+      "version_date": "2026-01-01",
+      "content_hash": "3215da0316f02d06809366e34c1ddda19800c425e01b44e19efb6a70d5e22ff9",
+      "start": 0,
+      "end": 29,
+      "text": "# 差旅报销规定\n\n本材料记录员工差旅报销的提交期限。\n\n",
+      "source_spans": [
+        {
+          "start": 0,
+          "end": 29,
+          "text": "# 差旅报销规定\n\n本材料记录员工差旅报销的提交期限。\n\n"
+        }
+      ],
+      "delivered_to_model": true
+    },
+    {
+      "evidence_id": "3472bbcc8a264d2fa5a60b1141e2ffb8:E3",
+      "tool_call_id": "call_00_3bsVfw85jDUanesQyWjJ0123",
+      "corpus_hash": "c283060df71f135a8009b5a8d3c6a072a798ad705e56ed39c24c6d73d3bc27a8",
+      "doc_id": "D01",
+      "title": "差旅报销规定 D01",
+      "version_date": "2026-01-01",
+      "content_hash": "86e651ca17bf03daef438457ea3075bcc3f5364117abaad88db87efc960dedcc",
+      "start": 0,
+      "end": 29,
+      "text": "# 差旅报销规定\n\n本材料记录员工差旅报销的提交期限。\n\n",
+      "source_spans": [
+        {
+          "start": 0,
+          "end": 29,
+          "text": "# 差旅报销规定\n\n本材料记录员工差旅报销的提交期限。\n\n"
+        }
+      ],
+      "delivered_to_model": true
+    },
+    {
+      "evidence_id": "3472bbcc8a264d2fa5a60b1141e2ffb8:E4",
+      "tool_call_id": "call_00_3bsVfw85jDUanesQyWjJ0123",
+      "corpus_hash": "c283060df71f135a8009b5a8d3c6a072a798ad705e56ed39c24c6d73d3bc27a8",
+      "doc_id": "D02",
+      "title": "差旅报销规定 D02",
+      "version_date": "2026-01-01",
+      "content_hash": "3215da0316f02d06809366e34c1ddda19800c425e01b44e19efb6a70d5e22ff9",
+      "start": 29,
+      "end": 59,
+      "text": "## 提交期限\n\n差旅报销须在行程结束后 15 天内提交。\n",
+      "source_spans": [
+        {
+          "start": 29,
+          "end": 59,
+          "text": "## 提交期限\n\n差旅报销须在行程结束后 15 天内提交。\n"
+        }
+      ],
+      "delivered_to_model": true
+    },
+    {
+      "evidence_id": "3472bbcc8a264d2fa5a60b1141e2ffb8:E5",
+      "tool_call_id": "call_00_r3xcpvGma1LF4YqPHK7V4418",
+      "corpus_hash": "c283060df71f135a8009b5a8d3c6a072a798ad705e56ed39c24c6d73d3bc27a8",
+      "doc_id": "D01",
+      "title": "差旅报销规定 D01",
+      "version_date": "2026-01-01",
+      "content_hash": "86e651ca17bf03daef438457ea3075bcc3f5364117abaad88db87efc960dedcc",
+      "start": 0,
+      "end": 29,
+      "text": "# 差旅报销规定\n\n本材料记录员工差旅报销的提交期限。\n\n",
+      "source_spans": [
+        {
+          "start": 0,
+          "end": 29,
+          "text": "# 差旅报销规定\n\n本材料记录员工差旅报销的提交期限。\n\n"
+        }
+      ],
+      "delivered_to_model": true
+    },
+    {
+      "evidence_id": "3472bbcc8a264d2fa5a60b1141e2ffb8:E6",
+      "tool_call_id": "call_00_r3xcpvGma1LF4YqPHK7V4418",
+      "corpus_hash": "c283060df71f135a8009b5a8d3c6a072a798ad705e56ed39c24c6d73d3bc27a8",
+      "doc_id": "D01",
+      "title": "差旅报销规定 D01",
+      "version_date": "2026-01-01",
+      "content_hash": "86e651ca17bf03daef438457ea3075bcc3f5364117abaad88db87efc960dedcc",
+      "start": 29,
+      "end": 59,
+      "text": "## 提交期限\n\n差旅报销须在行程结束后 30 天内提交。\n",
+      "source_spans": [
+        {
+          "start": 29,
+          "end": 59,
+          "text": "## 提交期限\n\n差旅报销须在行程结束后 30 天内提交。\n"
+        }
+      ],
+      "delivered_to_model": true
+    },
+    {
+      "evidence_id": "3472bbcc8a264d2fa5a60b1141e2ffb8:E7",
+      "tool_call_id": "call_01_s99EJkWbD4FlCjDLuPYS5933",
+      "corpus_hash": "c283060df71f135a8009b5a8d3c6a072a798ad705e56ed39c24c6d73d3bc27a8",
+      "doc_id": "D02",
+      "title": "差旅报销规定 D02",
+      "version_date": "2026-01-01",
+      "content_hash": "3215da0316f02d06809366e34c1ddda19800c425e01b44e19efb6a70d5e22ff9",
+      "start": 0,
+      "end": 29,
+      "text": "# 差旅报销规定\n\n本材料记录员工差旅报销的提交期限。\n\n",
+      "source_spans": [
+        {
+          "start": 0,
+          "end": 29,
+          "text": "# 差旅报销规定\n\n本材料记录员工差旅报销的提交期限。\n\n"
+        }
+      ],
+      "delivered_to_model": true
+    },
+    {
+      "evidence_id": "3472bbcc8a264d2fa5a60b1141e2ffb8:E8",
+      "tool_call_id": "call_01_s99EJkWbD4FlCjDLuPYS5933",
+      "corpus_hash": "c283060df71f135a8009b5a8d3c6a072a798ad705e56ed39c24c6d73d3bc27a8",
+      "doc_id": "D02",
+      "title": "差旅报销规定 D02",
+      "version_date": "2026-01-01",
+      "content_hash": "3215da0316f02d06809366e34c1ddda19800c425e01b44e19efb6a70d5e22ff9",
+      "start": 29,
+      "end": 59,
+      "text": "## 提交期限\n\n差旅报销须在行程结束后 15 天内提交。\n",
+      "source_spans": [
+        {
+          "start": 29,
+          "end": 59,
+          "text": "## 提交期限\n\n差旅报销须在行程结束后 15 天内提交。\n"
+        }
+      ],
+      "delivered_to_model": true
+    }
+  ],
+  "session_id": "e56c4314b97749fdbba302619809a7e7",
+  "turn_id": 1,
+  "previous_run_id": null,
+  "action_summaries": [
+    {
+      "model_turn": 1,
+      "tool": "search_knowledge",
+      "tool_call_id": "call_00_3bsVfw85jDUanesQyWjJ0123",
+      "purpose": "查找差旅报销提交期限规定"
+    },
+    {
+      "model_turn": 2,
+      "tool": "read_document",
+      "tool_call_id": "call_00_r3xcpvGma1LF4YqPHK7V4418",
+      "purpose": "核实 D01 是否有适用范围或替代关系说明"
+    },
+    {
+      "model_turn": 2,
+      "tool": "read_document",
+      "tool_call_id": "call_01_s99EJkWbD4FlCjDLuPYS5933",
+      "purpose": "核实 D02 是否有适用范围或替代关系说明"
+    }
+  ],
+  "usage": {
+    "model_turns": 3,
+    "http_attempts": 3,
+    "tool_calls": 3
+  }
+}

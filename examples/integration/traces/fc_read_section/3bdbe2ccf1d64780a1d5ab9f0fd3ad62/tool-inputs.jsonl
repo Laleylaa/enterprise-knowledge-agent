@@ -1,1 +1,0 @@
-{"tool": "read_document", "tool_call_id": "fc-read", "arguments": {"doc_id": "D01", "purpose": "核实原文", "section_id": "D01-S0003", "chunk_id": null, "cursor": null}}

@@ -28,7 +28,7 @@ def create_parser() -> argparse.ArgumentParser:
                         help="使用正式检索／读取工具及该派生块；未指定时保留原冒烟资料源")
     common.add_argument("--output-dir", type=Path, default=None)
     common.add_argument("--retrieval", dest="retrieval_mode", choices=["bm25", "vector", "hybrid"], default=None,
-                        help="真实模式默认 hybrid，未指定检索模式的 Mock 默认 bm25")
+                        help="真实模式默认 hybrid，可显式选择 bm25／vector；Mock 仅支持 bm25")
     common.add_argument("--embedding-model-path", type=Path, default=None)
     common.add_argument("--retrieval-cache-dir", type=Path, default=None)
     common.add_argument("--rrf-k", type=int, default=None)
@@ -44,6 +44,11 @@ def create_parser() -> argparse.ArgumentParser:
     chat.add_argument("--format", choices=["text", "json"], default="text", dest="output_format")
     prepare = commands.add_parser("prepare", parents=[common], help="准备分块与所选索引；默认仅使用本地资产")
     prepare.add_argument("--download", action="store_true", help="允许显式下载固定版本 tokenizer／BGE 资产")
+    evaluate = commands.add_parser("evaluate", parents=[common], help="复用现有离线／真实业务测试，保存独立批次报告")
+    evaluate.add_argument("--suite", help="真实模式选 tests/e2e/required 或 extended；Mock 选 tests/e2e/offline；可指定文件或节点")
+    evaluate.add_argument("--run-live", action="store_true", help="显式启用真实模型请求，可能消耗 API 额度")
+    evaluate.add_argument("--collect-only", action="store_true", help="只列出待执行用例，不执行或计为通过")
+    evaluate.add_argument("-k", dest="selection", help="pytest 用例名称筛选表达式")
     return parser
 
 
@@ -74,6 +79,16 @@ def main(argv: list[str] | None = None) -> int:
             recorder.write("summary.json", result)
             print(json.dumps(result, ensure_ascii=False, indent=2))
             return 1 if result["status"] == "partial" else 0
+        if args.command == "evaluate":
+            if args.corpus_path is not None or args.prepared_path is not None:
+                raise ValueError("evaluate 使用 suite 固定的合成资料，不接受 --corpus／--prepared 覆盖。")
+            from knowledge_agent.evaluation import evaluate
+            print("开始评估；测试输出与运行证据将保存到独立批次目录。", file=sys.stderr)
+            result = evaluate(settings, suite=args.suite, run_live=args.run_live, collect_only=args.collect_only,
+                              selection=args.selection,
+                              output_dir=settings.output_dir if "output_dir" in settings.model_fields_set else None)
+            print(json.dumps(result, ensure_ascii=False, indent=2))
+            return result["exit_code"]
         if args.command == "config":
             print(json.dumps(settings.public_config(), ensure_ascii=False, indent=2))
             return 0
@@ -105,6 +120,9 @@ def main(argv: list[str] | None = None) -> int:
         print(f"运行材料：{settings.output_dir / settings.mode / result.run_id}", file=sys.stderr)
         return 1 if result.result.status == "incomplete" else 0
     except ValidationError as exc:
+        if any(error["type"] == "mock_retrieval_mode" for error in exc.errors(include_input=False)):
+            print("Mock 仅支持 BM25；请使用 --retrieval bm25，或移除环境／.env 中的非 BM25 检索配置。", file=sys.stderr)
+            return 2
         # Pydantic's default string includes offending values, which can be secrets.
         fields = ", ".join(".".join(map(str, error["loc"])) for error in exc.errors(include_input=False))
         print(f"配置错误，请检查字段：{fields}。", file=sys.stderr)

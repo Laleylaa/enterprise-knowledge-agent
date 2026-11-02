@@ -1,9 +1,0 @@
-{
-  "scope": "single_search_tool",
-  "model_calls": 0,
-  "conflict_sources_found": [
-    "D01",
-    "D02"
-  ],
-  "conflict_pair_coverage": 1.0
-}

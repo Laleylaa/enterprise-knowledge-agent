@@ -1,0 +1,58 @@
+{
+  "case_id": "extended_conflict_newer",
+  "run_id": "7f6be3a9f2884c3b9172d6200e2ef837",
+  "artifacts": [
+    {
+      "path": "reports/extended_conflict_newer/7f6be3a9f2884c3b9172d6200e2ef837/business-evaluation.json",
+      "sha256": "b4941e7fc7f2f44e621ca70c082ab4644d5cb6ba7f2913644c59aef723d50ba2"
+    },
+    {
+      "path": "inputs/extended_conflict_newer/7f6be3a9f2884c3b9172d6200e2ef837/corpus.json",
+      "sha256": "932960c6b35d22e1025b46ddc12524b721d2bfbb17369806a40231c8275dc440"
+    },
+    {
+      "path": "inputs/extended_conflict_newer/7f6be3a9f2884c3b9172d6200e2ef837/fault-injection.json",
+      "sha256": "e5db73c0a927e0ce58eba230ee48552d903d0f36c927a07ef1d84751b24b40d1"
+    },
+    {
+      "path": "inputs/extended_conflict_newer/7f6be3a9f2884c3b9172d6200e2ef837/index-manifest.json",
+      "sha256": "06d53b1a93611bd7859c43ff994088468ea310e6d264508ab14ad6a88e0ecabf"
+    },
+    {
+      "path": "inputs/extended_conflict_newer/7f6be3a9f2884c3b9172d6200e2ef837/input.json",
+      "sha256": "c3fe3c47b9e10c15aba2ca82a092ace235fa5657e7d18d72b733afbb734a7b9b"
+    },
+    {
+      "path": "traces/extended_conflict_newer/7f6be3a9f2884c3b9172d6200e2ef837/model-inputs.jsonl",
+      "sha256": "ae4e1836af56c792518a4b6dd9783c246714bed9bec06842b80083670c884495"
+    },
+    {
+      "path": "traces/extended_conflict_newer/7f6be3a9f2884c3b9172d6200e2ef837/observed-evidence.json",
+      "sha256": "1bc2c914b76a64975f20063f4db67b501179ab1d4bf8264fdeecdb3ce8a54853"
+    },
+    {
+      "path": "outputs/extended_conflict_newer/7f6be3a9f2884c3b9172d6200e2ef837/output.json",
+      "sha256": "d03472a7697002d406fa8d3a4aa805ad48187f370b88651b369359816bbf5ac5"
+    },
+    {
+      "path": "outputs/extended_conflict_newer/7f6be3a9f2884c3b9172d6200e2ef837/run-summary.json",
+      "sha256": "9c6b7b16cfd99f6256f4417dd049c9a81c852ac96e23945670f6cf9bb42a00db"
+    },
+    {
+      "path": "traces/extended_conflict_newer/7f6be3a9f2884c3b9172d6200e2ef837/run.json",
+      "sha256": "b4b317f12af42c0359c91e1b14fcaa64e7ca22ae49e405b1dc738c24bc07e226"
+    },
+    {
+      "path": "traces/extended_conflict_newer/7f6be3a9f2884c3b9172d6200e2ef837/tool-inputs.jsonl",
+      "sha256": "6cc6c900ebba21b020c9965ace6736b0d909b038d2b6b4d2120632d123a56a26"
+    },
+    {
+      "path": "traces/extended_conflict_newer/7f6be3a9f2884c3b9172d6200e2ef837/tool-results.jsonl",
+      "sha256": "f41cc082c4cc993e4ff4a3454f09d1478b759caf13dea885f8e0fa14c767423a"
+    },
+    {
+      "path": "traces/extended_conflict_newer/7f6be3a9f2884c3b9172d6200e2ef837/trace.jsonl",
+      "sha256": "d6e1cc8090b588d66dec672f79f300240528dd59611539985b67c4282e04851d"
+    }
+  ]
+}

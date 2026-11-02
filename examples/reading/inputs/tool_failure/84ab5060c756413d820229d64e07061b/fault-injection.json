@@ -1,6 +1,0 @@
-{
-  "scope": "test_only",
-  "target": "RetrievalSnapshot.get",
-  "call_number": 1,
-  "error": "OSError"
-}

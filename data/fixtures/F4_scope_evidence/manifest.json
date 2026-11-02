@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "documents": [
+    {
+      "doc_id": "D01",
+      "title": "差旅报销规定 D01",
+      "version_date": "2026-01-01",
+      "source_path": "documents/D01.md"
+    },
+    {
+      "doc_id": "D02",
+      "title": "差旅报销规定 D02",
+      "version_date": "2026-01-01",
+      "source_path": "documents/D02.md"
+    },
+    {
+      "doc_id": "D03",
+      "title": "差旅制度适用范围说明",
+      "version_date": "2026-01-01",
+      "source_path": "documents/D03.md"
+    }
+  ]
+}

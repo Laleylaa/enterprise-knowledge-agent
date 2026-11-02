@@ -29,7 +29,7 @@ def retrieval_settings(monkeypatch, tmp_path):
     monkeypatch.setattr(socket.socket, "connect", forbidden)
     monkeypatch.setattr(socket, "getaddrinfo", forbidden)
     monkeypatch.setattr(urllib.request, "urlopen", forbidden)
-    return Settings(_env_file=None, tokenizer_path=tmp_path / "absent-tokenizer.json",
+    return Settings(_env_file=None, retrieval_mode="bm25", tokenizer_path=tmp_path / "absent-tokenizer.json",
                     retrieval_cache_dir=tmp_path / "cache", output_dir=tmp_path / "runs")
 
 
@@ -40,21 +40,4 @@ def tool_factory(retrieval_settings):
                                   corpus or ROOT / "data/fixtures" / fixture / "manifest.json",
                                   prepared or ROOT / "data/prepared" / f"{fixture}.json",
                                   output_dir=output_dir)
-    return create
-
-
-@pytest.fixture
-def preparation_settings(retrieval_settings):
-    path = ROOT / "runtime/models/bge-small-zh-v1.5-tokenizer/tokenizer.json"
-    if not path.is_file():
-        pytest.skip("Explicit download-tokenizer required for actual BGE preparation contracts")
-    return retrieval_settings.model_copy(update={"tokenizer_path": path})
-
-
-@pytest.fixture
-def business_tool(tool_factory, archive_run):
-    def create(case_id, fixture="F1_single_rule", **kwargs):
-        tool = tool_factory(fixture, **kwargs)
-        archive_run("retrieval", case_id, tool.recorder.directory)
-        return tool
     return create

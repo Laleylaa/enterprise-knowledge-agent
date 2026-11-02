@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "messages": [
+    {
+      "role": "user",
+      "content": "公司育儿假有多少天？"
+    },
+    {
+      "role": "assistant",
+      "content": "任务状态：未解决（unresolved）\n现有资料中未找到公司育儿假天数的规定，无法确定具体天数。\n\n引用与已取得资料\n本轮无最终结论引用。\n\n资料缺口：缺少育儿假天数的制度规定"
+    }
+  ]
+}

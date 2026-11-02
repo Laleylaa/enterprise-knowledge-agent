@@ -1,6 +1,10 @@
 # 独立检索工具
 
-本目录不依赖 Agent runtime，不调用模型。`tool_binding.py` 已通过标准函数工具注册复用本组件；`knowledge_agent.tools` 的旧函数只保留作原 smoke_fixture 适配器，不复制检索逻辑。
+本目录不依赖 Agent runtime，不调用主模型。BM25 不加载神经网络；vector 在受控子进程中加载本地 BGE。hybrid 按等权 RRF 融合两支。`tool_binding.py` 已通过标准函数工具注册复用三种模式，异步路径直接等待可取消计算。`knowledge_agent.tools` 的旧函数只保留作原 smoke_fixture 适配器，不复制检索逻辑。
+
+独立 CLI 已支持 `download-model`、`prepare --retrieval vector` 和 `search --retrieval vector`；命令见 [根 README](../../../README.md)，实际验证见 [向量记录](../../../docs/03-evaluation.md)。`model_assets.py` 固定资产与校验，`embedding_worker.py` 管理可终止计算，`vector.py` 管理向量身份／缓存／排名，`backend.py` 定义内部后端协议与带分支状态的排名结果；`hybrid.py` 融合排名，`factory.py` 统一构建三种索引。对外 SearchRequest 字段不变，execution 明确记录 requested_mode 和 effective_branches。
+
+向量工具须用上下文管理器或 close 释放进程；异步调用使用 VectorIndex.arank／EmbeddingWorker.aencode，不在事件循环内调用同步 rank／encode。超时或取消会回收 worker；新请求重新启动，不自动重做失败请求。正常查询不下载权重，vector 错误不改成 BM25。冷启动、建索引、编码分别有配置时限；终止和回收另有有界等待。
 
 | 组件 | 职责 |
 |---|---|
@@ -46,4 +50,12 @@ BM25 索引每次启动从已校验的块重建，不持久化排名索引，避
 
 每次执行保存 input/output、tool-inputs/tool-results、Trace 及已有证据；多次调用时 JSONL 保留完整过程，input.json/output.json 为最后一次调用。run.json 标识单工具来源，corpus.json 和 index-manifest.json 保留版本。记录与证据写入失败显式抛出，不把未保存的材料当成功交付。
 
-以上为 standalone=True 的独立入口。Agent 绑定时使用 standalone=False，共享当轮 EvidenceStore／RunRecorder，保留工具 JSONL 和证据，跳过工具层 input/output 写入及 tool_started 事件（由运行器和执行钩子分别负责）。游标实例跨同轮模型请求保留，每个新问题重新创建。接入测试见 [FC 记录](../../../examples/integration/tool-calls.md)。
+以上为 standalone=True 的独立入口。Agent 绑定时使用 standalone=False，共享当轮 EvidenceStore／RunRecorder，保留工具 JSONL 和证据，跳过工具层 input/output 写入及 tool_started 事件（由运行器和执行钩子分别负责）。游标实例跨同轮模型请求保留，每个新问题重新创建。接入测试见 [FC 记录](../../../docs/03-evaluation.md)。
+
+## 三模式集成约定
+
+`Settings.selected_retrieval` 统一解析显式配置与 real=hybrid／mock=bm25 默认。`create_search_tool` 和 `IndexedCorpus` 共用构建入口；正常 Agent 会话复用索引，逐轮新建工具、证据与游标。向量／混合工具使用 `aexecute(deadline=...)`，工具与整轮中较早的 deadline 生效，并预留 terminate／kill 回收时间。
+
+RRF 对完整分支排名按 rank 从1开始累加 `1/(k+rank)`，默认 k=60；相同块去重、不同文档来源不合并。失败分支不贡献排名但保留错误，成功空分支也列入 effective_branches。分页冻结候选、错误及分支列表。初始化失败的分支在本索引生命周期持续缺席；修复本地资产后需重新启动。
+
+`open_indexed_source` 由 CLI 使用，负责 finally 关闭及独立生命周期记录；嵌入式调用方使用 `with IndexedCorpus.load(...)` 或显式 close。组件验证与实际小样本比较见 [阶段索引](../../../docs/03-evaluation.md)，不代替真实主模型业务验收。

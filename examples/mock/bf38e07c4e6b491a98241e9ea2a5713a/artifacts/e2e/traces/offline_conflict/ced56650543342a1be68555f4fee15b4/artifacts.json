@@ -1,0 +1,50 @@
+{
+  "case_id": "offline_conflict",
+  "run_id": "ced56650543342a1be68555f4fee15b4",
+  "artifacts": [
+    {
+      "path": "inputs/offline_conflict/ced56650543342a1be68555f4fee15b4/corpus.json",
+      "sha256": "86f9b79101ccad916c8b9118c42be7abe75d784a405d99fc8130f78bdf6af9b4"
+    },
+    {
+      "path": "inputs/offline_conflict/ced56650543342a1be68555f4fee15b4/index-manifest.json",
+      "sha256": "42aded2ff993dcc1e8bfbec3df8c4bd3b1abe9ff6e1f26966614b4798936c5c3"
+    },
+    {
+      "path": "inputs/offline_conflict/ced56650543342a1be68555f4fee15b4/input.json",
+      "sha256": "685cbc8192e0ccb64eb66a644bacb79f0122bf87f72c2906ebe1c7146e13843e"
+    },
+    {
+      "path": "traces/offline_conflict/ced56650543342a1be68555f4fee15b4/model-inputs.jsonl",
+      "sha256": "df6254d14a45d2e3e7d91a438590ee943c976ddf36da0fff2a57e953b889bf80"
+    },
+    {
+      "path": "traces/offline_conflict/ced56650543342a1be68555f4fee15b4/observed-evidence.json",
+      "sha256": "a1ba8bfd031cbbe40a39b17b417b15c80efa5d68944666f0245c09c1663472c1"
+    },
+    {
+      "path": "outputs/offline_conflict/ced56650543342a1be68555f4fee15b4/output.json",
+      "sha256": "437ed0aeda163c29f7c66ef559af4e5fbd7d4a9d49e402c6b834a3434b831d28"
+    },
+    {
+      "path": "outputs/offline_conflict/ced56650543342a1be68555f4fee15b4/run-summary.json",
+      "sha256": "6359b957c193ccd70721a11629e0f4af13cf057a923462bf7a25efe07115d174"
+    },
+    {
+      "path": "traces/offline_conflict/ced56650543342a1be68555f4fee15b4/run.json",
+      "sha256": "fff3ff0fecdebc350980de88f864b22c64de926850e3f85a8cac256172d40abf"
+    },
+    {
+      "path": "traces/offline_conflict/ced56650543342a1be68555f4fee15b4/tool-inputs.jsonl",
+      "sha256": "96a66afcd1af10f9e6a4462bc31590982fd8d0c59f093aabb80f6ca6e9c9944f"
+    },
+    {
+      "path": "traces/offline_conflict/ced56650543342a1be68555f4fee15b4/tool-results.jsonl",
+      "sha256": "9e3285218fc6323dc8fcf45fac1e330ed94d4daba8887c923c48ae7daa4e1fd4"
+    },
+    {
+      "path": "traces/offline_conflict/ced56650543342a1be68555f4fee15b4/trace.jsonl",
+      "sha256": "d0643356ea26b44191244d5fcf1afbf3d640c0398aaaf6cb7ba397c15be85575"
+    }
+  ]
+}

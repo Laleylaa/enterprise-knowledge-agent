@@ -1,0 +1,48 @@
+{
+  "mock_scenario": null,
+  "run_id": "29919e3677a046449fb0bd834da40f39",
+  "mode": "real",
+  "stage": "tool_integration",
+  "requested_retrieval": "hybrid",
+  "result_origin": "model",
+  "termination_reason": "completed",
+  "result": {
+    "citations": [],
+    "answer": "目前无法确认国内差旅报销期限：检索工具连续三次失败，未能取得任何制度原文，因此本轮无法给出期限及起算条件。",
+    "gaps": [
+      "检索服务连续失败，未能取得国内差旅报销期限的制度原文，无法核实期限及起算条件"
+    ],
+    "clarification": null,
+    "status": "incomplete",
+    "decision_summary": "连续三次检索均因检索分支失败无结果，必要查证被故障阻断，无法给出期限结论。"
+  },
+  "observed_evidence": [],
+  "session_id": "667a071beac0402084cdea65276ee661",
+  "turn_id": 1,
+  "previous_run_id": null,
+  "action_summaries": [
+    {
+      "model_turn": 1,
+      "tool": "search_knowledge",
+      "tool_call_id": "call_00_YxTVrVyWJsFSeWxuihJj2200",
+      "purpose": "查找国内差旅报销提交期限规定"
+    },
+    {
+      "model_turn": 2,
+      "tool": "search_knowledge",
+      "tool_call_id": "call_00_XWtfcP5ocwDfWJufahI78845",
+      "purpose": "重试检索差旅报销期限规定"
+    },
+    {
+      "model_turn": 3,
+      "tool": "search_knowledge",
+      "tool_call_id": "call_00_DnZveWHiR1NpsKc4xF0g9026",
+      "purpose": "再次尝试检索报销时限相关原文"
+    }
+  ],
+  "usage": {
+    "model_turns": 4,
+    "http_attempts": 4,
+    "tool_calls": 3
+  }
+}

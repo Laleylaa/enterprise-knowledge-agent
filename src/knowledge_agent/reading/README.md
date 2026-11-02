@@ -59,6 +59,6 @@ if result["data"]["locators"]:
 
 标题与块正文分别保留真实位置，不拼接不连续片段作为一条引文。实际返回的正文才登记证据，记录调用 ID、快照、版本、来源；读取失败和定位列表不会生成证据。单工具运行没有向模型投递，delivered_to_model=false。
 
-与现有搜索入口一致，多次调用的 input.json/output.json 是最后一次调用，tool-inputs.jsonl/tool-results.jsonl 和 Trace 保留全过程。run.json 标明 standalone_read_tool、model_calls=0；corpus.json 保留原文及派生块。评估通过统一导出器保存到 examples/reading 的 inputs、outputs、traces、reports，以 case_id/run_id 关联。
+与现有搜索入口一致，多次调用的 input.json/output.json 是最后一次调用，tool-inputs.jsonl/tool-results.jsonl 和 Trace 保留全过程。run.json 标明 standalone_read_tool、model_calls=0；corpus.json 保留原文及派生块。提交版基础检查结果在 examples/contracts，端到端记录在 examples/real 或 examples/mock 的 inputs、outputs、traces、reports，以 case_id/run_id 关联。
 
-正式 Agent 绑定使用 standalone=False，共享本轮快照、证据和 recorder，跳过独立入口 input/output 写入以及工具开始事件；运行器保存整轮材料，执行钩子记录开始。原文返回和证据登记逻辑复用本组件；接入测试见 [FC 记录](../../../examples/integration/tool-calls.md)。章节范围沿用现有 ATX 标题切分的 Section，不新增 Markdown 章节树。同步内存读取不包含模型决策、强制异步中断或大规模文件系统性能验证。
+正式 Agent 绑定使用 standalone=False，共享本轮快照、证据和 recorder，跳过独立入口 input/output 写入以及工具开始事件；运行器保存整轮材料，执行钩子记录开始。原文返回和证据登记逻辑复用本组件；接入测试见 [FC 记录](../../../docs/03-evaluation.md)。章节范围沿用现有 ATX 标题切分的 Section，不新增 Markdown 章节树。同步内存读取不包含模型决策、强制异步中断或大规模文件系统性能验证。

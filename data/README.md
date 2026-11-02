@@ -1,6 +1,36 @@
-# 知识资料存储契约
+# 合成资料分类与使用
 
-所有制度均为合成内容，不代表真实企业制度。正式知识库采用 **Markdown 原文＋元数据清单**；不能把带 body 的 JSON 文档数组作为加载入口。
+所有制度均为合成内容。资料按业务用途区分，Markdown正文是唯一可编辑的知识原文。
+
+```text
+data/
+  knowledge_base/        日常真实问答：国内差旅、海外差旅、请假申请
+    manifest.json
+    documents/
+  fixtures/              固定专项测试场景，逐套加载
+    F1_single_rule/       正常、改写、上下文、部分信息缺失
+    F2_conflicting_rules/ 无法消解的期限冲突
+    F2_newer_D02/         日期较新但无优先级依据
+    F3_explicit_scope/    明确国内／海外范围的基础资料
+    F4_scope_evidence/    跨文档说明适用关系
+    F5_leave_and_scope/   多主题、资料外问题、条件更正
+    F6_replaced_rule/     原文30天改20天
+    R1_section_context/  长章节读取边界，兼用于降级业务测试
+  smoke/                 最小接入冒烟，非业务验收库
+  prepared/              原文的预生成检索块，不是另一套制度
+```
+
+| 使用目的 | 入口 | 注意事项 |
+| --- | --- | --- |
+| 日常真实问答 | [业务知识库](knowledge_base/README.md) | README推荐入口，真实检索默认hybrid；可显式选BM25或vector |
+| 题目必验与补充E2E | [测试资料索引](fixtures/README.md) | 每个测试固定一套资料，不能混入其他目录消除冲突或补上缺口 |
+| 离线Mock | F1正常／失败等、F2冲突 | 仅BM25；固定模型脚本，只证明流程 |
+| 基础模块／工具检查 | R1以及部分F1/F2；[smoke](smoke/README.md) | 与业务E2E区分，不能替代真实模型决策证明 |
+| 无需重新分块的运行 | [预生成块](prepared/README.md) | 必须与选定manifest匹配；改原文后重新prepare |
+
+业务知识库本次从现有F5原样复制三份制度，尚未扩充内容。`fixtures` 是独立场景快照，保留原路径、元数据与正文，历史 `examples` 不重写。已有真实验收结果仅对应当时记录的资料；新增业务入口不冒充已有测试覆盖。
+
+程序原始配置仍保留最小smoke入口；主README和 `.env.example` 推荐独立业务库。真实与Mock运行命令显式指定资料，避免继承错误配置。本次没有修改本机 `.env`。
 
 ## 唯一原文与元数据
 
@@ -36,18 +66,10 @@
 
 加载组件位于 [document_loader.py](../src/knowledge_agent/document_loader.py)，只负责清单校验与原文读取，组装内部 Document。检索源通过它加载资料；Agent 和工具不解析存储文件。内部对象及实际运行快照仍可序列化为 JSON，这不构成第二套可编辑原文。
 
-## 当前准备状态
+## 维护规则
 
-| 区域 | 状态与用途 |
-|---|---|
-| [smoke/manifest.json](smoke/manifest.json) | 最小冒烟资料也采用正式格式；原有单句正文及脚本前提保持不变 |
-| [F1 清单](fixtures/F1_single_rule/manifest.json)、[D01 原文](fixtures/F1_single_rule/documents/D01.md) | 已准备一份有章节的制度，包含提交期限及处理状态说明；没有凭证要求 |
-| [F2 清单](fixtures/F2_conflicting_rules/manifest.json) | 独立冲突资料：D01 为 30 天，D02 为 15 天；相同日期，不提供优先级或范围解释 |
-| [R1 清单](fixtures/R1_section_context/manifest.json) | 独立读取专项：期限与适用范围在同一章节的不同块；验证按搜索定位扩展读取，非 Agent 业务验收资料集 |
-| [prepared](prepared/README.md) | F1、F2、R1 的正式 tokenizer 预生成块，支持无网络、无 tokenizer 文件的基础搜索与读取 |
-
-F1 和 F2 已用于独立搜索工具的测试，不表示 Q01／Q02 的 Agent 行为已验收，也不是当前固定 Mock 脚本的输入。原有 Agent 冒烟仍只使用 smoke/manifest.json。
-
-已删除旧格式的 F2～F6 条款草稿及提前建立的全量评估索引。后续按实际开发需要逐组编写文档与对应测试；关键条款及冲突、缺口等场景仍以 solution §11.4 为准。
-
-每次只加载一套资料，禁止把互斥场景合并。原有冒烟指纹保持其原有定义；新检索快照的 corpus_hash 包括来源、分块配置和 tokenizer 身份，索引另记录分词字典及 BM25 参数指纹。派生块经过原文位置、覆盖范围和预算检查。预期答案和故障计划不进入知识原文或模型输入。
+1. 扩充日常制度时修改 `knowledge_base`，同步生成对应prepared；变更引用依据后应重新验证业务效果。
+2. 只有修改某个验收场景时才改其fixture，同时检查预期、重建prepared并重跑相关测试；不自动同步主知识库。
+3. 资料集内部文档ID唯一，跨资料集可复用。不要将F1至F6全部合并；F6是内容替换实验，不是比F1更新的默认制度。
+4. 工具故障、模型失败与执行上限由测试注入或配置，不放在知识原文。资料不足通过实际缺失信息表达，不在正文告诉模型预期状态。
+5. R1保留长章节和分块关系；不能为了缩短资料把后部范围条件搬到每个片段，否则会失去读取边界的验证意义。

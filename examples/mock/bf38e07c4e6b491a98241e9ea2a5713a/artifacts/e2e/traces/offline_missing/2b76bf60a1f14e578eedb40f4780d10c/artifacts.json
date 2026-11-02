@@ -1,0 +1,50 @@
+{
+  "case_id": "offline_missing",
+  "run_id": "2b76bf60a1f14e578eedb40f4780d10c",
+  "artifacts": [
+    {
+      "path": "inputs/offline_missing/2b76bf60a1f14e578eedb40f4780d10c/corpus.json",
+      "sha256": "758cfd629aa76666a489e86868e3c52584f606df4c0e6fba130b00b30347cd60"
+    },
+    {
+      "path": "inputs/offline_missing/2b76bf60a1f14e578eedb40f4780d10c/index-manifest.json",
+      "sha256": "092039b10911289c54acb61d0b10ddd847e659568fac56a2ed995a4acc9db3e6"
+    },
+    {
+      "path": "inputs/offline_missing/2b76bf60a1f14e578eedb40f4780d10c/input.json",
+      "sha256": "0e072897d223f76e92a25cf14c70c3a59c1772f5001a62e2b574072e0697ca47"
+    },
+    {
+      "path": "traces/offline_missing/2b76bf60a1f14e578eedb40f4780d10c/model-inputs.jsonl",
+      "sha256": "2a0a5537350e911c33116cf43e9f99c3a58d9f23b93f7996755bafd1788c140c"
+    },
+    {
+      "path": "traces/offline_missing/2b76bf60a1f14e578eedb40f4780d10c/observed-evidence.json",
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    {
+      "path": "outputs/offline_missing/2b76bf60a1f14e578eedb40f4780d10c/output.json",
+      "sha256": "08163e9536415dbf21218e91903c0a802e455198fed272a68592f080c93a8d00"
+    },
+    {
+      "path": "outputs/offline_missing/2b76bf60a1f14e578eedb40f4780d10c/run-summary.json",
+      "sha256": "19878390cdd1d83b15cc026517bf1840113919b320188280331f05bb2ce0e088"
+    },
+    {
+      "path": "traces/offline_missing/2b76bf60a1f14e578eedb40f4780d10c/run.json",
+      "sha256": "928510a30a5cc6af57b324cb5c91a557e24e809e27ca82b2f321e5d2da0d08f8"
+    },
+    {
+      "path": "traces/offline_missing/2b76bf60a1f14e578eedb40f4780d10c/tool-inputs.jsonl",
+      "sha256": "cd7f516be222ea790dfdc18598b701cbff3401c59ba15a75affd773877373d0b"
+    },
+    {
+      "path": "traces/offline_missing/2b76bf60a1f14e578eedb40f4780d10c/tool-results.jsonl",
+      "sha256": "c2a4bd63dab30d0b239b9747263e2b96dfffbc5ea3134d7b926c2552c408b357"
+    },
+    {
+      "path": "traces/offline_missing/2b76bf60a1f14e578eedb40f4780d10c/trace.jsonl",
+      "sha256": "d9555d9fb08a1689c78d930f3f6037d9d394449c964ff23b9a413e9284a5a983"
+    }
+  ]
+}

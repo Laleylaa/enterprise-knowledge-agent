@@ -1,0 +1,18 @@
+{
+  "case_id": "offline_session",
+  "run_id": "5d81832d134a41d792ed46223cb4aeae",
+  "artifacts": [
+    {
+      "path": "outputs/offline_session/5d81832d134a41d792ed46223cb4aeae/history.json",
+      "sha256": "7bc67d2db34d80690c02f95b196032c135314131a01034718e58eb2292790dfc"
+    },
+    {
+      "path": "traces/offline_session/5d81832d134a41d792ed46223cb4aeae/session.json",
+      "sha256": "636689ecee1010cc94a4823f47646d84495a6abb1944240a8b09230abadba1c3"
+    },
+    {
+      "path": "traces/offline_session/5d81832d134a41d792ed46223cb4aeae/trace.jsonl",
+      "sha256": "6fa862b6c7b796aa737fc07698ac83390f1baef6e9086fa75166ee5bc1f6e1e9"
+    }
+  ]
+}

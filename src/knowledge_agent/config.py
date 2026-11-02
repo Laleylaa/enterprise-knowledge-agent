@@ -4,6 +4,7 @@ from pathlib import Path
 from typing import Literal
 
 from pydantic import Field, SecretStr, model_validator
+from pydantic_core import PydanticCustomError
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -58,6 +59,11 @@ class Settings(BaseSettings):
 
     @model_validator(mode="after")
     def consistent_chunk_limits(self) -> "Settings":
+        if self.mode == "mock" and self.retrieval_mode not in {None, "bm25"}:
+            raise PydanticCustomError(
+                "mock_retrieval_mode",
+                "Mock 仅支持 BM25；请使用 --retrieval bm25 或移除 KA_RETRIEVAL_MODE 的非 BM25 配置。",
+            )
         if self.mode == "real" and self.mock_scenario is not None:
             raise ValueError("mock_scenario is only available in explicit mock mode")
         if self.model_output_tokens >= self.model_context_tokens:

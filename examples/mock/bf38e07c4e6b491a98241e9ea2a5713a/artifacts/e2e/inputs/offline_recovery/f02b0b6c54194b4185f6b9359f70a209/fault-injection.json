@@ -1,0 +1,8 @@
+{
+  "origin": "offline_mock_injection",
+  "mode": "first",
+  "backend_attempts": 2,
+  "last_tool": "read_document",
+  "injected": false,
+  "not_live_service_failure": true
+}

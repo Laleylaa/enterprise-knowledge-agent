@@ -1,0 +1,133 @@
+{
+  "mock_scenario": null,
+  "run_id": "b82f9bfc169d4fcab3db8bd5e7be9d2a",
+  "mode": "real",
+  "stage": "tool_integration",
+  "requested_retrieval": "hybrid",
+  "result_origin": "model",
+  "termination_reason": "completed",
+  "result": {
+    "citations": [
+      {
+        "evidence_id": "b82f9bfc169d4fcab3db8bd5e7be9d2a:E3",
+        "doc_id": "D01",
+        "quote": "国内差旅报销须在行程结束后 30 天内提交。"
+      }
+    ],
+    "answer": "D01《差旅报销规定》的“二、提交期限”载明：国内差旅报销须在行程结束后 30 天内提交。该规定版本日期为 2026-01-01。（说明：按文档 ID 读取 D01 全文的两次调用均返回 READ_FAILED，上述内容取自针对 D01 的检索返回的“二、提交期限”整节原文。）",
+    "gaps": [],
+    "clarification": null,
+    "status": "resolved",
+    "decision_summary": "全文读取失败，改按 doc_ids 检索 D01，取得“二、提交期限”整节原文，覆盖国内差旅报销期限及起算条件。"
+  },
+  "observed_evidence": [
+    {
+      "evidence_id": "b82f9bfc169d4fcab3db8bd5e7be9d2a:E1",
+      "tool_call_id": "call_00_5PfqhO5dncXED6FzbA0V6437",
+      "corpus_hash": "5863212f2b2165ea6237b6a33d04f736d827ec23201925879cb106faf8c533c8",
+      "doc_id": "D01",
+      "title": "差旅报销规定 D01",
+      "version_date": "2026-01-01",
+      "content_hash": "e2224c4c7e19f1ec6fa0fb2d37800a4adfc77c170baed7c44625f5a5e84279b4",
+      "start": 0,
+      "end": 12,
+      "text": "# 国内差旅报销规定\n\n",
+      "source_spans": [
+        {
+          "start": 0,
+          "end": 12,
+          "text": "# 国内差旅报销规定\n\n"
+        }
+      ],
+      "delivered_to_model": true
+    },
+    {
+      "evidence_id": "b82f9bfc169d4fcab3db8bd5e7be9d2a:E2",
+      "tool_call_id": "call_00_5PfqhO5dncXED6FzbA0V6437",
+      "corpus_hash": "5863212f2b2165ea6237b6a33d04f736d827ec23201925879cb106faf8c533c8",
+      "doc_id": "D01",
+      "title": "差旅报销规定 D01",
+      "version_date": "2026-01-01",
+      "content_hash": "e2224c4c7e19f1ec6fa0fb2d37800a4adfc77c170baed7c44625f5a5e84279b4",
+      "start": 12,
+      "end": 59,
+      "text": "## 一、用途与适用事项\n\n本规定说明员工国内差旅报销的提交期限，以及报销申请的处理状态。\n\n",
+      "source_spans": [
+        {
+          "start": 12,
+          "end": 59,
+          "text": "## 一、用途与适用事项\n\n本规定说明员工国内差旅报销的提交期限，以及报销申请的处理状态。\n\n"
+        }
+      ],
+      "delivered_to_model": true
+    },
+    {
+      "evidence_id": "b82f9bfc169d4fcab3db8bd5e7be9d2a:E3",
+      "tool_call_id": "call_00_5PfqhO5dncXED6FzbA0V6437",
+      "corpus_hash": "5863212f2b2165ea6237b6a33d04f736d827ec23201925879cb106faf8c533c8",
+      "doc_id": "D01",
+      "title": "差旅报销规定 D01",
+      "version_date": "2026-01-01",
+      "content_hash": "e2224c4c7e19f1ec6fa0fb2d37800a4adfc77c170baed7c44625f5a5e84279b4",
+      "start": 59,
+      "end": 122,
+      "text": "## 二、提交期限\n\n1. 国内差旅报销须在行程结束后 30 天内提交。\n2. 报销申请的处理状态与上述提交期限分别记录。\n\n",
+      "source_spans": [
+        {
+          "start": 59,
+          "end": 122,
+          "text": "## 二、提交期限\n\n1. 国内差旅报销须在行程结束后 30 天内提交。\n2. 报销申请的处理状态与上述提交期限分别记录。\n\n"
+        }
+      ],
+      "delivered_to_model": true
+    },
+    {
+      "evidence_id": "b82f9bfc169d4fcab3db8bd5e7be9d2a:E4",
+      "tool_call_id": "call_00_5PfqhO5dncXED6FzbA0V6437",
+      "corpus_hash": "5863212f2b2165ea6237b6a33d04f736d827ec23201925879cb106faf8c533c8",
+      "doc_id": "D01",
+      "title": "差旅报销规定 D01",
+      "version_date": "2026-01-01",
+      "content_hash": "e2224c4c7e19f1ec6fa0fb2d37800a4adfc77c170baed7c44625f5a5e84279b4",
+      "start": 122,
+      "end": 221,
+      "text": "## 三、申请状态说明\n\n1. “已提交”表示申请已进入处理队列，不代表审核通过。\n2. “处理中”表示申请仍在审核，不能据此认定已完成付款。\n3. 员工查询处理进度时，应区分申请状态与付款状态。\n",
+      "source_spans": [
+        {
+          "start": 122,
+          "end": 221,
+          "text": "## 三、申请状态说明\n\n1. “已提交”表示申请已进入处理队列，不代表审核通过。\n2. “处理中”表示申请仍在审核，不能据此认定已完成付款。\n3. 员工查询处理进度时，应区分申请状态与付款状态。\n"
+        }
+      ],
+      "delivered_to_model": true
+    }
+  ],
+  "session_id": "760c60ff2a394a6f858426bc59ce4790",
+  "turn_id": 1,
+  "previous_run_id": null,
+  "action_summaries": [
+    {
+      "model_turn": 1,
+      "tool": "read_document",
+      "tool_call_id": "call_00_vHcJFoiZ9OYDTo4gmQBe8991",
+      "purpose": "读取 D01 全文核实国内差旅报销期限"
+    },
+    {
+      "model_turn": 2,
+      "tool": "read_document",
+      "tool_call_id": "call_00_u4Z20eTeIp7h7fB45dnw4601",
+      "purpose": "重试读取 D01 全文"
+    },
+    {
+      "model_turn": 3,
+      "tool": "search_knowledge",
+      "tool_call_id": "call_00_5PfqhO5dncXED6FzbA0V6437",
+      "purpose": "全文读取失败，改用检索尝试取得 D01 相关原文"
+    }
+  ],
+  "usage": {
+    "model_turns": 5,
+    "http_attempts": 5,
+    "tool_calls": 3
+  }
+}

@@ -1,9 +1,0 @@
-{
-  "tool": "read_document",
-  "tool_call_id": "read-local-2",
-  "arguments": {
-    "doc_id": "D10",
-    "purpose": "取得可核对的制度原文",
-    "chunk_id": "D10-C0004"
-  }
-}

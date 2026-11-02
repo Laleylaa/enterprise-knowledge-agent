@@ -1,0 +1,54 @@
+{
+  "case_id": "required_context",
+  "run_id": "afbb99b5722545b3b4669523ab104756",
+  "artifacts": [
+    {
+      "path": "reports/required_context/afbb99b5722545b3b4669523ab104756/chat-evaluation.json",
+      "sha256": "58e333b3eb55ab592c7c557bb068631b990f9d01105a2eb8cea37422de581dc7"
+    },
+    {
+      "path": "inputs/required_context/afbb99b5722545b3b4669523ab104756/corpus.json",
+      "sha256": "758cfd629aa76666a489e86868e3c52584f606df4c0e6fba130b00b30347cd60"
+    },
+    {
+      "path": "inputs/required_context/afbb99b5722545b3b4669523ab104756/index-manifest.json",
+      "sha256": "6da37e7e6a90d527093ff16a71e4e4c0a0616e214693c839f6481bd14b1b7a69"
+    },
+    {
+      "path": "inputs/required_context/afbb99b5722545b3b4669523ab104756/input.json",
+      "sha256": "1d88146edb7ec7f8a71e6f0f3809ce66d00b5b5f09ae5bce80367408038f3e2a"
+    },
+    {
+      "path": "traces/required_context/afbb99b5722545b3b4669523ab104756/model-inputs.jsonl",
+      "sha256": "b66f767609839181e902a6004748dd74cfd1b577906ea01aaa555c67f1705ba9"
+    },
+    {
+      "path": "traces/required_context/afbb99b5722545b3b4669523ab104756/observed-evidence.json",
+      "sha256": "c18c462fd171d603d0a817f8a96cd9bb757b211fdf9b87118dfbd83c955d45a4"
+    },
+    {
+      "path": "outputs/required_context/afbb99b5722545b3b4669523ab104756/output.json",
+      "sha256": "d750268ca310cb757f976ee0d11f0cde6aa68b570602ac9afa3d34951b752065"
+    },
+    {
+      "path": "outputs/required_context/afbb99b5722545b3b4669523ab104756/run-summary.json",
+      "sha256": "5d48c83b25f2e35c9783d5de7cd1aadf1230af09c224f1067730ecce1c4838d4"
+    },
+    {
+      "path": "traces/required_context/afbb99b5722545b3b4669523ab104756/run.json",
+      "sha256": "26e82d2d709193ac055401dbbdadb1ceb9b507fb2fdd2d5dc7bbbf0af1d8c1fd"
+    },
+    {
+      "path": "traces/required_context/afbb99b5722545b3b4669523ab104756/tool-inputs.jsonl",
+      "sha256": "b27ff3d8213b936f1e69077ec2ec6871355e9627ffa81ff04f77ac362af6a709"
+    },
+    {
+      "path": "traces/required_context/afbb99b5722545b3b4669523ab104756/tool-results.jsonl",
+      "sha256": "b0c439c1b7cf3bae818af911f6c3f5e587491d61c74bfddf985fc200ca8eaeaa"
+    },
+    {
+      "path": "traces/required_context/afbb99b5722545b3b4669523ab104756/trace.jsonl",
+      "sha256": "d0af9ec309225600db8f8004cc8d2058364d42752bf986d65ac6c5e690b83a8f"
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "messages": [
+    {
+      "role": "user",
+      "content": "请查阅 D99 的规定。"
+    },
+    {
+      "role": "assistant",
+      "content": "运行方式：离线预设脚本（missing），仅验证流程，不证明模型决策能力。\n任务状态：未解决（unresolved）\n本轮未取得 D99 原文，无法回答其规定；不据此断言制度不存在。\n\n引用与已取得资料\n本轮无最终结论引用。\n\n资料缺口：缺少 D99 原文。"
+    }
+  ]
+}

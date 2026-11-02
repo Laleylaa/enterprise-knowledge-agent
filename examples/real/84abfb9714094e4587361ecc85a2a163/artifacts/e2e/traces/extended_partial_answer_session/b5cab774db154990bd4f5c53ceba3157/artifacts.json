@@ -1,0 +1,18 @@
+{
+  "case_id": "extended_partial_answer_session",
+  "run_id": "b5cab774db154990bd4f5c53ceba3157",
+  "artifacts": [
+    {
+      "path": "outputs/extended_partial_answer_session/b5cab774db154990bd4f5c53ceba3157/history.json",
+      "sha256": "c654867a50b520e3ddbff321da133cc2aa393028548895f82596869ab324f103"
+    },
+    {
+      "path": "traces/extended_partial_answer_session/b5cab774db154990bd4f5c53ceba3157/session.json",
+      "sha256": "7071a20f167e29e992f08767f0f6ffa3264d0f38c039aeb849f8115c7a016f1a"
+    },
+    {
+      "path": "traces/extended_partial_answer_session/b5cab774db154990bd4f5c53ceba3157/trace.jsonl",
+      "sha256": "44bcd1bcce473c194921b53b360c0787249a8c779cb1bb735ed27eb3df770119"
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "case_id": "quality_notification_r2",
+  "live_model": true,
+  "automated_test_outcome": "passed",
+  "semantic_review": "pending_separate_review",
+  "automated_scope": "structure_evidence_execution",
+  "required_semantic_checks": [
+    "Answer conclusions and conditions are supported by the cited original text, including negation and numbers.",
+    "Conflicts remain unresolved unless observed source evidence establishes applicability; user claims are not evidence.",
+    "History and notification details are represented faithfully; no inferred channel or stale condition.",
+    "Gaps and clarification concern the current question; actual tool failures are explained honestly.",
+    "Status matches what was answered or prevented; concision/wording notes are separate from business defects."
+  ]
+}

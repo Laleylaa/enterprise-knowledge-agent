@@ -1,0 +1,18 @@
+{
+  "case_id": "required_missing_session",
+  "run_id": "09e7fb9ba80a46cd9a370ce58374b1ef",
+  "artifacts": [
+    {
+      "path": "outputs/required_missing_session/09e7fb9ba80a46cd9a370ce58374b1ef/history.json",
+      "sha256": "eb95f83b7e25043910f8a6698d858e12ce0276aabf06c5a9d8857b5790ab50eb"
+    },
+    {
+      "path": "traces/required_missing_session/09e7fb9ba80a46cd9a370ce58374b1ef/session.json",
+      "sha256": "39972ff4575e954f5fd6e7a58ff35daf9fa0184b842d5952ef1f69d744fd9224"
+    },
+    {
+      "path": "traces/required_missing_session/09e7fb9ba80a46cd9a370ce58374b1ef/trace.jsonl",
+      "sha256": "6f3cae506c9461d141868beaad196ffc5165f85803621e57d458bd2f2e478c10"
+    }
+  ]
+}

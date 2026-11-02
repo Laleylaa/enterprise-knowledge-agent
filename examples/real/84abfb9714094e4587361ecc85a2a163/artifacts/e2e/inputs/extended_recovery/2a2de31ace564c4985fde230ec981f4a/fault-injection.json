@@ -1,0 +1,18 @@
+{
+  "origin": "test_only",
+  "mode": "first",
+  "targets": [
+    "search_knowledge",
+    "read_document"
+  ],
+  "executions": 2,
+  "injections": [
+    {
+      "tool": "search_knowledge",
+      "tool_call_id": "call_00_8fFMyXkDuNrstKCGLHRI0632",
+      "execution_number": 1,
+      "injection": "test_backend_oserror"
+    }
+  ],
+  "visible_to_model": "only_actual_tool_error"
+}

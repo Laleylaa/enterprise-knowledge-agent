@@ -1,0 +1,194 @@
+{
+  "reviewer": "Codex AI-assisted reading",
+  "reviewed_outputs": 23,
+  "verified_citations": 28,
+  "automatic_checks": "18 passed",
+  "overall_semantic_acceptance": "not_passed",
+  "known_issue_count": 1,
+  "runs": [
+    {
+      "case": "Q18b_after",
+      "run_id": "034d48ea22634a1c9219fc4227f4d083",
+      "input": "artifacts/e2e/inputs/Q18b_after/034d48ea22634a1c9219fc4227f4d083/input.json",
+      "output": "artifacts/e2e/outputs/Q18b_after/034d48ea22634a1c9219fc4227f4d083/output.json",
+      "review": "no_material_issue_observed",
+      "note": "本轮答复、状态与引用阅读核对未发现实质业务问题。"
+    },
+    {
+      "case": "Q18b_before",
+      "run_id": "d98fd8297fd0457ea697003cbd9d5894",
+      "input": "artifacts/e2e/inputs/Q18b_before/d98fd8297fd0457ea697003cbd9d5894/input.json",
+      "output": "artifacts/e2e/outputs/Q18b_before/d98fd8297fd0457ea697003cbd9d5894/output.json",
+      "review": "no_material_issue_observed",
+      "note": "本轮答复、状态与引用阅读核对未发现实质业务问题。"
+    },
+    {
+      "case": "extended_conflict_newer",
+      "run_id": "7f6be3a9f2884c3b9172d6200e2ef837",
+      "input": "artifacts/e2e/inputs/extended_conflict_newer/7f6be3a9f2884c3b9172d6200e2ef837/input.json",
+      "output": "artifacts/e2e/outputs/extended_conflict_newer/7f6be3a9f2884c3b9172d6200e2ef837/output.json",
+      "review": "no_material_issue_observed",
+      "note": "本轮答复、状态与引用阅读核对未发现实质业务问题。"
+    },
+    {
+      "case": "extended_notification",
+      "run_id": "231fc6f8163645fab41a7592885b9746",
+      "input": "artifacts/e2e/inputs/extended_notification/231fc6f8163645fab41a7592885b9746/input.json",
+      "output": "artifacts/e2e/outputs/extended_notification/231fc6f8163645fab41a7592885b9746/output.json",
+      "review": "failed",
+      "note": "用户未说明通知形式，answer却写“人事通知口头确定”；gaps又写15天在原文没有对应依据，容易与D02本身明确15天混淆，应限定为通知适用依据未核实。冲突未擅自消解，但忠实转述失败。"
+    },
+    {
+      "case": "extended_notification",
+      "run_id": "9aba9708e23e45e98c1c70cc18f8a92b",
+      "input": "artifacts/e2e/inputs/extended_notification/9aba9708e23e45e98c1c70cc18f8a92b/input.json",
+      "output": "artifacts/e2e/outputs/extended_notification/9aba9708e23e45e98c1c70cc18f8a92b/output.json",
+      "review": "no_material_issue_observed",
+      "note": "本轮答复、状态与引用阅读核对未发现实质业务问题。"
+    },
+    {
+      "case": "extended_partial_answer",
+      "run_id": "36189100861245c580d1c7dc8c0e85cb",
+      "input": "artifacts/e2e/inputs/extended_partial_answer/36189100861245c580d1c7dc8c0e85cb/input.json",
+      "output": "artifacts/e2e/outputs/extended_partial_answer/36189100861245c580d1c7dc8c0e85cb/output.json",
+      "review": "no_material_issue_observed",
+      "note": "本轮答复、状态与引用阅读核对未发现实质业务问题。"
+    },
+    {
+      "case": "extended_read_failure",
+      "run_id": "b82f9bfc169d4fcab3db8bd5e7be9d2a",
+      "input": "artifacts/e2e/inputs/extended_read_failure/b82f9bfc169d4fcab3db8bd5e7be9d2a/input.json",
+      "output": "artifacts/e2e/outputs/extended_read_failure/b82f9bfc169d4fcab3db8bd5e7be9d2a/output.json",
+      "review": "note",
+      "note": "读取两次失败后搜索取得期限并如实披露；附带未问的版本日期和较多查证过程，表达仍可精简。"
+    },
+    {
+      "case": "extended_recovery",
+      "run_id": "2a2de31ace564c4985fde230ec981f4a",
+      "input": "artifacts/e2e/inputs/extended_recovery/2a2de31ace564c4985fde230ec981f4a/input.json",
+      "output": "artifacts/e2e/outputs/extended_recovery/2a2de31ace564c4985fde230ec981f4a/output.json",
+      "review": "no_material_issue_observed",
+      "note": "本轮答复、状态与引用阅读核对未发现实质业务问题。"
+    },
+    {
+      "case": "extended_scope",
+      "run_id": "d3a882a0dfc242afa39f12e9fb23251f",
+      "input": "artifacts/e2e/inputs/extended_scope/d3a882a0dfc242afa39f12e9fb23251f/input.json",
+      "output": "artifacts/e2e/outputs/extended_scope/d3a882a0dfc242afa39f12e9fb23251f/output.json",
+      "review": "no_material_issue_observed",
+      "note": "本轮答复、状态与引用阅读核对未发现实质业务问题。"
+    },
+    {
+      "case": "extended_scope_correction",
+      "run_id": "335b31468cec4d26aec471a65ec94c17",
+      "input": "artifacts/e2e/inputs/extended_scope_correction/335b31468cec4d26aec471a65ec94c17/input.json",
+      "output": "artifacts/e2e/outputs/extended_scope_correction/335b31468cec4d26aec471a65ec94c17/output.json",
+      "review": "no_material_issue_observed",
+      "note": "本轮答复、状态与引用阅读核对未发现实质业务问题。"
+    },
+    {
+      "case": "extended_scope_correction",
+      "run_id": "a42fe3fdda214d2887c243df669b05ee",
+      "input": "artifacts/e2e/inputs/extended_scope_correction/a42fe3fdda214d2887c243df669b05ee/input.json",
+      "output": "artifacts/e2e/outputs/extended_scope_correction/a42fe3fdda214d2887c243df669b05ee/output.json",
+      "review": "no_material_issue_observed",
+      "note": "本轮答复、状态与引用阅读核对未发现实质业务问题。"
+    },
+    {
+      "case": "extended_status",
+      "run_id": "3733a0003580466da221e13b51341e97",
+      "input": "artifacts/e2e/inputs/extended_status/3733a0003580466da221e13b51341e97/input.json",
+      "output": "artifacts/e2e/outputs/extended_status/3733a0003580466da221e13b51341e97/output.json",
+      "review": "no_material_issue_observed",
+      "note": "本轮答复、状态与引用阅读核对未发现实质业务问题。"
+    },
+    {
+      "case": "extended_unknown_referent",
+      "run_id": "39cf800766614180903a5e231df0af80",
+      "input": "artifacts/e2e/inputs/extended_unknown_referent/39cf800766614180903a5e231df0af80/input.json",
+      "output": "artifacts/e2e/outputs/extended_unknown_referent/39cf800766614180903a5e231df0af80/output.json",
+      "review": "no_material_issue_observed",
+      "note": "本轮答复、状态与引用阅读核对未发现实质业务问题。"
+    },
+    {
+      "case": "hybrid_partial_section_context",
+      "run_id": "859fc5bf5f8347b38f2e24c93d680452",
+      "input": "artifacts/e2e/inputs/hybrid_partial_section_context/859fc5bf5f8347b38f2e24c93d680452/input.json",
+      "output": "artifacts/e2e/outputs/hybrid_partial_section_context/859fc5bf5f8347b38f2e24c93d680452/output.json",
+      "review": "no_material_issue_observed",
+      "note": "本轮答复、状态与引用阅读核对未发现实质业务问题。"
+    },
+    {
+      "case": "hybrid_partial_sufficient",
+      "run_id": "db2ac0181b7f4afc9370d071385c5616",
+      "input": "artifacts/e2e/inputs/hybrid_partial_sufficient/db2ac0181b7f4afc9370d071385c5616/input.json",
+      "output": "artifacts/e2e/outputs/hybrid_partial_sufficient/db2ac0181b7f4afc9370d071385c5616/output.json",
+      "review": "no_material_issue_observed",
+      "note": "本轮答复、状态与引用阅读核对未发现实质业务问题。"
+    },
+    {
+      "case": "required_clear_answer",
+      "run_id": "d27324d1dc574e619e7d226388810ba5",
+      "input": "artifacts/e2e/inputs/required_clear_answer/d27324d1dc574e619e7d226388810ba5/input.json",
+      "output": "artifacts/e2e/outputs/required_clear_answer/d27324d1dc574e619e7d226388810ba5/output.json",
+      "review": "no_material_issue_observed",
+      "note": "本轮答复、状态与引用阅读核对未发现实质业务问题。"
+    },
+    {
+      "case": "required_conflict",
+      "run_id": "37277fc358e944d8b21a4b091f12c7ba",
+      "input": "artifacts/e2e/inputs/required_conflict/37277fc358e944d8b21a4b091f12c7ba/input.json",
+      "output": "artifacts/e2e/outputs/required_conflict/37277fc358e944d8b21a4b091f12c7ba/output.json",
+      "review": "no_material_issue_observed",
+      "note": "本轮答复、状态与引用阅读核对未发现实质业务问题。"
+    },
+    {
+      "case": "required_context",
+      "run_id": "41f00d345cd24088a0312e7ca4b54753",
+      "input": "artifacts/e2e/inputs/required_context/41f00d345cd24088a0312e7ca4b54753/input.json",
+      "output": "artifacts/e2e/outputs/required_context/41f00d345cd24088a0312e7ca4b54753/output.json",
+      "review": "note",
+      "note": "所述期限有原文支持；“现行”未经时效查证，宜称“资料中的”。"
+    },
+    {
+      "case": "required_context",
+      "run_id": "afbb99b5722545b3b4669523ab104756",
+      "input": "artifacts/e2e/inputs/required_context/afbb99b5722545b3b4669523ab104756/input.json",
+      "output": "artifacts/e2e/outputs/required_context/afbb99b5722545b3b4669523ab104756/output.json",
+      "review": "no_material_issue_observed",
+      "note": "本轮答复、状态与引用阅读核对未发现实质业务问题。"
+    },
+    {
+      "case": "required_missing",
+      "run_id": "9e4305261c134c9fbe37beb3f515297e",
+      "input": "artifacts/e2e/inputs/required_missing/9e4305261c134c9fbe37beb3f515297e/input.json",
+      "output": "artifacts/e2e/outputs/required_missing/9e4305261c134c9fbe37beb3f515297e/output.json",
+      "review": "no_material_issue_observed",
+      "note": "本轮答复、状态与引用阅读核对未发现实质业务问题。"
+    },
+    {
+      "case": "required_paraphrase_a",
+      "run_id": "931b47c05d4a4da088890c2165bb1176",
+      "input": "artifacts/e2e/inputs/required_paraphrase_a/931b47c05d4a4da088890c2165bb1176/input.json",
+      "output": "artifacts/e2e/outputs/required_paraphrase_a/931b47c05d4a4da088890c2165bb1176/output.json",
+      "review": "no_material_issue_observed",
+      "note": "本轮答复、状态与引用阅读核对未发现实质业务问题。"
+    },
+    {
+      "case": "required_paraphrase_b",
+      "run_id": "69f6cc694bfe4a34b9ecbab0cd057970",
+      "input": "artifacts/e2e/inputs/required_paraphrase_b/69f6cc694bfe4a34b9ecbab0cd057970/input.json",
+      "output": "artifacts/e2e/outputs/required_paraphrase_b/69f6cc694bfe4a34b9ecbab0cd057970/output.json",
+      "review": "no_material_issue_observed",
+      "note": "本轮答复、状态与引用阅读核对未发现实质业务问题。"
+    },
+    {
+      "case": "required_tool_failure",
+      "run_id": "29919e3677a046449fb0bd834da40f39",
+      "input": "artifacts/e2e/inputs/required_tool_failure/29919e3677a046449fb0bd834da40f39/input.json",
+      "output": "artifacts/e2e/outputs/required_tool_failure/29919e3677a046449fb0bd834da40f39/output.json",
+      "review": "no_material_issue_observed",
+      "note": "本轮答复、状态与引用阅读核对未发现实质业务问题。"
+    }
+  ]
+}

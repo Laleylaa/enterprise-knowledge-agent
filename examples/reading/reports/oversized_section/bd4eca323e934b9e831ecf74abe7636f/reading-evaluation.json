@@ -1,9 +1,0 @@
-{
-  "scope": "single_read_tool",
-  "model_calls": 0,
-  "initial_status": "error",
-  "locator_count": 3,
-  "successful_chunk_reads": 3,
-  "recovered_scope": true,
-  "trigger": "test_selected_local_reads_not_model_recovery"
-}

@@ -1,0 +1,3 @@
+{"tool": "search_knowledge", "tool_call_id": "call_00_YxTVrVyWJsFSeWxuihJj2200", "arguments": {"query": "国内差旅报销期限", "purpose": "查找国内差旅报销提交期限规定", "doc_ids": null, "limit": 5, "cursor": null}}
+{"tool": "search_knowledge", "tool_call_id": "call_00_XWtfcP5ocwDfWJufahI78845", "arguments": {"query": "差旅费报销 行程结束后 天内提交", "purpose": "重试检索差旅报销期限规定", "doc_ids": null, "limit": 5, "cursor": null}}
+{"tool": "search_knowledge", "tool_call_id": "call_00_DnZveWHiR1NpsKc4xF0g9026", "arguments": {"query": "报销时限 差旅", "purpose": "再次尝试检索报销时限相关原文", "doc_ids": null, "limit": 5, "cursor": null}}

@@ -1,0 +1,25 @@
+{
+  "origin": "test_only",
+  "mode": "always",
+  "targets": [
+    "search_knowledge"
+  ],
+  "executions": 2,
+  "injections": [
+    {
+      "tool": "search_knowledge",
+      "tool_call_id": "call_00_iGNhkZRrK8WT3w8Fef6y7856",
+      "branch": "vector",
+      "injection": "test_embedding_timeout",
+      "execution_number": 1
+    },
+    {
+      "tool": "search_knowledge",
+      "tool_call_id": "call_01_Jl4he9ztJ9tVoeHB0VPQ4634",
+      "branch": "vector",
+      "injection": "test_embedding_timeout",
+      "execution_number": 2
+    }
+  ],
+  "visible_to_model": "only_actual_tool_error"
+}

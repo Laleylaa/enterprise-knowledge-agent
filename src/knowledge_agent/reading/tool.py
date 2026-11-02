@@ -51,7 +51,14 @@ class LocatorPage:
 
 class ReadTool:
     name = "read_document"
-    description = "按文档、章节或块读取原文；扩大到章节须传 section_id。超大内容仅返回局部读取定位。"
+    description = (
+        "读取原文，核实搜索片段缺少的适用范围、前提、上下文或冲突关系，也可完成用户明确提出的原文读取请求。"
+        "仅 doc_id 读取全文；doc_id 与 section_id 读取章节；chunk_id 只读该块，不扩展上下文，不能用重读同一块代替补读。"
+        "优先定位相关章节，范围在其他章节时继续定位，必要时读全文；证据已充分且没有明确读取请求时无需调用。"
+        "CONTENT_TOO_LARGE 返回的 locators 只是定位，不是正文证据，需按定位局部读取。"
+        "返回后重新判断问题和适用条件是否有据；读取失败不使先前搜索取得的原文失效，"
+        "只有失败阻断了必要核实才报告未完成。"
+    )
     locator_page_size = 20
 
     def __init__(self, snapshot: RetrievalSnapshot, settings: Settings,

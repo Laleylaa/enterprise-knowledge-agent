@@ -29,10 +29,10 @@ class Citation(StrictModel):
 class Answer(StrictModel):
     # Select evidence before composing claims; the public fields and types stay the same.
     citations: list[Citation] = Field(description="逐项支持 answer 中所有制度性结论的本轮原文；只引用实际需要的连续片段。状态结论须引状态定义，不能用文档用途或期限条款替代。")
-    answer: NonEmpty = Field(description="仅依据上面已选引文组织本轮的最小充分答案，不是文档摘要。只问国内期限时，只写国内适用依据、起算条件和期限；不写海外期限、申请状态或其他未问事项，即使有引用也省略。没有选入引文的制度结论不要写。只按用户原话描述通知，不推断通知形式。")
+    answer: NonEmpty = Field(description="仅用已选引文回答本轮所问及必要适用条件。逐句核对并删去无关提醒；每个保留的制度结论都必须被 citations 支持。原文出现但当前未问的相邻条款不展开，不推断用户未提供的事实。")
     gaps: list[NonEmpty] = Field(description="仅列本轮已问但尚未回答的事项，或阻碍必要核实的实际故障；未询问的日期、材料、状态等不列入。无相关缺口时为空列表。")
     clarification: NonEmpty | None = Field(description="为解决当前问题所需的具体追问；用户已说明没有更多可核实线索时为 null，不在 answer 中重复追问。")
-    status: Status = Field(description="根据上述答案和实际缺口选择：resolved：本轮所问均有依据；needs_info：需要具体追问；unresolved：所问信息缺少依据或冲突无法确定；incomplete：实际故障或执行限制打断了必要处理。只因资料未写生效日期、凭证等所问内容，应为 unresolved 或 needs_info，不能为 incomplete。")
+    status: Status = Field(description="resolved：本轮所问均有依据；needs_info：需具体追问；unresolved：合理查证后仍缺依据或冲突无法确定；incomplete：实际故障或执行限制阻断必要处理。工具部分失败但证据充分时仍可 resolved。")
     decision_summary: NonEmpty
 
     @model_validator(mode="after")

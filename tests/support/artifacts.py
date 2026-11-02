@@ -9,11 +9,11 @@ import pytest
 
 
 def artifact_group(name: str) -> str:
-    if name in {"input.json", "corpus.json", "index-manifest.json", "fault-injection.json"}:
+    if name in {"input.json", "corpus.json", "index-manifest.json", "fault-injection.json", "imported-history.json"}:
         return "inputs"
-    if name in {"output.json", "run-summary.json"}:
+    if name in {"output.json", "run-summary.json", "history.json"}:
         return "outputs"
-    if name in {"retrieval-evaluation.json", "reading-evaluation.json", "tool-integration-evaluation.json"}:
+    if name in {"retrieval-evaluation.json", "reading-evaluation.json", "tool-integration-evaluation.json", "single-turn-evaluation.json", "chat-evaluation.json", "business-evaluation.json"}:
         return "reports"
     return "traces"
 

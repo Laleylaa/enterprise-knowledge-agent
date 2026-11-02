@@ -1,8 +1,0 @@
-{
-  "tool": "read_document",
-  "tool_call_id": "read-1",
-  "arguments": {
-    "doc_id": "D01",
-    "purpose": "取得可核对的制度原文"
-  }
-}
