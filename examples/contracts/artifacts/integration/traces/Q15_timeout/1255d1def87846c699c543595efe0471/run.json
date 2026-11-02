@@ -1,1 +1,0 @@
-{"scope": "formal_cli_http_injection", "mode": "real", "live_model": false, "model_origin": "local_http_fault", "failure": "timeout", "network_blocked": true}

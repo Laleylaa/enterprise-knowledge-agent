@@ -1,1 +1,0 @@
-{"scope": "formal_offline_cli", "live_model": false, "model_origin": "production_script", "scenario": "normal", "test_id": "tests/e2e/offline/test_mock.py::test_formal_offline_scenarios[normal-F1_single_rule-resolved]", "network_blocked": true, "credentials_present": false, "tokenizer_cache_present": true, "retrieval": "bm25"}

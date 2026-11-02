@@ -1,3 +1,0 @@
-{"tool": "search_knowledge", "tool_call_id": "call_00_okUvS28Zx0zS7Xj6S07a1440", "arguments": {"query": "国内差旅报销期限 凭证", "purpose": "查找国内差旅报销的提交期限与所需凭证", "doc_ids": null, "limit": 5, "cursor": null}}
-{"tool": "search_knowledge", "tool_call_id": "call_00_eaclzHmKX8tOEC7etGCu5195", "arguments": {"query": "差旅报销 需要提供的凭证 票据 材料", "purpose": "核实是否有报销凭证要求的规定", "doc_ids": null, "limit": 5, "cursor": null}}
-{"tool": "read_document", "tool_call_id": "call_00_Wae0BivF2b9njpgp8tMu7440", "arguments": {"doc_id": "D01", "purpose": "核对全文是否包含凭证要求", "section_id": null, "chunk_id": null, "cursor": null}}

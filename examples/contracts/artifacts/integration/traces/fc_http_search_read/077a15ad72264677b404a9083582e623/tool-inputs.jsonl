@@ -1,2 +1,0 @@
-{"tool": "search_knowledge", "tool_call_id": "provider-call-1", "arguments": {"query": "草稿保存时间", "purpose": "查条款", "doc_ids": null, "limit": 1, "cursor": null}}
-{"tool": "read_document", "tool_call_id": "provider-call-2", "arguments": {"doc_id": "D10", "purpose": "按来源读取章节", "section_id": "D10-S0002", "chunk_id": null, "cursor": null}}

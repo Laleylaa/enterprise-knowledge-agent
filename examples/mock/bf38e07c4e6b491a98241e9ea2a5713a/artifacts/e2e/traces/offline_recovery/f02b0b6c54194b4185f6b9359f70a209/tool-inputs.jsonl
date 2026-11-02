@@ -1,2 +1,0 @@
-{"tool": "search_knowledge", "tool_call_id": "offline-1", "arguments": {"query": "差旅 报销 期限", "purpose": "离线脚本：实际检索期限条款", "doc_ids": null, "limit": 5, "cursor": null}}
-{"tool": "read_document", "tool_call_id": "offline-2", "arguments": {"doc_id": "D01", "purpose": "离线预设恢复分支：观察故障后改为读取", "section_id": null, "chunk_id": null, "cursor": null}}

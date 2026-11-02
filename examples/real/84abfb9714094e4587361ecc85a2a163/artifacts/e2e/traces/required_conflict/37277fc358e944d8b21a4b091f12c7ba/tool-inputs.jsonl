@@ -1,3 +1,0 @@
-{"tool": "search_knowledge", "tool_call_id": "call_00_Kr3MKgC5n5bGeiMMcadP6308", "arguments": {"query": "差旅报销期限", "purpose": "查找差旅报销提交期限规定", "doc_ids": null, "limit": 5, "cursor": null}}
-{"tool": "read_document", "tool_call_id": "call_00_E4aHhAWcCSf0Y18SNty02794", "arguments": {"doc_id": "D01", "purpose": "核实 D01 的适用范围与是否有其他条款", "section_id": null, "chunk_id": null, "cursor": null}}
-{"tool": "read_document", "tool_call_id": "call_01_CNYIG7DMEJZTOuMxVAra6101", "arguments": {"doc_id": "D02", "purpose": "核实 D02 的适用范围与是否有其他条款", "section_id": null, "chunk_id": null, "cursor": null}}

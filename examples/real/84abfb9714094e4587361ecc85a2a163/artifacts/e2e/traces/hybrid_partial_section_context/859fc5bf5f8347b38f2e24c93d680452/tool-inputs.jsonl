@@ -1,2 +1,0 @@
-{"tool": "search_knowledge", "tool_call_id": "call_00_iGNhkZRrK8WT3w8Fef6y7856", "arguments": {"query": "草稿保存时间", "purpose": "检索草稿保存时间片段", "doc_ids": null, "limit": 3, "cursor": null}}
-{"tool": "search_knowledge", "tool_call_id": "call_01_Jl4he9ztJ9tVoeHB0VPQ4634", "arguments": {"query": "海外差旅报销 行程结束后30天内提交", "purpose": "核实海外差旅提交期限", "doc_ids": null, "limit": 5, "cursor": null}}
