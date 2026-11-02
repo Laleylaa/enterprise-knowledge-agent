@@ -55,6 +55,6 @@ def test_Q15_formal_chat_http_failures(monkeypatch,tmp_path,capsys,archive_run,f
     assert r['usage']=={'model_turns':1,'http_attempts':attempts,'tool_calls':0}
     assert len(requests)==attempts and all(c.is_closed() for c in clients)
     assert not r['observed_evidence'] and not r['result']['citations']
-    assert {t['function']['name'] for t in requests[0]['tools']}=={'search_knowledge','read_document','submit_answer'}
+    assert {t['function']['name'] for t in requests[0]['tools']}=={'search_knowledge','read_document','finish_research'}
     if attempts==2:assert requests[0]==requests[1]
     assert 'local-injected-test-key' not in captured.out and 'private injected body' not in captured.out

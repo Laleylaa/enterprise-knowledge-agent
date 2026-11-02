@@ -12,6 +12,8 @@ def test_Q02_newer_date_does_not_resolve_conflict(cli_run):
 def test_Q11_unknown_referent(cli_run):
     result,_,_=cli_run('extended_unknown_referent','这个能报销吗？','F5_leave_and_scope')
     assert result['result']['status']=='needs_info' and result['result']['clarification']
+    assert result['usage']['tool_calls'] == 0
+    assert not result['observed_evidence'] and not result['result']['citations']
 
 
 def test_Q13_partial_answer_preserves_missing_item(cli_run):

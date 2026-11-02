@@ -39,7 +39,7 @@ def test_hybrid_partial_evidence_decision(cli_run, evaluation_settings, case):
     fault = VectorTimeoutPlan()
     question, fixture = (
         ('国内差旅报销期限多久？', 'F1_single_rule') if case == 'sufficient' else
-        ('先按“草稿保存时间”检索一条片段，再核实海外差旅是否也必须在行程结束后30天内提交？',
+        ('我是海外差旅，看到报销说明里写行程结束后30天内提交，这条也适用于我吗？',
          'R1_section_context')
     )
     result, records, _ = cli_run('hybrid_partial_' + case, question, fixture, fault=fault)
@@ -51,10 +51,8 @@ def test_hybrid_partial_evidence_decision(cli_run, evaluation_settings, case):
         deadline(result, 30)
         # No mandatory reread or restoration of the vector branch.
     else:
-        first_text = '\n'.join(h['text'] for h in searches[0]['data']['hits'])
-        assert '30 天内提交' in first_text and '仅适用于国内差旅' not in first_text
-        # The fixture's section contains the condition omitted from the first hit.
-        # Accept any subsequent evidence-gathering action that actually obtains it.
+        # Natural business input does not prescribe the query or first-hit contents.
+        # The controlled first-hit diagnostic remains in local_validation.
         assert any('仅适用于国内差旅' in e['text'] and e['delivered_to_model']
                    for e in result['observed_evidence'])
         answer = result['result']

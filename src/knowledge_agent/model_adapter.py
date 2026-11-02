@@ -84,6 +84,7 @@ class RecordedModel(WrapperModel):
             request_id = f"{state.recorder.run_id}:M{turn}:A{attempt + 1}"
             state.recorder.append("model-inputs.jsonl", {
                 "request_id": request_id, "model_turn": turn, "attempt": attempt + 1,
+                "phase": state.phase,
                 "messages": public_messages(messages),
                 "instructions": [asdict(p) for p in model_request_parameters.instruction_parts or []],
                 "tools": [{"name": t.name, "description": t.description, "schema": t.parameters_json_schema}

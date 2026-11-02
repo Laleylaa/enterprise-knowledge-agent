@@ -92,7 +92,26 @@ def audit_run(directory, result, *, expected_history=None, expected_retrieval="b
     assert result["stage"] == "tool_integration" and result["requested_retrieval"] == expected_retrieval
     assert json.loads((directory / "input.json").read_text())["effective_history"] == (expected_history or [])
     for request in requests:
-        assert {t["name"] for t in request["tools"]} == {"search_knowledge", "read_document", "submit_answer"}
+        names = {t["name"] for t in request["tools"]}
+        if request["phase"] == "research":
+            assert names == {"search_knowledge", "read_document", "finish_research"}
+        else:
+            assert request["phase"] == "answer"
+            assert names in ({"submit_answer"}, {"submit_answer", "request_evidence"})
+            # A fresh writer context must not inherit collector prose or tool chatter.
+            first_parts = [p for p in request["messages"][0]["parts"] if p["part_kind"] != "system-prompt"]
+            assert len(first_parts) == 1 and first_parts[0]["part_kind"] == "user-prompt"
+            packet = json.loads(first_parts[0]["content"])
+            assert packet["kind"] == "answer_input"
+            assert packet["question"] == json.loads((directory / "input.json").read_text())["question"]
+            assert packet["history"] == [{"role": h["role"], "content": h["content"]}
+                                         for h in expected_history or []]
+            items = {e["evidence_id"]: e for e in result["observed_evidence"]}
+            for source in packet["sources"]:
+                item = items[source["evidence_id"]]
+                assert item["delivered_to_model"] and source["doc_id"] == item["doc_id"]
+                assert any(source["text"] == span["text"] and source["start"] == span["start"]
+                           and source["end"] == span["end"] for span in item["source_spans"])
     evidence = {e["evidence_id"]: e for e in result["observed_evidence"]}
     for citation in result["result"]["citations"]:
         item = evidence[citation["evidence_id"]]

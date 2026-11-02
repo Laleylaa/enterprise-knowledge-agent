@@ -39,7 +39,7 @@ def test_sdk_sends_native_definitions_and_returns_with_matching_call_ids(bound_s
         definitions = body["tools"]
         assert all(t["type"] == "function" for t in definitions)
         functions = {t["function"]["name"]: t["function"] for t in definitions}
-        assert set(functions) == {"search_knowledge", "read_document", "submit_answer"}
+        assert set(functions) == {"search_knowledge", "read_document", "finish_research"}
         for name, properties, required in [
             ("search_knowledge", {"query", "purpose", "doc_ids", "limit", "cursor"}, {"query", "purpose"}),
             ("read_document", {"doc_id", "purpose", "section_id", "chunk_id", "cursor"}, {"doc_id", "purpose"}),

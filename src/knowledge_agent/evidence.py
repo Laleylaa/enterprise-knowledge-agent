@@ -1,7 +1,7 @@
 """Per-run evidence identity and exact-quote validation, without semantic judgment."""
 
 from knowledge_agent.corpus import fingerprint
-from knowledge_agent.schemas import Answer, Document, Evidence, EvidenceSpan
+from knowledge_agent.schemas import Answer, AnswerPart, Citation, Document, DraftAnswer, Evidence, EvidenceSpan
 
 
 class EvidenceStore:
@@ -58,3 +58,41 @@ class EvidenceStore:
 
     def snapshot(self) -> list[Evidence]:
         return [item.model_copy(deep=True) for item in self._items.values()]
+
+    def sources(self) -> list[dict]:
+        """Deduplicate delivered exact spans; keep every source, including conflicts."""
+        sources, seen = [], set()
+        for item in self._items.values():
+            if not item.delivered_to_model:
+                continue
+            for index, span in enumerate(item.source_spans or [item]):
+                key = (item.doc_id, item.content_hash, span.start, span.end)
+                if key in seen:
+                    continue
+                seen.add(key)
+                sources.append(dict(source_id=f"{item.evidence_id}:S{index}",
+                                    evidence_id=item.evidence_id, doc_id=item.doc_id,
+                                    title=item.title, version_date=item.version_date.isoformat(),
+                                    start=span.start, end=span.end, text=span.text))
+        return sources
+
+    def materialize(self, draft: DraftAnswer) -> Answer:
+        """Resolve IDs to original text, without generating or changing business prose."""
+        sources = {s["source_id"]: s for s in self.sources()}
+        citations, parts, numbers = [], [], {}
+        for part in draft.parts:
+            refs = []
+            for source_id in dict.fromkeys(part.source_ids):
+                source = sources.get(source_id)
+                if source is None:
+                    raise ValueError("source_ids 必须选择本轮证据包中存在的 source_id。")
+                if source_id not in numbers:
+                    citations.append(Citation(evidence_id=source["evidence_id"],
+                                              doc_id=source["doc_id"], quote=source["text"]))
+                    numbers[source_id] = len(citations)
+                refs.append(numbers[source_id])
+            parts.append(AnswerPart(text=part.text, citation_numbers=refs))
+        answer = Answer(answer="\n\n".join(p.text for p in parts), citations=citations,
+                        answer_parts=parts, **draft.model_dump(exclude={"parts"}))
+        self.validate(answer)
+        return answer

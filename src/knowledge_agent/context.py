@@ -30,3 +30,5 @@ class TurnContext:
     action_summaries: list[dict] = field(default_factory=list)
     history_message_count: int = 0
     tool_deadline: float | None = None
+    phase: str = "research"
+    tool_observations: list[dict] = field(default_factory=list)

@@ -38,12 +38,15 @@ class ToolExecutionPolicy(AbstractCapability[TurnContext]):
             async with timeout:
                 result = await handler(args)
             check_time(state)
+            state.tool_observations.append(result)
             return result
         except TimeoutError:
             if not timeout.expired():
                 raise  # A backend's own TimeoutError is not this execution deadline.
             check_time(state)  # The whole-turn deadline always wins over recovery.
-            return tool_error(ctx, call.tool_name, "TOOL_TIMEOUT", "工具执行超时，可在预算内调整或重试。")
+            result = tool_error(ctx, call.tool_name, "TOOL_TIMEOUT", "工具执行超时，可在预算内调整或重试。")
+            state.tool_observations.append(result)
+            return result
         except asyncio.CancelledError:
             state.recorder.event("tool_cancelled", tool=call.tool_name, tool_call_id=call.tool_call_id)
             raise

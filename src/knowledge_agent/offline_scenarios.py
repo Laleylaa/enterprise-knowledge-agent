@@ -11,6 +11,7 @@ from pydantic_ai.messages import ModelRequest, ModelResponse, ToolCallPart, Tool
 from pydantic_ai.models.function import FunctionModel
 
 from knowledge_agent.reading.tool import ReadTool
+from knowledge_agent.mock_model import scripted_answer
 
 Scenario = Literal['normal', 'conflict', 'missing', 'tool_failure', 'recovery', 'budget']
 QUESTIONS = {
@@ -30,15 +31,19 @@ def validate_scenario_input(scenario: str, question: str):
 
 def create_scenario_model(scenario: Scenario) -> FunctionModel:
     def respond(messages, info):
+        written = scripted_answer(messages, info, scenario)
+        if written is not None:
+            return written
         observations = [p.content for m in messages if isinstance(m, ModelRequest) for p in m.parts
                         if isinstance(p, ToolReturnPart) and isinstance(p.content, dict)
                         and p.content.get('schema_version') == 1]
         def call(name, args):
             return ModelResponse(parts=[ToolCallPart(name, args, tool_call_id=f'offline-{len(observations)+1}')])
         def finish(status, text, citations=(), gaps=(), clarification=None):
-            return call(info.output_tools[0].name, dict(status=status, answer=text, citations=list(citations),
-                gaps=list(gaps), clarification=clarification,
-                decision_summary=f'离线预设 {scenario} 脚本依据实际观察构造结果；不证明模型决策能力。'))
+            return call('finish_research', dict(
+                reason={'resolved':'sufficient','needs_info':'needs_user',
+                        'unresolved':'missing','incomplete':'blocked'}[status],
+                decision_summary=f'离线预设 {scenario} 脚本停止取证；不证明模型决策能力。'))
         if scenario == 'budget':
             return call('search_knowledge', {'query':'国内差旅 报销 期限','purpose':'离线预算脚本：持续请求合法工具'})
         if not observations:

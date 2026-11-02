@@ -1,6 +1,7 @@
 """Single-turn coordination; reusable by CLI and later evaluation entry points."""
 
 import asyncio
+import json
 from collections.abc import Callable
 from contextlib import AbstractAsyncContextManager
 from time import monotonic
@@ -10,7 +11,8 @@ from pydantic_ai.exceptions import UnexpectedModelBehavior, UsageLimitExceeded
 from pydantic_ai.usage import UsageLimits
 from pydantic_ai.models import Model
 
-from knowledge_agent.agent import build_agent
+from knowledge_agent.agent import build_agent, build_answer_agent
+from knowledge_agent.answering import answer_packet
 from knowledge_agent.budgets import check_time
 from knowledge_agent.config import Settings
 from knowledge_agent.context import TurnContext
@@ -19,7 +21,7 @@ from knowledge_agent.errors import RunStopped, TurnCancelled
 from knowledge_agent.knowledge_base import IndexedCorpus
 from knowledge_agent.evidence import EvidenceStore
 from knowledge_agent.model_adapter import RecordedModel, open_model
-from knowledge_agent.schemas import Answer, RunResult, Usage
+from knowledge_agent.schemas import Answer, EvidenceRequest, RunResult, Usage
 from knowledge_agent.session import ConversationSession, SessionTurn, validate_input
 from knowledge_agent.trace import RunRecorder
 from knowledge_agent.tool_binding import KnowledgeTools
@@ -82,12 +84,38 @@ async def run_turn(
     try:
         async with asyncio.timeout(max(0, state.deadline - monotonic())):
             async with (model_factory or open_model)(settings) as model:
-                agent = build_agent(RecordedModel(model, state), state)
+                recorded = RecordedModel(model, state)
+                agent = build_agent(recorded, state)
                 result = await agent.run(question, deps=state,
                                          message_history=session_turn.messages() if session_turn else None,
                                          usage_limits=UsageLimits(request_limit=None))
+                history = ([{"role": m.role, "content": m.content} for m in session_turn.effective_history]
+                           if session_turn else [])
+                for round_number in range(2):
+                    check_time(state)
+                    state.phase = "answer"
+                    # One supplement can require a request, a tool observation, and a final writer call.
+                    allow_supplement = (round_number == 0
+                                        and result.output.reason not in {"unclear_question", "out_of_scope"}
+                                        and settings.max_model_turns - state.usage.model_turns >= 4
+                                        and settings.max_tool_calls - state.usage.tool_calls > 1)
+                    packet = answer_packet(question, history, state, reason=result.output.reason,
+                                           allow_supplement=allow_supplement)
+                    recorder.write(f"answer-input-{round_number + 1}.json", packet)
+                    recorder.event("answer_started", round=round_number + 1,
+                                   source_count=len(packet["sources"]), allow_supplement=allow_supplement)
+                    writer = build_answer_agent(recorded, state, allow_supplement=allow_supplement)
+                    written = await writer.run(json.dumps(packet, ensure_ascii=False), deps=state,
+                                               usage_limits=UsageLimits(request_limit=None))
+                    if not isinstance(written.output, EvidenceRequest):
+                        answer = state.evidence.materialize(written.output)
+                        break
+                    state.phase = "research"
+                    result = await agent.run(
+                        "回答阶段请求补查以下必要证据（不是事实依据）：" + written.output.question,
+                        deps=state, message_history=result.all_messages(),
+                        usage_limits=UsageLimits(request_limit=None))
                 check_time(state)
-                answer = result.output
     except RunStopped as exc:
         reason, origin, answer = exc.reason, "runtime_fallback", incomplete(str(exc))
     except TimeoutError:
