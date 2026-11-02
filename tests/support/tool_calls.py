@@ -3,7 +3,7 @@
 import json
 
 from pydantic_ai import Agent
-from pydantic_ai.messages import ModelRequest, ModelResponse, TextPart, ToolReturnPart
+from pydantic_ai.messages import ModelRequest, TextPart, ToolReturnPart
 from pydantic_ai.usage import UsageLimits
 
 from knowledge_agent.agent import build_agent
@@ -12,11 +12,6 @@ from knowledge_agent.model_adapter import RecordedModel
 
 def observations(messages):
     return [p for m in messages if isinstance(m, ModelRequest) for p in m.parts if isinstance(p, ToolReturnPart)]
-
-
-def acknowledgement():
-    # The driver stops before this response enters final-answer handling.
-    return ModelResponse(parts=[TextPart("工具观察已收到；测试在此停止，不生成业务回答。")])
 
 
 def records(state, name):

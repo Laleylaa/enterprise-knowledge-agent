@@ -8,7 +8,7 @@ from typing import AsyncIterator
 
 from openai import AsyncOpenAI
 from pydantic_ai.exceptions import ModelAPIError, ModelConnectionError, ModelHTTPError, ModelRequestTimeout
-from pydantic_ai.messages import ModelMessage, ModelMessagesTypeAdapter, ModelRequest, ToolCallPart, ToolReturnPart
+from pydantic_ai.messages import ModelMessage, ModelMessagesTypeAdapter, ModelRequest, ToolCallPart, ToolReturnPart, UserPromptPart
 from pydantic_ai.models import Model
 from pydantic_ai.models.openai import OpenAIChatModel, OpenAIChatModelSettings
 from pydantic_ai.models.wrapper import WrapperModel
@@ -93,6 +93,11 @@ class RecordedModel(WrapperModel):
             })
             state.evidence.mark_delivered({p.tool_call_id for m in messages if isinstance(m, ModelRequest)
                                            for p in m.parts if isinstance(p, ToolReturnPart)})
+            if state.session_evidence_message and any(
+                isinstance(p, UserPromptPart) and p.content == state.session_evidence_message
+                for m in messages if isinstance(m, ModelRequest) for p in m.parts
+            ):
+                state.evidence.mark_reused_delivered()
             if state.knowledge_tools is not None:
                 state.recorder.write("observed-evidence.json", [e.model_dump(mode="json") for e in state.evidence.snapshot()])
             state.recorder.event("model_request_started", origin=settings.mode, request_id=request_id, model_turn=turn, attempt=attempt + 1)

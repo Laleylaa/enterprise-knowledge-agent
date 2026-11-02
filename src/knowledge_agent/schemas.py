@@ -8,7 +8,8 @@ from pydantic import BaseModel, ConfigDict, Field, model_validator
 NonEmpty = Annotated[str, Field(min_length=1, pattern=r"\S")]
 Status = Literal["resolved", "needs_info", "unresolved", "incomplete"]
 STATUS_DESCRIPTION = (
-    "resolved：本问有充分原文依据；needs_info：缺最小必要用户信息，需具体追问；"
+    "resolved：用户实际询问的事项有充分原文依据，肯定或否定回答均可；只问适用性且已有明确依据时，不因未知替代规定而选unresolved；"
+    "needs_info：缺最小必要用户信息，需具体追问；"
     "unresolved：工具正常完成必要查证后仍缺依据或冲突未解，或问题超出服务范围；"
     "incomplete：实际故障或执行限制阻断必要处理。blocked且必要工具持续失败、证据不足时必须用incomplete，不能用unresolved。"
     "正常返回空结果不等于执行故障；部分失败或失败后恢复但证据充分时仍可resolved。"
@@ -33,8 +34,15 @@ class Citation(StrictModel):
 
 
 class ResearchComplete(StrictModel):
-    reason: Literal["unclear_question", "sufficient", "needs_user", "missing", "blocked", "out_of_scope"] = Field(
-        description="对象不明且历史无法解释：unclear_question，不调用工具；对象明确但缺用户条件：needs_user；正常查证后缺依据：missing；实际故障阻断必要查证：blocked；其余按取证规则选择。")
+    reason: Literal["unclear_question", "sufficient", "conflict", "needs_user", "missing", "blocked", "out_of_scope"] = Field(
+        description=(
+            "取证结束时的证据状态，不是回复阶段的最终任务状态。"
+            "sufficient：原文足以支持本问的肯定或否定结论，适用关系明确且无影响结论的未解冲突；立即结束，不查未询问的替代规则。"
+            "查到相关条款或冲突双方不等于sufficient，能够呈现冲突不等于已确定适用结论。"
+            "conflict：原文对本问结论相互矛盾，经适用范围或替代关系查证仍未消解；是否追问及最终状态交回复阶段判断，用户没有更多线索时仍为conflict。"
+            "needs_user：规则没有未解冲突，但缺判断适用性的必要个人条件。"
+            "missing：正常完成必要查证后仍缺必要原文依据，不用于已有明确冲突的情况。"
+            "unclear_question：对象不明且历史无法解释；blocked：实际故障阻断必要查证；out_of_scope：超出服务范围。"))
     decision_summary: NonEmpty = Field(description="只说明结束取证的原因，不改写原文或生成业务答案。")
 
 
@@ -49,7 +57,7 @@ class DraftPart(StrictModel):
 
 class DraftAnswer(StrictModel):
     parts: list[DraftPart] = Field(min_length=1)
-    gaps: list[NonEmpty] = Field(description="用户可见：只列阻止回答本轮问题的必要缺口，不包含内部来源ID或运行ID；公司制度天数不明不等于需要个人剩余额度。")
+    gaps: list[NonEmpty] = Field(description="用户可见：只列阻止回答用户实际所问的必要缺口；问题已有有据结论时必须为空，未询问的替代规则、数值或办理方案不得列入。公司制度天数不明不等于需要个人剩余额度。不包含内部来源ID或运行ID。")
     clarification: NonEmpty | None = Field(description="用户可见的最小必要追问，不包含内部来源ID或运行ID；无需追问时为null。")
     status: Status = Field(description=STATUS_DESCRIPTION)
     decision_summary: NonEmpty
@@ -100,6 +108,7 @@ class Evidence(StrictModel):
     text: str
     source_spans: list[EvidenceSpan] = Field(default_factory=list)
     delivered_to_model: bool = False
+    reused_from: str | None = None
 
 
 class Usage(StrictModel):

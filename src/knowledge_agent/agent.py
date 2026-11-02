@@ -18,7 +18,7 @@ def build_agent(model: Model, state: TurnContext) -> Agent[TurnContext, Research
         model, deps_type=TurnContext,
         output_type=ToolOutput(ResearchComplete, name="finish_research",
                                max_retries=state.settings.output_retries,
-                               description="结束本阶段取证，由程序向回答阶段传递全部已取得原文。"),
+                               description="结束取证并报告实际证据状态，结束不等于sufficient；由程序传递全部原文，回复阶段独立决定答复及任务状态。"),
         instructions=INSTRUCTIONS, retries=state.settings.output_retries,
         end_strategy="graceful",
         capabilities=[OutputValidationPolicy(), ToolExecutionPolicy()],
@@ -37,6 +37,11 @@ def build_agent(model: Model, state: TurnContext) -> Agent[TurnContext, Research
 
     @agent.output_validator
     def finish(ctx: RunContext[TurnContext], result: ResearchComplete) -> ResearchComplete:
+        if result.reason == "sufficient" and not ctx.deps.evidence.sources():
+            reason = ("本轮尚无已送达模型的有效制度原文，不能以 sufficient 结束取证。"
+                      "历史助手答案不是原文；问题明确且仍需依据时，请调用工具查证。")
+            reject_output(ctx.deps, reason, "research_without_evidence")
+            raise ModelRetry(reason)
         ctx.deps.recorder.event("research_complete", result=result.model_dump(mode="json"))
         return result
 

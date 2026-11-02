@@ -82,11 +82,14 @@ def observed_runs(directory):
                      'retrieval': result['requested_retrieval'], 'origin': result['result_origin'],
                      'status': result['result']['status'], 'usage': result['usage'],
                      'output': str(path.relative_to(directory))})
-    for path in (directory / 'artifacts/e2e/traces').glob('*/*/tool-results.jsonl'):
+    for path in (directory / 'artifacts/e2e/traces').glob('*/*/trace.jsonl'):
         for line in path.read_text().splitlines():
-            value = json.loads(line)
+            event = json.loads(line)
+            if event.get('event') != 'tool_result':
+                continue
+            value = event['data']
             if value['tool'] == 'search_knowledge' and any(
-                    (e.get('target') or {}).get('kind') == 'branch' for e in value['errors']):
+                    (e.get('target') or {}).get('kind') == 'branch' for e in value.get('errors', [])):
                 degraded += 1
     return {'runs': runs, 'observed_retrieval_modes': sorted(modes),
             'search_calls_with_branch_errors': degraded,

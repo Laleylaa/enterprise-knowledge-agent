@@ -29,6 +29,7 @@ class TurnContext:
     knowledge_tools: "KnowledgeTools | None" = None
     action_summaries: list[dict] = field(default_factory=list)
     history_message_count: int = 0
+    session_evidence_message: str | None = None
     tool_deadline: float | None = None
     phase: str = "research"
     tool_observations: list[dict] = field(default_factory=list)

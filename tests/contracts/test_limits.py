@@ -10,14 +10,6 @@ def search(call_id):
     return ToolCallPart("search_knowledge", {"query": "差旅", "purpose": "获取依据"}, call_id)
 
 
-def clarify():
-    return ToolCallPart("submit_answer", {
-        "status": "needs_info", "answer": "请说明费用类型。", "citations": [],
-        "gaps": ["费用类型不明。"], "clarification": "请说明费用类型。",
-        "decision_summary": "受控模型提交澄清。",
-    }, "finish")
-
-
 @pytest.mark.parametrize("limit", ["model", "tool"])
 def test_repeated_legal_requests_stop_without_summary_and_keep_evidence(run_loop, limit):
     calls = 0

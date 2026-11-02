@@ -63,6 +63,9 @@ def test_scope_lookup_does_not_expand_deadline_answer(cli_run):
     # The scope must be supported by delivered original text, from either tool.
     assert any(c['doc_id'] == 'D03' and 'D01 适用于国内差旅' in c['quote']
                for c in result['result']['citations'])
+    stops = [e['payload']['result']['reason'] for e in records['events']
+             if e['event_type'] == 'research_complete']
+    assert stops and stops[-1] == 'sufficient'
 
 
 def test_notification_without_channel_is_not_classified(live_chat):
@@ -75,6 +78,14 @@ def test_notification_without_channel_is_not_classified(live_chat):
     assert answer['status'] == 'unresolved' and answer['clarification'] is None
     assert {c['doc_id'] for c in answer['citations']} == {'D01', 'D02'}
     assert all(str(n) in '\n'.join(c['quote'] for c in answer['citations']) for n in (30, 15))
+    # User's ability to provide more clues changes the answer status, not the
+    # evidence fact that the policy conflict remains unresolved.
+    for result in results:
+        trace = live_chat.root / 'real' / result['run_id'] / 'trace.jsonl'
+        events = [json.loads(line) for line in trace.read_text().splitlines()]
+        stops = [e['payload']['result']['reason'] for e in events
+                 if e['event_type'] == 'research_complete']
+        assert stops and all(reason == 'conflict' for reason in stops), stops
 
 
 def test_explicit_status_question_is_still_answered(cli_run):

@@ -10,6 +10,7 @@ from uuid import uuid4
 from pydantic_ai.exceptions import UnexpectedModelBehavior, UsageLimitExceeded
 from pydantic_ai.usage import UsageLimits
 from pydantic_ai.models import Model
+from pydantic_ai.messages import ModelRequest, UserPromptPart
 
 from knowledge_agent.agent import build_agent, build_answer_agent
 from knowledge_agent.answering import answer_packet
@@ -58,6 +59,14 @@ def create_turn_context(question: str, settings: Settings, source: KnowledgeSour
         recorder.event("retrieval_initialized", requested_mode=source.strategy,
                        startup_errors=list(getattr(source.index, "startup_errors", ())))
     recorder.write("corpus.json", corpus)
+    if session_turn and session_turn.evidence:
+        restored = state.evidence.restore(session_turn.evidence, corpus['documents'])
+        packet = {'kind': 'session_evidence', 'sources': [e.model_dump(mode='json') for e in restored]}
+        recorder.write('session-evidence.json', packet)
+        recorder.event('session_evidence_restored', source_count=len(restored),
+                       previous_count=len(session_turn.evidence))
+        if restored:
+            state.session_evidence_message = json.dumps(packet, ensure_ascii=False)
     recorder.event("input_accepted")
     return state
 
@@ -86,8 +95,11 @@ async def run_turn(
             async with (model_factory or open_model)(settings) as model:
                 recorded = RecordedModel(model, state)
                 agent = build_agent(recorded, state)
+                messages = session_turn.messages() if session_turn else []
+                if state.session_evidence_message:
+                    messages.append(ModelRequest(parts=[UserPromptPart(state.session_evidence_message)]))
                 result = await agent.run(question, deps=state,
-                                         message_history=session_turn.messages() if session_turn else None,
+                                         message_history=messages or None,
                                          usage_limits=UsageLimits(request_limit=None))
                 history = ([{"role": m.role, "content": m.content} for m in session_turn.effective_history]
                            if session_turn else [])

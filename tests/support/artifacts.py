@@ -1,51 +1,10 @@
-"""Export actual test runs without changing the runtime's recording format."""
+"""Export compact submission evidence; runtime debug files remain local."""
 
-import hashlib
-import json
-import shutil
 from pathlib import Path
 
 import pytest
 
-
-def artifact_group(name: str) -> str:
-    if name in {"input.json", "corpus.json", "index-manifest.json", "fault-injection.json", "imported-history.json"}:
-        return "inputs"
-    if name in {"output.json", "run-summary.json", "history.json"}:
-        return "outputs"
-    if name in {"retrieval-evaluation.json", "reading-evaluation.json", "tool-integration-evaluation.json", "single-turn-evaluation.json", "chat-evaluation.json", "business-evaluation.json"}:
-        return "reports"
-    return "traces"
-
-
-def export_run(source: Path, destination: Path, case_id: str) -> dict:
-    """Copy a completed or interrupted run; reject collisions, preserve raw bytes."""
-    run_id = source.name
-    for value in (case_id, run_id):
-        if not value or value in {".", ".."} or Path(value).name != value:
-            raise ValueError("case_id and run_id must be single path components")
-    files = sorted(path for path in source.iterdir() if path.is_file())
-    entries = []
-    for path in files:
-        target = destination / artifact_group(path.name) / case_id / run_id / path.name
-        if target.exists() and target.read_bytes() != path.read_bytes():
-            raise FileExistsError(f"Refusing to overwrite a different artifact: {target}")
-        entries.append((path, target, hashlib.sha256(path.read_bytes()).hexdigest()))
-    manifest = {"case_id": case_id, "run_id": run_id, "artifacts": [
-        {"path": target.relative_to(destination).as_posix(), "sha256": checksum}
-        for _, target, checksum in entries
-    ]}
-    manifest_path = destination / "traces" / case_id / run_id / "artifacts.json"
-    encoded = json.dumps(manifest, ensure_ascii=False, indent=2) + "\n"
-    if manifest_path.exists() and manifest_path.read_text(encoding="utf-8") != encoded:
-        raise FileExistsError(f"Refusing to overwrite a different manifest: {manifest_path}")
-    for path, target, checksum in entries:
-        target.parent.mkdir(parents=True, exist_ok=True)
-        shutil.copyfile(path, target)
-        assert hashlib.sha256(target.read_bytes()).hexdigest() == checksum
-    manifest_path.parent.mkdir(parents=True, exist_ok=True)
-    manifest_path.write_text(encoded, encoding="utf-8")
-    return manifest
+from knowledge_agent.artifact_export import export_run
 
 
 @pytest.fixture

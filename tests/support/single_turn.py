@@ -127,7 +127,24 @@ def audit_run(directory, result, *, expected_history=None, expected_retrieval="b
                         assert value in returns
                         assert part["tool_call_id"] == value["tool_call_id"]
                         observed_ids.add(part["tool_call_id"])
-    assert all(not e["delivered_to_model"] or e["tool_call_id"] in observed_ids for e in evidence.values())
+    reused_ids = set()
+    reused_path = directory / 'session-evidence.json'
+    if reused_path.exists():
+        packet = json.loads(reused_path.read_text())
+        encoded = json.dumps(packet, ensure_ascii=False)
+        delivered = any(p.get('part_kind') == 'user-prompt' and p.get('content') == encoded
+                        for r in requests for m in r['messages'] for p in m['parts'])
+        corpus = json.loads((directory / 'corpus.json').read_text())
+        documents = {d['doc_id']: d for d in corpus['documents']}
+        for item in packet['sources']:
+            assert item['reused_from'] and item['corpus_hash'] == corpus['corpus_hash']
+            document = documents[item['doc_id']]
+            assert all(document['body'][s['start']:s['end']] == s['text'] for s in item['source_spans'])
+            if delivered:
+                reused_ids.add(item['evidence_id'])
+    assert all(not e["delivered_to_model"] or
+               (e['evidence_id'] in reused_ids if e.get('reused_from') else e['tool_call_id'] in observed_ids)
+               for e in evidence.values())
     if result["termination_reason"] == "completed":
         assert all(r["tool_call_id"] in observed_ids for r in returns)
         assert any(e["event_type"] == "result_candidate" for e in events)
@@ -160,7 +177,10 @@ def evaluate_case(case, result, records, fault):
                       cited_source={c["doc_id"] for c in answer["citations"]} == {"D01"})
     elif case == "Q02":
         both_turns = [r["model_turn"] for r in records["requests"] if delivered_rules(r) == {"D01", "D02"}]
+        stop_reasons = [e["payload"]["result"]["reason"] for e in records["events"]
+                        if e["event_type"] == "research_complete"]
         checks.update(status=answer["status"] == "needs_info", clarification=bool(answer["clarification"]),
+                      conflict_evidence_state=bool(stop_reasons) and all(r == "conflict" for r in stop_reasons),
                       both_quotes=all(s in quotes for s in ["30 天", "15 天"]),
                       both_sources={c["doc_id"] for c in answer["citations"]} == {"D01", "D02"},
                       both_rules_observed=bool(both_turns),

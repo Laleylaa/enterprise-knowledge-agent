@@ -20,7 +20,7 @@ from knowledge_agent.retrieval.models import Chunk, digest
 
 class SearchRequest(StrictModel):
     query: str = Field(description="检索问题；仅按明确 doc_ids 定位时允许为空。")
-    purpose: NonEmpty = Field(description="简短行动目的，仅记录，不影响排序。")
+    purpose: NonEmpty = Field(description="简述用户明确询问且尚未回答的事项，以及本次检索要补的必要原文；不能以未被询问的替代规则作为缺口。仅记录，不影响排序。")
     doc_ids: list[NonEmpty] | None = Field(default=None, description="限定的文档 ID；不能为空列表；重复项按首次出现去重。")
     limit: Annotated[int, Field(strict=True, ge=1, le=10)] = Field(default=5, description="每页块数，1 到 10。")
     cursor: str | None = Field(default=None, description="上页返回的不透明游标；保持 query、doc_ids 和 limit 不变。")
@@ -60,11 +60,14 @@ class SearchTool:
     name = "search_knowledge"
     description = (
         "检索原文块及文档／章节定位，可过滤文档、按明确 ID 定位或沿游标翻页。"
+        "仅在用户明确询问的事项仍缺必要原文时调用，并在 purpose 指明该事项和缺口。"
         "返回后检查原文是否覆盖问题、适用范围和必要条件；排名或命中不代表可直接下结论。"
         "hybrid 的某一分支失败时保留另一分支的真实结果，以 partial、errors 和 effective_branches 标明。"
-        "例如向量超时而 BM25 成功，BM25 返回的原文仍是有效证据，不必恢复向量才作答。"
+        "例如向量超时而 BM25 成功，BM25 返回的原文仍是有效证据，不必恢复向量才结束取证。"
         "partial 也可能表示部分文档缺失，须查看 errors 的具体对象；不能仅凭该状态判定证据无效或任务失败。"
-        "证据充分可直接回答；片段缺少影响适用性的上下文时用 read_document 补读相关章节。"
+        "原文已能肯定或否定用户所问且无相关冲突时，下一步单独 finish_research(reason='sufficient')。"
+        "用户只问某规则是否适用时，明确排除其情形就已充分；原文提示另查制度不授权检索用户未问的替代规则。"
+        "只有片段缺少影响本问结论的上下文时，才用 read_document 补读相关章节。"
         "没有相关结果时可针对缺口改写搜索；空结果或故障不证明制度不存在，不重复无信息增益的查询。"
     )
 

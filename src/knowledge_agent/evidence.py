@@ -47,6 +47,42 @@ class EvidenceStore:
             if item.tool_call_id in tool_call_ids:
                 item.delivered_to_model = True
 
+    def restore(self, items: list[Evidence], documents: list[dict]) -> list[Evidence]:
+        """Rebind unchanged session evidence to this run, pending actual model delivery."""
+        current = {d['doc_id']: Document.model_validate(d) for d in documents}
+        seen = set()
+        restored = []
+        for item in items:
+            document = current.get(item.doc_id)
+            if (not item.delivered_to_model or item.corpus_hash != self.corpus_hash
+                    or document is None or item.content_hash != fingerprint(document.body)
+                    or item.title != document.title or item.version_date != document.version_date):
+                continue
+            spans = item.source_spans or [EvidenceSpan(start=item.start, end=item.end, text=item.text)]
+            if any(not 0 <= s.start < s.end <= len(document.body)
+                   or document.body[s.start:s.end] != s.text for s in spans):
+                continue
+            if document.body[item.start:item.end] != item.text:
+                continue
+            key = (item.doc_id, item.content_hash, tuple((s.start, s.end) for s in spans))
+            if key in seen:
+                continue
+            seen.add(key)
+            rebound = item.model_copy(deep=True, update={
+                'evidence_id': f'{self.run_id}:E{len(self._items) + 1}',
+                'reused_from': item.reused_from or item.evidence_id,
+                'source_spans': [s.model_copy(deep=True) for s in spans],
+                'delivered_to_model': False,
+            })
+            self._items[rebound.evidence_id] = rebound
+            restored.append(rebound.model_copy(deep=True))
+        return restored
+
+    def mark_reused_delivered(self) -> None:
+        for item in self._items.values():
+            if item.reused_from is not None:
+                item.delivered_to_model = True
+
     def validate(self, result: Answer) -> None:
         for index, citation in enumerate(result.citations):
             item = self._items.get(citation.evidence_id)

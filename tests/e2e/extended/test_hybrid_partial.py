@@ -52,10 +52,26 @@ def test_hybrid_partial_evidence_decision(cli_run, evaluation_settings, case):
         # No mandatory reread or restoration of the vector branch.
     else:
         # Natural business input does not prescribe the query or first-hit contents.
-        # The controlled first-hit diagnostic remains in local_validation.
-        assert any('仅适用于国内差旅' in e['text'] and e['delivered_to_model']
-                   for e in result['observed_evidence'])
+        scope_sources = [e for e in result['observed_evidence']
+                         if '仅适用于国内差旅' in e['text'] and e['delivered_to_model']]
+        assert scope_sources
         answer = result['result']
-        assert answer['status'] in {'resolved', 'unresolved', 'needs_info'}
+        assert result['result_origin'] == 'model' and result['termination_reason'] == 'completed'
+        assert answer['status'] == 'resolved'
+        assert answer['gaps'] == [] and answer['clarification'] is None
         assert any('仅适用于国内差旅' in c['quote'] for c in answer['citations'])
+        # Permit any necessary search/read before the scope arrives, but no further
+        # business calls once the model observes the explicit applicability rule.
+        scope_calls = {e['tool_call_id'] for e in scope_sources}
+        observed_turns = [r['model_turn'] for r in records['requests'] if any(
+            p.get('part_kind') == 'tool-return' and p.get('tool_call_id') in scope_calls
+            for m in r['messages'] for p in m['parts'])]
+        assert observed_turns
+        assert not any(e['event_type'] == 'tool_requested'
+                       and e['payload']['model_turn'] >= min(observed_turns)
+                       for e in records['events'])
+        assert not any(e['event_type'] == 'evidence_requested' for e in records['events'])
+        assert any(e['event_type'] == 'research_complete'
+                   and e['payload']['result']['reason'] == 'sufficient'
+                   for e in records['events'])
         # Review separately: do not assign the domestic 30-day rule to overseas travel.

@@ -119,7 +119,19 @@ def live_chat(monkeypatch,tmp_path,capsys,archive_run,request,evaluation_setting
             # Compare actual first model request with the saved complete conversation snapshot.
             first=json.loads((path/'model-inputs.jsonl').read_text().splitlines()[0])
             text=[p['content'] for m in first['messages'] for p in m['parts'] if p['part_kind'] in {'user-prompt','text'}]
-            assert text==[m['content'] for m in inp['effective_history']]+[questions[i]]
+            expected_text=[m['content'] for m in inp['effective_history']]
+            reused_path=path/'session-evidence.json'
+            if reused_path.exists():
+                reused=json.loads(reused_path.read_text())
+                if reused['sources']:
+                    expected_text.append(json.dumps(reused,ensure_ascii=False))
+                    previous={e['reused_from'] or e['evidence_id']:e
+                              for e in results[i-1]['observed_evidence'] if e['delivered_to_model']}
+                    for item in reused['sources']:
+                        original=previous[item['reused_from']]
+                        for key in ('corpus_hash','doc_id','content_hash','text','source_spans','tool_call_id'):
+                            assert item[key]==original[key]
+            assert text==expected_text+[questions[i]]
             assert not any(p['part_kind'] in {'tool-return','tool-call','retry-prompt'} for m in first['messages'] for p in m['parts'])
             assert all(c['evidence_id'].startswith(value['run_id']+':') for c in value['result']['citations'])
         return results

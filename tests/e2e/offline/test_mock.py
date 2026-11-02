@@ -70,7 +70,11 @@ def test_formal_offline_scenarios(offline_cli,scenario,fixture,status):
     records=audit_run(offline_cli.root/'mock'/r['run_id'],r,expected_retrieval=offline_cli.retrieval)
     assert r['result_origin']==('runtime_fallback' if scenario=='budget' else 'mock')
     assert r['usage']['tool_calls']>0
-    if scenario=='conflict':assert {c['doc_id'] for c in r['result']['citations']}=={'D01','D02'}
+    if scenario=='conflict':
+        assert {c['doc_id'] for c in r['result']['citations']}=={'D01','D02'}
+        stops = [e['payload']['result']['reason'] for e in records['events']
+                 if e['event_type']=='research_complete']
+        assert stops == ['conflict']
     if scenario=='tool_failure':
         assert records['returns'][0]['errors'][0]['code']=='READ_FAILED'
         assert not r['observed_evidence']

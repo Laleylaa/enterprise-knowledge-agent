@@ -19,7 +19,7 @@ from knowledge_agent.trace import RunRecorder
 
 class ReadRequest(StrictModel):
     doc_id: NonEmpty = Field(description="原文文档 ID；单独提供时读取全文。")
-    purpose: NonEmpty = Field(description="简短读取目的，只记日志，不改变所读内容。")
+    purpose: NonEmpty = Field(description="简述用户明确询问且尚未回答的事项及其缺少的必要原文，或用户明确要求读取的对象；不扩展到未被询问的替代规则。只记日志，不改变所读内容。")
     section_id: NonEmpty | None = Field(default=None, description="读取所属章节标题及正文；与 chunk_id 互斥。")
     chunk_id: NonEmpty | None = Field(default=None, description="只读取指定块及所属标题，不自动扩展到章节。")
     cursor: str | None = Field(default=None, description="超大读取的定位列表续页；保持选择器不变，不能用于读取正文。")
@@ -52,9 +52,11 @@ class LocatorPage:
 class ReadTool:
     name = "read_document"
     description = (
-        "读取原文，核实搜索片段缺少的适用范围、前提、上下文或冲突关系，也可完成用户明确提出的原文读取请求。"
+        "读取原文，仅补齐影响用户所问结论的适用范围、前提、上下文或冲突关系，或完成用户明确提出的原文读取请求；purpose 指明对应事项和缺口或读取对象。"
         "仅 doc_id 读取全文；doc_id 与 section_id 读取章节；chunk_id 只读该块，不扩展上下文，不能用重读同一块代替补读。"
-        "优先定位相关章节，范围在其他章节时继续定位，必要时读全文；证据已充分且没有明确读取请求时无需调用。"
+        "优先定位相关章节，范围在其他章节时继续定位，必要时读全文。"
+        "原文已能肯定或否定用户所问且无相关冲突、也没有未完成的明确读取请求时，下一步单独 finish_research(reason='sufficient')。"
+        "用户只问某规则是否适用时，明确排除其情形就已充分；原文提示另查制度不授权读取用户未问的替代规则。"
         "CONTENT_TOO_LARGE 返回的 locators 只是定位，不是正文证据，需按定位局部读取。"
         "返回后重新判断问题和适用条件是否有据；读取失败不使先前搜索取得的原文失效，"
         "只有失败阻断了必要核实才报告未完成。"

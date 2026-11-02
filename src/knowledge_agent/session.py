@@ -1,4 +1,4 @@
-"""Ephemeral conversation text, explicit import and per-turn provenance.
+"""Ephemeral conversation text and original evidence, with explicit text-only import.
 
 Saved history is an audit/export artifact; no startup code discovers or resumes it.
 """
@@ -14,7 +14,7 @@ from pydantic import Field, ValidationError
 from pydantic_ai.messages import ModelRequest, ModelResponse, TextPart, UserPromptPart
 
 from knowledge_agent.presentation import render_result
-from knowledge_agent.schemas import NonEmpty, RunResult, StrictModel
+from knowledge_agent.schemas import Evidence, NonEmpty, RunResult, StrictModel
 
 
 class HistoryInputError(ValueError):
@@ -69,6 +69,7 @@ class SessionTurn:
     turn_id: int
     previous_run_id: str | None
     effective_history: list[HistoryEntry]
+    evidence: list[Evidence] = field(default_factory=list)
 
     def messages(self):
         return [ModelRequest(parts=[UserPromptPart(m.content)]) if m.role == "user" else
@@ -86,13 +87,15 @@ class ConversationSession:
     turn_id: int = 0
     previous_run_id: str | None = None
     active_run_id: str | None = None
+    evidence: list[Evidence] = field(default_factory=list)
 
     def prepare(self, question: str, limit: int) -> SessionTurn:
         if self.active_run_id is not None:
             raise RuntimeError("This session already has an active turn")
         validate_input(question, self.history, limit)
         return SessionTurn(self.session_id, self.turn_id + 1, self.previous_run_id,
-                           [m.model_copy(deep=True) for m in self.history])
+                           [m.model_copy(deep=True) for m in self.history],
+                           [e.model_copy(deep=True) for e in self.evidence])
 
     def accept(self, question: str, run_id: str, turn: SessionTurn):
         if turn.session_id != self.session_id or turn.turn_id != self.turn_id + 1 or self.active_run_id:
@@ -104,10 +107,11 @@ class ConversationSession:
     def finish(self, result: RunResult):
         if result.run_id != self.active_run_id:
             raise RuntimeError("Result does not belong to active session turn")
-        # Only final presented conversation text crosses turns, never raw tool/retry messages.
+        # Keep original evidence separately from conversation text; never replay tool/retry messages.
         self.history.append(HistoryEntry(role="assistant", content=render_result(result),
                                          origin="session", run_id=result.run_id))
         self.previous_run_id = result.run_id
+        self.evidence = [e.model_copy(deep=True) for e in result.observed_evidence if e.delivered_to_model]
         self.active_run_id = None
 
     def export(self):
@@ -115,5 +119,6 @@ class ConversationSession:
 
     def clear(self):
         self.history.clear()
+        self.evidence.clear()
         self.active_run_id = None
         self.previous_run_id = None

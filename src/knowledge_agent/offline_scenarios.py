@@ -41,7 +41,7 @@ def create_scenario_model(scenario: Scenario) -> FunctionModel:
             return ModelResponse(parts=[ToolCallPart(name, args, tool_call_id=f'offline-{len(observations)+1}')])
         def finish(status, text, citations=(), gaps=(), clarification=None):
             return call('finish_research', dict(
-                reason={'resolved':'sufficient','needs_info':'needs_user',
+                reason={'resolved':'sufficient','needs_info':'conflict',
                         'unresolved':'missing','incomplete':'blocked'}[status],
                 decision_summary=f'离线预设 {scenario} 脚本停止取证；不证明模型决策能力。'))
         if scenario == 'budget':
