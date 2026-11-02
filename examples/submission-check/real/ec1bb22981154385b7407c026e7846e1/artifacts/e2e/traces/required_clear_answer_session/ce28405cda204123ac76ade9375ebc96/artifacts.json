@@ -1,0 +1,18 @@
+{
+  "case_id": "required_clear_answer_session",
+  "run_id": "ce28405cda204123ac76ade9375ebc96",
+  "artifacts": [
+    {
+      "path": "outputs/required_clear_answer_session/ce28405cda204123ac76ade9375ebc96/history.json",
+      "sha256": "1d3a8a9bff7d708077df1e0b5a8e7ee04154069b76c7570ce7220f5968ebdddb"
+    },
+    {
+      "path": "traces/required_clear_answer_session/ce28405cda204123ac76ade9375ebc96/session.json",
+      "sha256": "3b6853155bd51478fa94451174d823462bd74ec0d2361077459c8dafbf452d47"
+    },
+    {
+      "path": "traces/required_clear_answer_session/ce28405cda204123ac76ade9375ebc96/trace.jsonl",
+      "sha256": "5565963cd4f16dac0fe99026bc49377c27bc6f3748c729d204b413ba45c2163c"
+    }
+  ]
+}

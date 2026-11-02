@@ -1,0 +1,12 @@
+{
+  "collected": 1,
+  "deselected": 0,
+  "passed": 1,
+  "failed": 0,
+  "errors": 0,
+  "skipped": 0,
+  "pytest_exit_code": 0,
+  "items": [
+    "tests/e2e/required/test_acceptance.py::test_context_followup"
+  ]
+}

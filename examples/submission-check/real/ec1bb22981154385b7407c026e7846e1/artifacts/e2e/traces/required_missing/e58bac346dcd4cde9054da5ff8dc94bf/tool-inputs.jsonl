@@ -1,0 +1,2 @@
+{"tool": "search_knowledge", "tool_call_id": "call_00_g9liQWP9POPaELOPjIwC4537", "arguments": {"query": "育儿假 天数", "purpose": "查找公司育儿假天数规定", "doc_ids": null, "limit": 5, "cursor": null}}
+{"tool": "search_knowledge", "tool_call_id": "call_00_GMDAu5tXzlDmAcVWPBYD7851", "arguments": {"query": "育儿假 年休假 产假 假期天数规定", "purpose": "确认制度库中是否存在育儿假条款", "doc_ids": null, "limit": 10, "cursor": null}}

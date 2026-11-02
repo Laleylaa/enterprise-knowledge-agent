@@ -1,0 +1,83 @@
+{
+  "kind": "answer_input",
+  "question": "国内差旅报销期限多久？",
+  "history": [],
+  "sources": [
+    {
+      "source_id": "f8489aba21284b29879451b319647063:E1:S0",
+      "evidence_id": "f8489aba21284b29879451b319647063:E1",
+      "doc_id": "D01",
+      "title": "差旅报销规定 D01",
+      "version_date": "2026-01-01",
+      "start": 0,
+      "end": 12,
+      "text": "# 国内差旅报销规定\n\n"
+    },
+    {
+      "source_id": "f8489aba21284b29879451b319647063:E2:S0",
+      "evidence_id": "f8489aba21284b29879451b319647063:E2",
+      "doc_id": "D01",
+      "title": "差旅报销规定 D01",
+      "version_date": "2026-01-01",
+      "start": 59,
+      "end": 122,
+      "text": "## 二、提交期限\n\n1. 国内差旅报销须在行程结束后 30 天内提交。\n2. 报销申请的处理状态与上述提交期限分别记录。\n\n"
+    },
+    {
+      "source_id": "f8489aba21284b29879451b319647063:E3:S0",
+      "evidence_id": "f8489aba21284b29879451b319647063:E3",
+      "doc_id": "D01",
+      "title": "差旅报销规定 D01",
+      "version_date": "2026-01-01",
+      "start": 12,
+      "end": 59,
+      "text": "## 一、用途与适用事项\n\n本规定说明员工国内差旅报销的提交期限，以及报销申请的处理状态。\n\n"
+    },
+    {
+      "source_id": "f8489aba21284b29879451b319647063:E4:S0",
+      "evidence_id": "f8489aba21284b29879451b319647063:E4",
+      "doc_id": "D02",
+      "title": "差旅报销规定 D02",
+      "version_date": "2026-01-01",
+      "start": 0,
+      "end": 12,
+      "text": "# 海外差旅报销规定\n\n"
+    },
+    {
+      "source_id": "f8489aba21284b29879451b319647063:E5:S0",
+      "evidence_id": "f8489aba21284b29879451b319647063:E5",
+      "doc_id": "D02",
+      "title": "差旅报销规定 D02",
+      "version_date": "2026-01-01",
+      "start": 59,
+      "end": 122,
+      "text": "## 二、提交期限\n\n1. 海外差旅报销须在行程结束后 15 天内提交。\n2. 报销申请的处理状态与上述提交期限分别记录。\n\n"
+    }
+  ],
+  "tool_observations": [
+    {
+      "tool": "search_knowledge",
+      "tool_call_id": "call_00_cwQ1zJjcnSx6WLbVj85m3159",
+      "status": "ok",
+      "errors": [],
+      "execution": {
+        "strategy": "hybrid",
+        "requested_mode": "hybrid",
+        "effective_branches": [
+          "bm25",
+          "vector"
+        ],
+        "next_cursor": "2fPsOeLXGm1RkWXA7rFhwWD1Wk1w6mtk",
+        "has_more": true,
+        "return_limited": false
+      },
+      "returned_items": 5
+    }
+  ],
+  "research_stop_reason": "sufficient",
+  "budget": {
+    "remaining_model_turns": 8,
+    "remaining_tool_calls": 15,
+    "allow_supplement": true
+  }
+}

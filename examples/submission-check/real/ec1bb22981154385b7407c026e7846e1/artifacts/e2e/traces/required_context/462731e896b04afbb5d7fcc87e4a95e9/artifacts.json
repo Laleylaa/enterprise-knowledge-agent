@@ -1,0 +1,58 @@
+{
+  "case_id": "required_context",
+  "run_id": "462731e896b04afbb5d7fcc87e4a95e9",
+  "artifacts": [
+    {
+      "path": "traces/required_context/462731e896b04afbb5d7fcc87e4a95e9/answer-input-1.json",
+      "sha256": "3636c0e7cd8b75a2a98a9c5c945198706209dd18c3b115d31a312be4a7f2f9dd"
+    },
+    {
+      "path": "reports/required_context/462731e896b04afbb5d7fcc87e4a95e9/chat-evaluation.json",
+      "sha256": "58e333b3eb55ab592c7c557bb068631b990f9d01105a2eb8cea37422de581dc7"
+    },
+    {
+      "path": "inputs/required_context/462731e896b04afbb5d7fcc87e4a95e9/corpus.json",
+      "sha256": "758cfd629aa76666a489e86868e3c52584f606df4c0e6fba130b00b30347cd60"
+    },
+    {
+      "path": "inputs/required_context/462731e896b04afbb5d7fcc87e4a95e9/index-manifest.json",
+      "sha256": "6da37e7e6a90d527093ff16a71e4e4c0a0616e214693c839f6481bd14b1b7a69"
+    },
+    {
+      "path": "inputs/required_context/462731e896b04afbb5d7fcc87e4a95e9/input.json",
+      "sha256": "4894b448771169bf1121ce6f3d59bb35d3a7f99f5d48d6ff05ab6e381cc7f963"
+    },
+    {
+      "path": "traces/required_context/462731e896b04afbb5d7fcc87e4a95e9/model-inputs.jsonl",
+      "sha256": "788bd2474a5fc442f8c63089e0dd561e4a61a9b420dc8f8b30a8315ff40927e9"
+    },
+    {
+      "path": "traces/required_context/462731e896b04afbb5d7fcc87e4a95e9/observed-evidence.json",
+      "sha256": "aef5651066d286588ea6a94bba18af538f7ac98ff168414ef387adedff9b7c52"
+    },
+    {
+      "path": "outputs/required_context/462731e896b04afbb5d7fcc87e4a95e9/output.json",
+      "sha256": "62edb3d4416a03cff6f799efc20e77f7450d6d5cb906feac1da9ec52d97cf6e2"
+    },
+    {
+      "path": "outputs/required_context/462731e896b04afbb5d7fcc87e4a95e9/run-summary.json",
+      "sha256": "82998f5a805d92d645a2df1e3be2b2cb54b4717c098442976f37bcf3b29aa337"
+    },
+    {
+      "path": "traces/required_context/462731e896b04afbb5d7fcc87e4a95e9/run.json",
+      "sha256": "07cf26076aa72b6b2b0a6817f04cdff5be861aa0c1212e74329c463e8bc7715b"
+    },
+    {
+      "path": "traces/required_context/462731e896b04afbb5d7fcc87e4a95e9/tool-inputs.jsonl",
+      "sha256": "ddd19b6adb906426af30ae75d5c9cd94d56915173d224625a460ba663a31b309"
+    },
+    {
+      "path": "traces/required_context/462731e896b04afbb5d7fcc87e4a95e9/tool-results.jsonl",
+      "sha256": "4f204fa902f7384b8ccd27857d20b4cdfcf7fc0370a82efb2de326e6214513b3"
+    },
+    {
+      "path": "traces/required_context/462731e896b04afbb5d7fcc87e4a95e9/trace.jsonl",
+      "sha256": "bde2dac6586acbf1bd038620c7837098e10f5330a4a6ec38e4a0780dee0cf3f2"
+    }
+  ]
+}

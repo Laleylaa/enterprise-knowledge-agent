@@ -1,0 +1,18 @@
+{
+  "case_id": "extended_scope_session",
+  "run_id": "be10999d444a408e9d24325cc5f10211",
+  "artifacts": [
+    {
+      "path": "outputs/extended_scope_session/be10999d444a408e9d24325cc5f10211/history.json",
+      "sha256": "13c1406c3eab77e37b7fd2d5229a8f50287120c9a110bcfde0353bab438aec11"
+    },
+    {
+      "path": "traces/extended_scope_session/be10999d444a408e9d24325cc5f10211/session.json",
+      "sha256": "c545780ffad52577998ec82d2714bc435b6ed9f388805409c76f9737b5605dc9"
+    },
+    {
+      "path": "traces/extended_scope_session/be10999d444a408e9d24325cc5f10211/trace.jsonl",
+      "sha256": "1913f09c7baaed66fe9090c3e836f5ba37a4e4f6c93ef3f8aafac046c7a0118c"
+    }
+  ]
+}

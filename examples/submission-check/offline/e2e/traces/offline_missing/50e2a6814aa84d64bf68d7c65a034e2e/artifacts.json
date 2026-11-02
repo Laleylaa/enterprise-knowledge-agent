@@ -1,0 +1,54 @@
+{
+  "case_id": "offline_missing",
+  "run_id": "50e2a6814aa84d64bf68d7c65a034e2e",
+  "artifacts": [
+    {
+      "path": "traces/offline_missing/50e2a6814aa84d64bf68d7c65a034e2e/answer-input-1.json",
+      "sha256": "f20dcc4c87344bdeb0451e149854ee2d8e80b44da497e50ab4146c3d3f95e8b8"
+    },
+    {
+      "path": "inputs/offline_missing/50e2a6814aa84d64bf68d7c65a034e2e/corpus.json",
+      "sha256": "758cfd629aa76666a489e86868e3c52584f606df4c0e6fba130b00b30347cd60"
+    },
+    {
+      "path": "inputs/offline_missing/50e2a6814aa84d64bf68d7c65a034e2e/index-manifest.json",
+      "sha256": "092039b10911289c54acb61d0b10ddd847e659568fac56a2ed995a4acc9db3e6"
+    },
+    {
+      "path": "inputs/offline_missing/50e2a6814aa84d64bf68d7c65a034e2e/input.json",
+      "sha256": "b75e74eaec40c3fcaf180b6a6231b25bd467f9679b6175061ba5f49051dc204d"
+    },
+    {
+      "path": "traces/offline_missing/50e2a6814aa84d64bf68d7c65a034e2e/model-inputs.jsonl",
+      "sha256": "cecd7b4279bc3e9aa5133d3327ed374687594afa0670a8405520ef1cca7d9114"
+    },
+    {
+      "path": "traces/offline_missing/50e2a6814aa84d64bf68d7c65a034e2e/observed-evidence.json",
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    {
+      "path": "outputs/offline_missing/50e2a6814aa84d64bf68d7c65a034e2e/output.json",
+      "sha256": "822a6cab8456df871a02c7333181a9395343a03cded5af891128322b62f51769"
+    },
+    {
+      "path": "outputs/offline_missing/50e2a6814aa84d64bf68d7c65a034e2e/run-summary.json",
+      "sha256": "fb48a10d3936f30fd4c17cd486b069fdaa10f326d221ff7e66a92f2f49df14d8"
+    },
+    {
+      "path": "traces/offline_missing/50e2a6814aa84d64bf68d7c65a034e2e/run.json",
+      "sha256": "9108f64f87e88a4ef0f4b1c10ebdac672539b8e52c18c34dc4a16db89ade2358"
+    },
+    {
+      "path": "traces/offline_missing/50e2a6814aa84d64bf68d7c65a034e2e/tool-inputs.jsonl",
+      "sha256": "cd7f516be222ea790dfdc18598b701cbff3401c59ba15a75affd773877373d0b"
+    },
+    {
+      "path": "traces/offline_missing/50e2a6814aa84d64bf68d7c65a034e2e/tool-results.jsonl",
+      "sha256": "c2a4bd63dab30d0b239b9747263e2b96dfffbc5ea3134d7b926c2552c408b357"
+    },
+    {
+      "path": "traces/offline_missing/50e2a6814aa84d64bf68d7c65a034e2e/trace.jsonl",
+      "sha256": "d232a7a7be9d512e5d7f260d9280334777965c1f1e9390846d3ab97e01e9a369"
+    }
+  ]
+}

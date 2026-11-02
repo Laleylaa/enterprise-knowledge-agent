@@ -1,0 +1,3 @@
+{"tool": "search_knowledge", "tool_call_id": "call_00_wNKHLjEup9TXY9JCEsCb3232", "arguments": {"query": "国内差旅报销期限", "purpose": "查找国内差旅费用报销的时间期限规定", "doc_ids": null, "limit": 5, "cursor": null}}
+{"tool": "search_knowledge", "tool_call_id": "call_00_e3TDbczxbPtwA0EkbMoR9973", "arguments": {"query": "差旅费报销 时限 天数 期限", "purpose": "检索失败后重试，查找差旅报销期限规定", "doc_ids": null, "limit": 5, "cursor": null}}
+{"tool": "search_knowledge", "tool_call_id": "call_00_cLT9jFBucmBQ5orWVL7A8551", "arguments": {"query": "差旅费管理办法", "purpose": "再次尝试以更宽泛查询获取差旅制度原文，确认是否为服务故障", "doc_ids": null, "limit": 5, "cursor": null}}

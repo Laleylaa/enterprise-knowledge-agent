@@ -1,0 +1,7 @@
+{
+  "run_id": "079e0adfc6d947f0840e5326fc9a8120",
+  "stage": "agent_tool_calls",
+  "model_origin": "local_http_injection",
+  "live_model": false,
+  "boundary": "stop_after_tool_observation_no_final_answer"
+}

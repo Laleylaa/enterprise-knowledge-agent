@@ -1,0 +1,35 @@
+{
+  "mock_scenario": null,
+  "run_id": "ae3f2774b71b4730af52fb0c905d2d35",
+  "mode": "real",
+  "stage": "tool_integration",
+  "requested_retrieval": "hybrid",
+  "result_origin": "model",
+  "termination_reason": "completed",
+  "result": {
+    "citations": [],
+    "answer": "请问您指的是哪一项具体事项需要报销？麻烦补充说明具体场景（例如是哪种费用、什么情况下发生的），以便核对相关规定。",
+    "gaps": [
+      "不清楚用户所指的报销对象/场景"
+    ],
+    "clarification": "请问您想报销的具体是什么费用或事项？在什么场景下发生的？",
+    "status": "needs_info",
+    "decision_summary": "原始问题“这个能报销吗”未指明对象，历史为空，无法确定所指事项，故追问具体报销事项与场景。",
+    "answer_parts": [
+      {
+        "text": "请问您指的是哪一项具体事项需要报销？麻烦补充说明具体场景（例如是哪种费用、什么情况下发生的），以便核对相关规定。",
+        "citation_numbers": []
+      }
+    ]
+  },
+  "observed_evidence": [],
+  "session_id": "2b8e09903f5348e1ac7603bbca906f8c",
+  "turn_id": 1,
+  "previous_run_id": null,
+  "action_summaries": [],
+  "usage": {
+    "model_turns": 2,
+    "http_attempts": 2,
+    "tool_calls": 0
+  }
+}

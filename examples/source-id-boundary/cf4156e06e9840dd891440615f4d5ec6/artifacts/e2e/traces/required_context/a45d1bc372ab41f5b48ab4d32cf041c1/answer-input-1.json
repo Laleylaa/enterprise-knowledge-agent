@@ -1,0 +1,106 @@
+{
+  "kind": "answer_input",
+  "question": "国内差旅报销有什么要求？",
+  "history": [],
+  "sources": [
+    {
+      "source_id": "a45d1bc372ab41f5b48ab4d32cf041c1:E1:S0",
+      "evidence_id": "a45d1bc372ab41f5b48ab4d32cf041c1:E1",
+      "doc_id": "D01",
+      "title": "差旅报销规定 D01",
+      "version_date": "2026-01-01",
+      "start": 0,
+      "end": 12,
+      "text": "# 国内差旅报销规定\n\n"
+    },
+    {
+      "source_id": "a45d1bc372ab41f5b48ab4d32cf041c1:E2:S0",
+      "evidence_id": "a45d1bc372ab41f5b48ab4d32cf041c1:E2",
+      "doc_id": "D01",
+      "title": "差旅报销规定 D01",
+      "version_date": "2026-01-01",
+      "start": 12,
+      "end": 59,
+      "text": "## 一、用途与适用事项\n\n本规定说明员工国内差旅报销的提交期限，以及报销申请的处理状态。\n\n"
+    },
+    {
+      "source_id": "a45d1bc372ab41f5b48ab4d32cf041c1:E3:S0",
+      "evidence_id": "a45d1bc372ab41f5b48ab4d32cf041c1:E3",
+      "doc_id": "D01",
+      "title": "差旅报销规定 D01",
+      "version_date": "2026-01-01",
+      "start": 59,
+      "end": 122,
+      "text": "## 二、提交期限\n\n1. 国内差旅报销须在行程结束后 30 天内提交。\n2. 报销申请的处理状态与上述提交期限分别记录。\n\n"
+    },
+    {
+      "source_id": "a45d1bc372ab41f5b48ab4d32cf041c1:E4:S0",
+      "evidence_id": "a45d1bc372ab41f5b48ab4d32cf041c1:E4",
+      "doc_id": "D01",
+      "title": "差旅报销规定 D01",
+      "version_date": "2026-01-01",
+      "start": 122,
+      "end": 221,
+      "text": "## 三、申请状态说明\n\n1. “已提交”表示申请已进入处理队列，不代表审核通过。\n2. “处理中”表示申请仍在审核，不能据此认定已完成付款。\n3. 员工查询处理进度时，应区分申请状态与付款状态。\n"
+    }
+  ],
+  "tool_observations": [
+    {
+      "tool": "search_knowledge",
+      "tool_call_id": "call_00_Q8F40cX7TpyENMKeaKYp8692",
+      "status": "ok",
+      "errors": [],
+      "execution": {
+        "strategy": "hybrid",
+        "requested_mode": "hybrid",
+        "effective_branches": [
+          "bm25",
+          "vector"
+        ],
+        "next_cursor": null,
+        "has_more": false,
+        "return_limited": false
+      },
+      "returned_items": 4
+    },
+    {
+      "tool": "search_knowledge",
+      "tool_call_id": "call_01_KTOgc264vlWm33Xm7V1W2261",
+      "status": "ok",
+      "errors": [],
+      "execution": {
+        "strategy": "hybrid",
+        "requested_mode": "hybrid",
+        "effective_branches": [
+          "bm25",
+          "vector"
+        ],
+        "next_cursor": null,
+        "has_more": false,
+        "return_limited": false
+      },
+      "returned_items": 4
+    },
+    {
+      "tool": "read_document",
+      "tool_call_id": "call_00_b8HwawKJ79lR5B4gwy078298",
+      "status": "ok",
+      "errors": [],
+      "execution": {
+        "strategy": "document",
+        "requested_mode": null,
+        "effective_branches": [],
+        "next_cursor": null,
+        "has_more": false,
+        "return_limited": false
+      },
+      "returned_items": 0
+    }
+  ],
+  "research_stop_reason": "sufficient",
+  "budget": {
+    "remaining_model_turns": 7,
+    "remaining_tool_calls": 13,
+    "allow_supplement": true
+  }
+}

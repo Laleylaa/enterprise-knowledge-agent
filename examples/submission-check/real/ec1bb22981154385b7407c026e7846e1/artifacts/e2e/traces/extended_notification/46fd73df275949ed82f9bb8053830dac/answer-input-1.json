@@ -1,0 +1,82 @@
+{
+  "kind": "answer_input",
+  "question": "人事刚通知以 15 天为准，我没有更多可核实的线索",
+  "history": [
+    {
+      "role": "user",
+      "content": "差旅报销期限多久？"
+    },
+    {
+      "role": "assistant",
+      "content": "任务状态：待补充信息\n\n回答：\n现有两份材料对差旅报销提交期限的规定不一致：D01 规定“差旅报销须在行程结束后 30 天内提交”；D02 规定“差旅报销须在行程结束后 15 天内提交”。二者版本日期均为 2026-01-01，暂无法确定适用关系。[1][2]\n请补充：贵公司差旅报销以哪份文件（D01 或 D02）为准，或有无其他文件线索可确认适用制度？\n\n引用：\n[1] D01｜版本日期：2026-01-01\n## 提交期限\n\n差旅报销须在行程结束后 30 天内提交。\n\n[2] D02｜版本日期：2026-01-01\n## 提交期限\n\n差旅报销须在行程结束后 15 天内提交。\n\n\n资料缺口：两份材料规定的提交期限分别为30天和15天，缺少确定适用哪一份制度的依据"
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "46fd73df275949ed82f9bb8053830dac:E1:S0",
+      "evidence_id": "46fd73df275949ed82f9bb8053830dac:E1",
+      "doc_id": "D02",
+      "title": "差旅报销规定 D02",
+      "version_date": "2026-01-01",
+      "start": 29,
+      "end": 59,
+      "text": "## 提交期限\n\n差旅报销须在行程结束后 15 天内提交。\n"
+    },
+    {
+      "source_id": "46fd73df275949ed82f9bb8053830dac:E2:S0",
+      "evidence_id": "46fd73df275949ed82f9bb8053830dac:E2",
+      "doc_id": "D01",
+      "title": "差旅报销规定 D01",
+      "version_date": "2026-01-01",
+      "start": 0,
+      "end": 29,
+      "text": "# 差旅报销规定\n\n本材料记录员工差旅报销的提交期限。\n\n"
+    },
+    {
+      "source_id": "46fd73df275949ed82f9bb8053830dac:E3:S0",
+      "evidence_id": "46fd73df275949ed82f9bb8053830dac:E3",
+      "doc_id": "D01",
+      "title": "差旅报销规定 D01",
+      "version_date": "2026-01-01",
+      "start": 29,
+      "end": 59,
+      "text": "## 提交期限\n\n差旅报销须在行程结束后 30 天内提交。\n"
+    },
+    {
+      "source_id": "46fd73df275949ed82f9bb8053830dac:E4:S0",
+      "evidence_id": "46fd73df275949ed82f9bb8053830dac:E4",
+      "doc_id": "D02",
+      "title": "差旅报销规定 D02",
+      "version_date": "2026-01-01",
+      "start": 0,
+      "end": 29,
+      "text": "# 差旅报销规定\n\n本材料记录员工差旅报销的提交期限。\n\n"
+    }
+  ],
+  "tool_observations": [
+    {
+      "tool": "search_knowledge",
+      "tool_call_id": "call_00_HN2Um5KCtoyU0FNLZEFl4305",
+      "status": "ok",
+      "errors": [],
+      "execution": {
+        "strategy": "hybrid",
+        "requested_mode": "hybrid",
+        "effective_branches": [
+          "bm25",
+          "vector"
+        ],
+        "next_cursor": null,
+        "has_more": false,
+        "return_limited": false
+      },
+      "returned_items": 4
+    }
+  ],
+  "research_stop_reason": "sufficient",
+  "budget": {
+    "remaining_model_turns": 8,
+    "remaining_tool_calls": 15,
+    "allow_supplement": true
+  }
+}

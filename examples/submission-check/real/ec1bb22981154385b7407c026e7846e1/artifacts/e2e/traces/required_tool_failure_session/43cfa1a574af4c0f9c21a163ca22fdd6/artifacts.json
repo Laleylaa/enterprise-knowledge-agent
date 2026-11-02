@@ -1,0 +1,18 @@
+{
+  "case_id": "required_tool_failure_session",
+  "run_id": "43cfa1a574af4c0f9c21a163ca22fdd6",
+  "artifacts": [
+    {
+      "path": "outputs/required_tool_failure_session/43cfa1a574af4c0f9c21a163ca22fdd6/history.json",
+      "sha256": "47254119b713a0376afed7a59c3089da7fa8df207364787acb1c030bbd6c8981"
+    },
+    {
+      "path": "traces/required_tool_failure_session/43cfa1a574af4c0f9c21a163ca22fdd6/session.json",
+      "sha256": "f64ec43bae148eb02d6857c171ff4f693c708dce6192e73511c0a40428f58a59"
+    },
+    {
+      "path": "traces/required_tool_failure_session/43cfa1a574af4c0f9c21a163ca22fdd6/trace.jsonl",
+      "sha256": "bec11150d665045d912d5360a8bd64d3889df3196fcf42614a35a170967f971b"
+    }
+  ]
+}

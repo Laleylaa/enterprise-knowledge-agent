@@ -1,0 +1,50 @@
+{
+  "case_id": "Q15_authentication",
+  "run_id": "c6a0b79dc24942cbadd146bfadef96f0",
+  "artifacts": [
+    {
+      "path": "inputs/Q15_authentication/c6a0b79dc24942cbadd146bfadef96f0/corpus.json",
+      "sha256": "758cfd629aa76666a489e86868e3c52584f606df4c0e6fba130b00b30347cd60"
+    },
+    {
+      "path": "inputs/Q15_authentication/c6a0b79dc24942cbadd146bfadef96f0/fault-injection.json",
+      "sha256": "fa410883bc98d0226e22aea631aea0bedda83dbb14f919da08282f460baa4ccf"
+    },
+    {
+      "path": "inputs/Q15_authentication/c6a0b79dc24942cbadd146bfadef96f0/index-manifest.json",
+      "sha256": "092039b10911289c54acb61d0b10ddd847e659568fac56a2ed995a4acc9db3e6"
+    },
+    {
+      "path": "inputs/Q15_authentication/c6a0b79dc24942cbadd146bfadef96f0/input.json",
+      "sha256": "2138cda08d62c72926da9cf96823e86c28e04488aa3308028e41d0308701f01c"
+    },
+    {
+      "path": "traces/Q15_authentication/c6a0b79dc24942cbadd146bfadef96f0/model-inputs.jsonl",
+      "sha256": "818aa0ac268454772b87dd66728fde945cb4acdf91e911bab2054928850816c6"
+    },
+    {
+      "path": "traces/Q15_authentication/c6a0b79dc24942cbadd146bfadef96f0/observed-evidence.json",
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    {
+      "path": "outputs/Q15_authentication/c6a0b79dc24942cbadd146bfadef96f0/output.json",
+      "sha256": "4e600ffdfb39cba92b8f97bea09814e01775c80bfc479e067276e0e8d8069498"
+    },
+    {
+      "path": "traces/Q15_authentication/c6a0b79dc24942cbadd146bfadef96f0/provider-requests.json",
+      "sha256": "7799c61f3856146d38843eab61ee06f34cde8bf5e81b1f6e3dbc7edaf6e154d4"
+    },
+    {
+      "path": "outputs/Q15_authentication/c6a0b79dc24942cbadd146bfadef96f0/run-summary.json",
+      "sha256": "42f975cbce9dba2ace07755af17f04594df5fcae56a8092091d230a32db59f6c"
+    },
+    {
+      "path": "traces/Q15_authentication/c6a0b79dc24942cbadd146bfadef96f0/run.json",
+      "sha256": "6ff488a9dadb524d31c3852688c052c5f9cb8df24bf89445118fc90b90992a14"
+    },
+    {
+      "path": "traces/Q15_authentication/c6a0b79dc24942cbadd146bfadef96f0/trace.jsonl",
+      "sha256": "4fbbf2ba80903433d8e5dbe86e24099e8a16943436045dd06103087e9c537e0f"
+    }
+  ]
+}

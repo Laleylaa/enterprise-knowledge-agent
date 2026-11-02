@@ -1,0 +1,20 @@
+{
+  "files_checked": 134,
+  "changed_code_data_files": [],
+  "imports_from_local_validation": [],
+  "tracked_local_or_secret_paths": [],
+  "local_validation_ignored": true,
+  "configured_key_checked": true,
+  "files_containing_configured_key": [],
+  "secret_check_scope": "Only the currently configured API key and tracked sensitive paths; not a complete historical secret/privacy audit.",
+  "delivery_pending": [
+    "正式题号",
+    "实际个人投入时长",
+    "个人贡献与复盘核实",
+    "最终commit SHA及推送",
+    "远程评审访问权限核验"
+  ],
+  "artifact_manifests_checked": 59,
+  "artifacts_checked": 506,
+  "artifact_mismatches": []
+}

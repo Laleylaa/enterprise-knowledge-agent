@@ -1,0 +1,39 @@
+{
+  "kind": "answer_input",
+  "question": "国内差旅报销期限多久？",
+  "history": [],
+  "sources": [],
+  "tool_observations": [
+    {
+      "tool": "read_document",
+      "tool_call_id": "offline-1",
+      "status": "error",
+      "errors": [
+        {
+          "code": "READ_FAILED",
+          "message": "本次原文读取失败，未能取得正文。",
+          "retryable": true,
+          "target": {
+            "kind": "doc",
+            "id": "D01"
+          }
+        }
+      ],
+      "execution": {
+        "strategy": "document",
+        "requested_mode": null,
+        "effective_branches": [],
+        "next_cursor": null,
+        "has_more": false,
+        "return_limited": false
+      },
+      "returned_items": 0
+    }
+  ],
+  "research_stop_reason": "blocked",
+  "budget": {
+    "remaining_model_turns": 8,
+    "remaining_tool_calls": 15,
+    "allow_supplement": true
+  }
+}

@@ -1,0 +1,138 @@
+{
+  "corpus_hash": "5863212f2b2165ea6237b6a33d04f736d827ec23201925879cb106faf8c533c8",
+  "documents": [
+    {
+      "doc_id": "D01",
+      "title": "差旅报销规定 D01",
+      "version_date": "2026-01-01",
+      "body": "# 国内差旅报销规定\n\n## 一、用途与适用事项\n\n本规定说明员工国内差旅报销的提交期限，以及报销申请的处理状态。\n\n## 二、提交期限\n\n1. 国内差旅报销须在行程结束后 30 天内提交。\n2. 报销申请的处理状态与上述提交期限分别记录。\n\n## 三、申请状态说明\n\n1. “已提交”表示申请已进入处理队列，不代表审核通过。\n2. “处理中”表示申请仍在审核，不能据此认定已完成付款。\n3. 员工查询处理进度时，应区分申请状态与付款状态。\n"
+    }
+  ],
+  "prepared": {
+    "schema_version": 1,
+    "source_hash": "5236f5eb64e7a57b91b0d54b0cf98fcda38d4cfb63947e3fd437232c8011fe86",
+    "corpus_hash": "5863212f2b2165ea6237b6a33d04f736d827ec23201925879cb106faf8c533c8",
+    "chunker_config": {
+      "algorithm": "markdown-bge-v1",
+      "target_tokens": 320,
+      "max_tokens": 480,
+      "overlap_tokens": 48
+    },
+    "tokenizer": {
+      "model": "BAAI/bge-small-zh-v1.5",
+      "revision": "7999e1d3359715c523056ef9478215996d62a620",
+      "sha256": "48cea5d44424912a6fd1ea647bf4fe50b55ab8b1e5879c3275f80e339e8fae26",
+      "library": "tokenizers",
+      "library_version": "0.22.1"
+    },
+    "sections": [
+      {
+        "doc_id": "D01",
+        "section_id": "D01-S0001",
+        "start": 0,
+        "end": 12,
+        "heading": "国内差旅报销规定",
+        "heading_span": {
+          "start": 2,
+          "end": 10
+        }
+      },
+      {
+        "doc_id": "D01",
+        "section_id": "D01-S0002",
+        "start": 12,
+        "end": 59,
+        "heading": "一、用途与适用事项",
+        "heading_span": {
+          "start": 15,
+          "end": 24
+        }
+      },
+      {
+        "doc_id": "D01",
+        "section_id": "D01-S0003",
+        "start": 59,
+        "end": 122,
+        "heading": "二、提交期限",
+        "heading_span": {
+          "start": 62,
+          "end": 68
+        }
+      },
+      {
+        "doc_id": "D01",
+        "section_id": "D01-S0004",
+        "start": 122,
+        "end": 221,
+        "heading": "三、申请状态说明",
+        "heading_span": {
+          "start": 125,
+          "end": 133
+        }
+      }
+    ],
+    "chunks": [
+      {
+        "doc_id": "D01",
+        "section_id": "D01-S0001",
+        "chunk_id": "D01-C0001",
+        "start": 0,
+        "end": 12,
+        "heading_span": {
+          "start": 2,
+          "end": 10
+        },
+        "text": "# 国内差旅报销规定\n\n",
+        "index_text": "差旅报销规定 D01\n国内差旅报销规定\n# 国内差旅报销规定\n\n",
+        "token_count": 26,
+        "context_truncated": false
+      },
+      {
+        "doc_id": "D01",
+        "section_id": "D01-S0002",
+        "chunk_id": "D01-C0002",
+        "start": 12,
+        "end": 59,
+        "heading_span": {
+          "start": 15,
+          "end": 24
+        },
+        "text": "## 一、用途与适用事项\n\n本规定说明员工国内差旅报销的提交期限，以及报销申请的处理状态。\n\n",
+        "index_text": "差旅报销规定 D01\n一、用途与适用事项\n## 一、用途与适用事项\n\n本规定说明员工国内差旅报销的提交期限，以及报销申请的处理状态。\n\n",
+        "token_count": 60,
+        "context_truncated": false
+      },
+      {
+        "doc_id": "D01",
+        "section_id": "D01-S0003",
+        "chunk_id": "D01-C0003",
+        "start": 59,
+        "end": 122,
+        "heading_span": {
+          "start": 62,
+          "end": 68
+        },
+        "text": "## 二、提交期限\n\n1. 国内差旅报销须在行程结束后 30 天内提交。\n2. 报销申请的处理状态与上述提交期限分别记录。\n\n",
+        "index_text": "差旅报销规定 D01\n二、提交期限\n## 二、提交期限\n\n1. 国内差旅报销须在行程结束后 30 天内提交。\n2. 报销申请的处理状态与上述提交期限分别记录。\n\n",
+        "token_count": 67,
+        "context_truncated": false
+      },
+      {
+        "doc_id": "D01",
+        "section_id": "D01-S0004",
+        "chunk_id": "D01-C0004",
+        "start": 122,
+        "end": 221,
+        "heading_span": {
+          "start": 125,
+          "end": 133
+        },
+        "text": "## 三、申请状态说明\n\n1. “已提交”表示申请已进入处理队列，不代表审核通过。\n2. “处理中”表示申请仍在审核，不能据此认定已完成付款。\n3. 员工查询处理进度时，应区分申请状态与付款状态。\n",
+        "index_text": "差旅报销规定 D01\n三、申请状态说明\n## 三、申请状态说明\n\n1. “已提交”表示申请已进入处理队列，不代表审核通过。\n2. “处理中”表示申请仍在审核，不能据此认定已完成付款。\n3. 员工查询处理进度时，应区分申请状态与付款状态。\n",
+        "token_count": 107,
+        "context_truncated": false
+      }
+    ],
+    "chunks_hash": "94817d90ef571578ea70b6e558b3be9899016adf6f1585ba288936310e932c6f"
+  }
+}

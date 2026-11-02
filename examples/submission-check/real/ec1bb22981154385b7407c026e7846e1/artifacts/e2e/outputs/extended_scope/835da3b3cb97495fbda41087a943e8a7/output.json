@@ -1,0 +1,207 @@
+{
+  "mock_scenario": null,
+  "run_id": "835da3b3cb97495fbda41087a943e8a7",
+  "mode": "real",
+  "stage": "tool_integration",
+  "requested_retrieval": "hybrid",
+  "result_origin": "model",
+  "termination_reason": "completed",
+  "result": {
+    "citations": [
+      {
+        "evidence_id": "835da3b3cb97495fbda41087a943e8a7:E1",
+        "doc_id": "D03",
+        "quote": "## 适用关系\n\nD01 适用于国内差旅，D02 适用于海外差旅。\n"
+      },
+      {
+        "evidence_id": "835da3b3cb97495fbda41087a943e8a7:E5",
+        "doc_id": "D01",
+        "quote": "## 提交期限\n\n差旅报销须在行程结束后 30 天内提交。\n"
+      }
+    ],
+    "answer": "D03 载明：D01 适用于国内差旅，D02 适用于海外差旅。\n\n按此适用关系，国内差旅适用 D01。D01 规定：差旅报销须在行程结束后 30 天内提交。",
+    "gaps": [],
+    "clarification": null,
+    "status": "resolved",
+    "decision_summary": "D03 明确 D01 适用于国内差旅，D01 原文给出提交期限为行程结束后 30 天内，据此可回答。",
+    "answer_parts": [
+      {
+        "text": "D03 载明：D01 适用于国内差旅，D02 适用于海外差旅。",
+        "citation_numbers": [
+          1
+        ]
+      },
+      {
+        "text": "按此适用关系，国内差旅适用 D01。D01 规定：差旅报销须在行程结束后 30 天内提交。",
+        "citation_numbers": [
+          1,
+          2
+        ]
+      }
+    ]
+  },
+  "observed_evidence": [
+    {
+      "evidence_id": "835da3b3cb97495fbda41087a943e8a7:E1",
+      "tool_call_id": "call_00_osJZ9iJGVBdh0pW1tUAL2966",
+      "corpus_hash": "0ef3a14ac79f649ca9b8f72ec79117126030a033e7098b0366d9e6343f897d55",
+      "doc_id": "D03",
+      "title": "差旅制度适用范围说明",
+      "version_date": "2026-01-01",
+      "content_hash": "6b2ec296871b754d5a17260e0fa1bfc4dde4756536f3d1ad3979b505fab27031",
+      "start": 14,
+      "end": 48,
+      "text": "## 适用关系\n\nD01 适用于国内差旅，D02 适用于海外差旅。\n",
+      "source_spans": [
+        {
+          "start": 14,
+          "end": 48,
+          "text": "## 适用关系\n\nD01 适用于国内差旅，D02 适用于海外差旅。\n"
+        }
+      ],
+      "delivered_to_model": true
+    },
+    {
+      "evidence_id": "835da3b3cb97495fbda41087a943e8a7:E2",
+      "tool_call_id": "call_00_osJZ9iJGVBdh0pW1tUAL2966",
+      "corpus_hash": "0ef3a14ac79f649ca9b8f72ec79117126030a033e7098b0366d9e6343f897d55",
+      "doc_id": "D02",
+      "title": "差旅报销规定 D02",
+      "version_date": "2026-01-01",
+      "content_hash": "3215da0316f02d06809366e34c1ddda19800c425e01b44e19efb6a70d5e22ff9",
+      "start": 0,
+      "end": 29,
+      "text": "# 差旅报销规定\n\n本材料记录员工差旅报销的提交期限。\n\n",
+      "source_spans": [
+        {
+          "start": 0,
+          "end": 29,
+          "text": "# 差旅报销规定\n\n本材料记录员工差旅报销的提交期限。\n\n"
+        }
+      ],
+      "delivered_to_model": true
+    },
+    {
+      "evidence_id": "835da3b3cb97495fbda41087a943e8a7:E3",
+      "tool_call_id": "call_00_osJZ9iJGVBdh0pW1tUAL2966",
+      "corpus_hash": "0ef3a14ac79f649ca9b8f72ec79117126030a033e7098b0366d9e6343f897d55",
+      "doc_id": "D01",
+      "title": "差旅报销规定 D01",
+      "version_date": "2026-01-01",
+      "content_hash": "86e651ca17bf03daef438457ea3075bcc3f5364117abaad88db87efc960dedcc",
+      "start": 0,
+      "end": 29,
+      "text": "# 差旅报销规定\n\n本材料记录员工差旅报销的提交期限。\n\n",
+      "source_spans": [
+        {
+          "start": 0,
+          "end": 29,
+          "text": "# 差旅报销规定\n\n本材料记录员工差旅报销的提交期限。\n\n"
+        }
+      ],
+      "delivered_to_model": true
+    },
+    {
+      "evidence_id": "835da3b3cb97495fbda41087a943e8a7:E4",
+      "tool_call_id": "call_00_osJZ9iJGVBdh0pW1tUAL2966",
+      "corpus_hash": "0ef3a14ac79f649ca9b8f72ec79117126030a033e7098b0366d9e6343f897d55",
+      "doc_id": "D03",
+      "title": "差旅制度适用范围说明",
+      "version_date": "2026-01-01",
+      "content_hash": "6b2ec296871b754d5a17260e0fa1bfc4dde4756536f3d1ad3979b505fab27031",
+      "start": 0,
+      "end": 14,
+      "text": "# 差旅制度适用范围说明\n\n",
+      "source_spans": [
+        {
+          "start": 0,
+          "end": 14,
+          "text": "# 差旅制度适用范围说明\n\n"
+        }
+      ],
+      "delivered_to_model": true
+    },
+    {
+      "evidence_id": "835da3b3cb97495fbda41087a943e8a7:E5",
+      "tool_call_id": "call_00_osJZ9iJGVBdh0pW1tUAL2966",
+      "corpus_hash": "0ef3a14ac79f649ca9b8f72ec79117126030a033e7098b0366d9e6343f897d55",
+      "doc_id": "D01",
+      "title": "差旅报销规定 D01",
+      "version_date": "2026-01-01",
+      "content_hash": "86e651ca17bf03daef438457ea3075bcc3f5364117abaad88db87efc960dedcc",
+      "start": 29,
+      "end": 59,
+      "text": "## 提交期限\n\n差旅报销须在行程结束后 30 天内提交。\n",
+      "source_spans": [
+        {
+          "start": 29,
+          "end": 59,
+          "text": "## 提交期限\n\n差旅报销须在行程结束后 30 天内提交。\n"
+        }
+      ],
+      "delivered_to_model": true
+    },
+    {
+      "evidence_id": "835da3b3cb97495fbda41087a943e8a7:E6",
+      "tool_call_id": "call_00_p3HHmSFgjzoRZ2L2tN2F4709",
+      "corpus_hash": "0ef3a14ac79f649ca9b8f72ec79117126030a033e7098b0366d9e6343f897d55",
+      "doc_id": "D03",
+      "title": "差旅制度适用范围说明",
+      "version_date": "2026-01-01",
+      "content_hash": "6b2ec296871b754d5a17260e0fa1bfc4dde4756536f3d1ad3979b505fab27031",
+      "start": 0,
+      "end": 14,
+      "text": "# 差旅制度适用范围说明\n\n",
+      "source_spans": [
+        {
+          "start": 0,
+          "end": 14,
+          "text": "# 差旅制度适用范围说明\n\n"
+        }
+      ],
+      "delivered_to_model": true
+    },
+    {
+      "evidence_id": "835da3b3cb97495fbda41087a943e8a7:E7",
+      "tool_call_id": "call_00_p3HHmSFgjzoRZ2L2tN2F4709",
+      "corpus_hash": "0ef3a14ac79f649ca9b8f72ec79117126030a033e7098b0366d9e6343f897d55",
+      "doc_id": "D03",
+      "title": "差旅制度适用范围说明",
+      "version_date": "2026-01-01",
+      "content_hash": "6b2ec296871b754d5a17260e0fa1bfc4dde4756536f3d1ad3979b505fab27031",
+      "start": 14,
+      "end": 48,
+      "text": "## 适用关系\n\nD01 适用于国内差旅，D02 适用于海外差旅。\n",
+      "source_spans": [
+        {
+          "start": 14,
+          "end": 48,
+          "text": "## 适用关系\n\nD01 适用于国内差旅，D02 适用于海外差旅。\n"
+        }
+      ],
+      "delivered_to_model": true
+    }
+  ],
+  "session_id": "be10999d444a408e9d24325cc5f10211",
+  "turn_id": 1,
+  "previous_run_id": null,
+  "action_summaries": [
+    {
+      "model_turn": 1,
+      "tool": "search_knowledge",
+      "tool_call_id": "call_00_osJZ9iJGVBdh0pW1tUAL2966",
+      "purpose": "查证用户所述 D03 是否说明 D01 与 D02 的适用范围，以及国内差旅报销期限"
+    },
+    {
+      "model_turn": 2,
+      "tool": "read_document",
+      "tool_call_id": "call_00_p3HHmSFgjzoRZ2L2tN2F4709",
+      "purpose": "核实 D03 全文是否还有 D01/D02 适用关系与期限的其他说明，以及 D01 提交期限条款上下文"
+    }
+  ],
+  "usage": {
+    "model_turns": 4,
+    "http_attempts": 4,
+    "tool_calls": 2
+  }
+}

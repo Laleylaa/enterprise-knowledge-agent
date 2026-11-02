@@ -1,0 +1,30 @@
+{
+  "origin": "test_only",
+  "mode": "always",
+  "targets": [
+    "search_knowledge",
+    "read_document"
+  ],
+  "executions": 3,
+  "injections": [
+    {
+      "tool": "search_knowledge",
+      "tool_call_id": "call_00_wNKHLjEup9TXY9JCEsCb3232",
+      "execution_number": 1,
+      "injection": "test_backend_oserror"
+    },
+    {
+      "tool": "search_knowledge",
+      "tool_call_id": "call_00_e3TDbczxbPtwA0EkbMoR9973",
+      "execution_number": 2,
+      "injection": "test_backend_oserror"
+    },
+    {
+      "tool": "search_knowledge",
+      "tool_call_id": "call_00_cLT9jFBucmBQ5orWVL7A8551",
+      "execution_number": 3,
+      "injection": "test_backend_oserror"
+    }
+  ],
+  "visible_to_model": "only_actual_tool_error"
+}

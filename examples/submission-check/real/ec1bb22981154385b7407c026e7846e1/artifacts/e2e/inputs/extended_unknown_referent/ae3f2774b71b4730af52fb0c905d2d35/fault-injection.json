@@ -1,0 +1,11 @@
+{
+  "origin": "test_only",
+  "mode": "none",
+  "targets": [
+    "search_knowledge",
+    "read_document"
+  ],
+  "executions": 0,
+  "injections": [],
+  "visible_to_model": "only_actual_tool_error"
+}

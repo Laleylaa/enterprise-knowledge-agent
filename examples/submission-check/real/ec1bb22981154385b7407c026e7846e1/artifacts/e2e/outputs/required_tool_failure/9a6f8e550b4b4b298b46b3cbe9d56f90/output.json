@@ -1,0 +1,54 @@
+{
+  "mock_scenario": null,
+  "run_id": "9a6f8e550b4b4b298b46b3cbe9d56f90",
+  "mode": "real",
+  "stage": "tool_integration",
+  "requested_retrieval": "hybrid",
+  "result_origin": "model",
+  "termination_reason": "completed",
+  "result": {
+    "citations": [],
+    "answer": "本次检索工具持续失败，未能取得国内差旅报销期限相关的制度原文，暂时无法核实。请稍后重试。",
+    "gaps": [
+      "国内差旅报销期限的制度原文尚未取得（检索持续失败）"
+    ],
+    "clarification": null,
+    "status": "incomplete",
+    "decision_summary": "三次检索调用均返回 SEARCH_FAILED，取证停止原因为 blocked，sources 为空，无法给出制度结论，本次查证未完成。",
+    "answer_parts": [
+      {
+        "text": "本次检索工具持续失败，未能取得国内差旅报销期限相关的制度原文，暂时无法核实。请稍后重试。",
+        "citation_numbers": []
+      }
+    ]
+  },
+  "observed_evidence": [],
+  "session_id": "43cfa1a574af4c0f9c21a163ca22fdd6",
+  "turn_id": 1,
+  "previous_run_id": null,
+  "action_summaries": [
+    {
+      "model_turn": 1,
+      "tool": "search_knowledge",
+      "tool_call_id": "call_00_wNKHLjEup9TXY9JCEsCb3232",
+      "purpose": "查找国内差旅费用报销的时间期限规定"
+    },
+    {
+      "model_turn": 2,
+      "tool": "search_knowledge",
+      "tool_call_id": "call_00_e3TDbczxbPtwA0EkbMoR9973",
+      "purpose": "检索失败后重试，查找差旅报销期限规定"
+    },
+    {
+      "model_turn": 3,
+      "tool": "search_knowledge",
+      "tool_call_id": "call_00_cLT9jFBucmBQ5orWVL7A8551",
+      "purpose": "再次尝试以更宽泛查询获取差旅制度原文，确认是否为服务故障"
+    }
+  ],
+  "usage": {
+    "model_turns": 5,
+    "http_attempts": 5,
+    "tool_calls": 3
+  }
+}

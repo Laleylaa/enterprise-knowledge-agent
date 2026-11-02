@@ -1,0 +1,18 @@
+{
+  "case_id": "required_context_session",
+  "run_id": "4ab9aca3108c4ed0ab16dfefe0f47518",
+  "artifacts": [
+    {
+      "path": "outputs/required_context_session/4ab9aca3108c4ed0ab16dfefe0f47518/history.json",
+      "sha256": "5bb3a04fa45403f294bf6249ce0e8b850f7e19704bc8e4af665837576eaa198f"
+    },
+    {
+      "path": "traces/required_context_session/4ab9aca3108c4ed0ab16dfefe0f47518/session.json",
+      "sha256": "7e83ddaa0fbec152f5bf6d5546a4d89c1c5e6555ca39d04358880da4e6a9215a"
+    },
+    {
+      "path": "traces/required_context_session/4ab9aca3108c4ed0ab16dfefe0f47518/trace.jsonl",
+      "sha256": "72e05f127a3996de27f088443531b6d62a07d9143a19588cd5b24a72bf2ca113"
+    }
+  ]
+}

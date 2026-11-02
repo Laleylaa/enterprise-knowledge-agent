@@ -1,0 +1,18 @@
+{
+  "case_id": "extended_notification_session",
+  "run_id": "d9f669b7ab5c494588ad72f39bca7feb",
+  "artifacts": [
+    {
+      "path": "outputs/extended_notification_session/d9f669b7ab5c494588ad72f39bca7feb/history.json",
+      "sha256": "e85f7a019cf4270d9a17c57015fed091346675ab6d198cffc79772759b7d0acc"
+    },
+    {
+      "path": "traces/extended_notification_session/d9f669b7ab5c494588ad72f39bca7feb/session.json",
+      "sha256": "cc6b07f49ee0e493cf302d1d229f9009868d1ecd1792923a4e89ac4ae35583c1"
+    },
+    {
+      "path": "traces/extended_notification_session/d9f669b7ab5c494588ad72f39bca7feb/trace.jsonl",
+      "sha256": "d392bccabc953c59d028d6380ba6ce43ba6ae329651ba45b12ec9529be321390"
+    }
+  ]
+}

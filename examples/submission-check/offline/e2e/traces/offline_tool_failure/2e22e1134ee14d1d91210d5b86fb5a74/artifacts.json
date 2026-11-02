@@ -1,0 +1,58 @@
+{
+  "case_id": "offline_tool_failure",
+  "run_id": "2e22e1134ee14d1d91210d5b86fb5a74",
+  "artifacts": [
+    {
+      "path": "traces/offline_tool_failure/2e22e1134ee14d1d91210d5b86fb5a74/answer-input-1.json",
+      "sha256": "4e3527c098a424606b74117f00cea63ea2ce381d9243337660a175c7f0d0f187"
+    },
+    {
+      "path": "inputs/offline_tool_failure/2e22e1134ee14d1d91210d5b86fb5a74/corpus.json",
+      "sha256": "758cfd629aa76666a489e86868e3c52584f606df4c0e6fba130b00b30347cd60"
+    },
+    {
+      "path": "inputs/offline_tool_failure/2e22e1134ee14d1d91210d5b86fb5a74/fault-injection.json",
+      "sha256": "4761d58132b06f878b38ecbb794acd479fc82676991d93e5f7dc0ac77d7a2372"
+    },
+    {
+      "path": "inputs/offline_tool_failure/2e22e1134ee14d1d91210d5b86fb5a74/index-manifest.json",
+      "sha256": "092039b10911289c54acb61d0b10ddd847e659568fac56a2ed995a4acc9db3e6"
+    },
+    {
+      "path": "inputs/offline_tool_failure/2e22e1134ee14d1d91210d5b86fb5a74/input.json",
+      "sha256": "75a24854a005b77436a86b2048de131a2922812fa5e89cd765ee43b3adc8c903"
+    },
+    {
+      "path": "traces/offline_tool_failure/2e22e1134ee14d1d91210d5b86fb5a74/model-inputs.jsonl",
+      "sha256": "11cc69b866a95160182efe73c0020d28cb361ddb9f98b11488d7dfb0a8779d3e"
+    },
+    {
+      "path": "traces/offline_tool_failure/2e22e1134ee14d1d91210d5b86fb5a74/observed-evidence.json",
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    {
+      "path": "outputs/offline_tool_failure/2e22e1134ee14d1d91210d5b86fb5a74/output.json",
+      "sha256": "f6bb5bc5d7e0b012f434103cec8778543f02df2da889ee233a71a410812341a7"
+    },
+    {
+      "path": "outputs/offline_tool_failure/2e22e1134ee14d1d91210d5b86fb5a74/run-summary.json",
+      "sha256": "14b11e049abf11edb4d7e1063c2db5da4b7a81806e9274f838ad493cc719aaab"
+    },
+    {
+      "path": "traces/offline_tool_failure/2e22e1134ee14d1d91210d5b86fb5a74/run.json",
+      "sha256": "f1a3796e339a7f5297d343bbed7f112502014b20578d5b4e5864dcacb30fe9b2"
+    },
+    {
+      "path": "traces/offline_tool_failure/2e22e1134ee14d1d91210d5b86fb5a74/tool-inputs.jsonl",
+      "sha256": "e9a611f2ed52b9e62cb052d5f782f7eb29a1e6d491f4caa9eec6752a83d47ca5"
+    },
+    {
+      "path": "traces/offline_tool_failure/2e22e1134ee14d1d91210d5b86fb5a74/tool-results.jsonl",
+      "sha256": "a37740d320f6d4d6aba6fc9c5b493fd18f0d18b9e5263c4c536a47aa9a663f32"
+    },
+    {
+      "path": "traces/offline_tool_failure/2e22e1134ee14d1d91210d5b86fb5a74/trace.jsonl",
+      "sha256": "ca3c6d0f496ed7de35fcac76ea39cff9d0e2147869e34527994843a1367d0c2d"
+    }
+  ]
+}

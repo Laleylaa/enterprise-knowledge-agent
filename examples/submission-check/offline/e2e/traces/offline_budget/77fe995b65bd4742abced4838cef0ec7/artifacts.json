@@ -1,0 +1,50 @@
+{
+  "case_id": "offline_budget",
+  "run_id": "77fe995b65bd4742abced4838cef0ec7",
+  "artifacts": [
+    {
+      "path": "inputs/offline_budget/77fe995b65bd4742abced4838cef0ec7/corpus.json",
+      "sha256": "758cfd629aa76666a489e86868e3c52584f606df4c0e6fba130b00b30347cd60"
+    },
+    {
+      "path": "inputs/offline_budget/77fe995b65bd4742abced4838cef0ec7/index-manifest.json",
+      "sha256": "092039b10911289c54acb61d0b10ddd847e659568fac56a2ed995a4acc9db3e6"
+    },
+    {
+      "path": "inputs/offline_budget/77fe995b65bd4742abced4838cef0ec7/input.json",
+      "sha256": "14a0f4ba5bec921761ce8b406d85ee67ae2958b860df898fc6d3d1663ca3760f"
+    },
+    {
+      "path": "traces/offline_budget/77fe995b65bd4742abced4838cef0ec7/model-inputs.jsonl",
+      "sha256": "4fdf4c05fdf26f875547cb11717d820852bcf5db2f9f7695df296fe9ccbe00d7"
+    },
+    {
+      "path": "traces/offline_budget/77fe995b65bd4742abced4838cef0ec7/observed-evidence.json",
+      "sha256": "68c17907e6a18808a9b620eb7fa3f9b06a873fb91e82bfd8a82ea802dca6c024"
+    },
+    {
+      "path": "outputs/offline_budget/77fe995b65bd4742abced4838cef0ec7/output.json",
+      "sha256": "cb7c0f9f8736d3b183e8d2934a9ab7c6b5c27609db57ec9903a9f9efd1f605d2"
+    },
+    {
+      "path": "outputs/offline_budget/77fe995b65bd4742abced4838cef0ec7/run-summary.json",
+      "sha256": "6f8046273bbf00351133ec6978aafdfd97aa6a9480b3ca44853c982cf6e3574e"
+    },
+    {
+      "path": "traces/offline_budget/77fe995b65bd4742abced4838cef0ec7/run.json",
+      "sha256": "f75165ab9f5f87564f84e4fd37d4edf2551e83427991ee50c8ebf690e2cb45b6"
+    },
+    {
+      "path": "traces/offline_budget/77fe995b65bd4742abced4838cef0ec7/tool-inputs.jsonl",
+      "sha256": "8d4c652dd80ac8b81af51c2c8a6d52417beac95f1aa08be6a170a42ee5855ed4"
+    },
+    {
+      "path": "traces/offline_budget/77fe995b65bd4742abced4838cef0ec7/tool-results.jsonl",
+      "sha256": "05a3393ca533260097bcbb3659ed7665a113f8fb0038d136bf0292394435a8ee"
+    },
+    {
+      "path": "traces/offline_budget/77fe995b65bd4742abced4838cef0ec7/trace.jsonl",
+      "sha256": "fe06ab64a20734f750fc7fe19fbf0ea45ae1c384cb5db731230b5b932a36efed"
+    }
+  ]
+}

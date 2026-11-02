@@ -1,0 +1,2 @@
+{"tool": "search_knowledge", "tool_call_id": "call_00_r85YfJRGMgEGd1FdD6y84379", "arguments": {"query": "差旅报销申请 已提交 状态 是否审核通过", "purpose": "查找报销单状态含义，特别是\"已提交\"是否代表审核通过", "doc_ids": null, "limit": 5, "cursor": null}}
+{"tool": "read_document", "tool_call_id": "call_00_aKvsPwewN43YVCO6itS61208", "arguments": {"doc_id": "D01", "purpose": "核实差旅报销规定全文，确认\"已提交\"状态含义及是否有其他状态说明", "section_id": null, "chunk_id": null, "cursor": null}}

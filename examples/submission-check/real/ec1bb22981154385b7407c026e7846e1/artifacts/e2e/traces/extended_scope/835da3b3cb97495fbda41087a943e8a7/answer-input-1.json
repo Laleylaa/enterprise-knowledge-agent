@@ -1,0 +1,98 @@
+{
+  "kind": "answer_input",
+  "question": "我是国内差旅，预置 D03 据说说明了 D01 与 D02 的适用范围，请查证报销期限。",
+  "history": [],
+  "sources": [
+    {
+      "source_id": "835da3b3cb97495fbda41087a943e8a7:E1:S0",
+      "evidence_id": "835da3b3cb97495fbda41087a943e8a7:E1",
+      "doc_id": "D03",
+      "title": "差旅制度适用范围说明",
+      "version_date": "2026-01-01",
+      "start": 14,
+      "end": 48,
+      "text": "## 适用关系\n\nD01 适用于国内差旅，D02 适用于海外差旅。\n"
+    },
+    {
+      "source_id": "835da3b3cb97495fbda41087a943e8a7:E2:S0",
+      "evidence_id": "835da3b3cb97495fbda41087a943e8a7:E2",
+      "doc_id": "D02",
+      "title": "差旅报销规定 D02",
+      "version_date": "2026-01-01",
+      "start": 0,
+      "end": 29,
+      "text": "# 差旅报销规定\n\n本材料记录员工差旅报销的提交期限。\n\n"
+    },
+    {
+      "source_id": "835da3b3cb97495fbda41087a943e8a7:E3:S0",
+      "evidence_id": "835da3b3cb97495fbda41087a943e8a7:E3",
+      "doc_id": "D01",
+      "title": "差旅报销规定 D01",
+      "version_date": "2026-01-01",
+      "start": 0,
+      "end": 29,
+      "text": "# 差旅报销规定\n\n本材料记录员工差旅报销的提交期限。\n\n"
+    },
+    {
+      "source_id": "835da3b3cb97495fbda41087a943e8a7:E4:S0",
+      "evidence_id": "835da3b3cb97495fbda41087a943e8a7:E4",
+      "doc_id": "D03",
+      "title": "差旅制度适用范围说明",
+      "version_date": "2026-01-01",
+      "start": 0,
+      "end": 14,
+      "text": "# 差旅制度适用范围说明\n\n"
+    },
+    {
+      "source_id": "835da3b3cb97495fbda41087a943e8a7:E5:S0",
+      "evidence_id": "835da3b3cb97495fbda41087a943e8a7:E5",
+      "doc_id": "D01",
+      "title": "差旅报销规定 D01",
+      "version_date": "2026-01-01",
+      "start": 29,
+      "end": 59,
+      "text": "## 提交期限\n\n差旅报销须在行程结束后 30 天内提交。\n"
+    }
+  ],
+  "tool_observations": [
+    {
+      "tool": "search_knowledge",
+      "tool_call_id": "call_00_osJZ9iJGVBdh0pW1tUAL2966",
+      "status": "ok",
+      "errors": [],
+      "execution": {
+        "strategy": "hybrid",
+        "requested_mode": "hybrid",
+        "effective_branches": [
+          "bm25",
+          "vector"
+        ],
+        "next_cursor": "JPkP4g2llYSb2ctSZoUB2NuWB9EQWrle",
+        "has_more": true,
+        "return_limited": false
+      },
+      "returned_items": 5
+    },
+    {
+      "tool": "read_document",
+      "tool_call_id": "call_00_p3HHmSFgjzoRZ2L2tN2F4709",
+      "status": "ok",
+      "errors": [],
+      "execution": {
+        "strategy": "document",
+        "requested_mode": null,
+        "effective_branches": [],
+        "next_cursor": null,
+        "has_more": false,
+        "return_limited": false
+      },
+      "returned_items": 0
+    }
+  ],
+  "research_stop_reason": "sufficient",
+  "budget": {
+    "remaining_model_turns": 7,
+    "remaining_tool_calls": 14,
+    "allow_supplement": true
+  }
+}

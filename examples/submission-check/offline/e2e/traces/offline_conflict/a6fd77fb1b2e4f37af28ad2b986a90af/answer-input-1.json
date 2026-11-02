@@ -1,0 +1,102 @@
+{
+  "kind": "answer_input",
+  "question": "差旅报销期限多久？",
+  "history": [],
+  "sources": [
+    {
+      "source_id": "a6fd77fb1b2e4f37af28ad2b986a90af:E1:S0",
+      "evidence_id": "a6fd77fb1b2e4f37af28ad2b986a90af:E1",
+      "doc_id": "D01",
+      "title": "差旅报销规定 D01",
+      "version_date": "2026-01-01",
+      "start": 29,
+      "end": 59,
+      "text": "## 提交期限\n\n差旅报销须在行程结束后 30 天内提交。\n"
+    },
+    {
+      "source_id": "a6fd77fb1b2e4f37af28ad2b986a90af:E2:S0",
+      "evidence_id": "a6fd77fb1b2e4f37af28ad2b986a90af:E2",
+      "doc_id": "D02",
+      "title": "差旅报销规定 D02",
+      "version_date": "2026-01-01",
+      "start": 29,
+      "end": 59,
+      "text": "## 提交期限\n\n差旅报销须在行程结束后 15 天内提交。\n"
+    },
+    {
+      "source_id": "a6fd77fb1b2e4f37af28ad2b986a90af:E3:S0",
+      "evidence_id": "a6fd77fb1b2e4f37af28ad2b986a90af:E3",
+      "doc_id": "D01",
+      "title": "差旅报销规定 D01",
+      "version_date": "2026-01-01",
+      "start": 0,
+      "end": 29,
+      "text": "# 差旅报销规定\n\n本材料记录员工差旅报销的提交期限。\n\n"
+    },
+    {
+      "source_id": "a6fd77fb1b2e4f37af28ad2b986a90af:E4:S0",
+      "evidence_id": "a6fd77fb1b2e4f37af28ad2b986a90af:E4",
+      "doc_id": "D02",
+      "title": "差旅报销规定 D02",
+      "version_date": "2026-01-01",
+      "start": 0,
+      "end": 29,
+      "text": "# 差旅报销规定\n\n本材料记录员工差旅报销的提交期限。\n\n"
+    }
+  ],
+  "tool_observations": [
+    {
+      "tool": "search_knowledge",
+      "tool_call_id": "offline-1",
+      "status": "ok",
+      "errors": [],
+      "execution": {
+        "strategy": "bm25",
+        "requested_mode": "bm25",
+        "effective_branches": [
+          "bm25"
+        ],
+        "next_cursor": null,
+        "has_more": false,
+        "return_limited": false
+      },
+      "returned_items": 4
+    },
+    {
+      "tool": "read_document",
+      "tool_call_id": "offline-2",
+      "status": "ok",
+      "errors": [],
+      "execution": {
+        "strategy": "document",
+        "requested_mode": null,
+        "effective_branches": [],
+        "next_cursor": null,
+        "has_more": false,
+        "return_limited": false
+      },
+      "returned_items": 0
+    },
+    {
+      "tool": "read_document",
+      "tool_call_id": "offline-3",
+      "status": "ok",
+      "errors": [],
+      "execution": {
+        "strategy": "document",
+        "requested_mode": null,
+        "effective_branches": [],
+        "next_cursor": null,
+        "has_more": false,
+        "return_limited": false
+      },
+      "returned_items": 0
+    }
+  ],
+  "research_stop_reason": "needs_user",
+  "budget": {
+    "remaining_model_turns": 6,
+    "remaining_tool_calls": 13,
+    "allow_supplement": true
+  }
+}
