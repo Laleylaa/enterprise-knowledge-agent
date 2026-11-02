@@ -1,0 +1,201 @@
+{
+  "repetitions": 3,
+  "selection": "test_conflicting_documents or test_Q02_newer_date or test_notification_without_channel or test_scope_lookup",
+  "then": "one full submission regression; retain all results",
+  "evidence_state": "conflict",
+  "independent_answer_states": [
+    "needs_info",
+    "unresolved"
+  ],
+  "iterations": [
+    {
+      "round": 1,
+      "counts": {
+        "collected": 4,
+        "deselected": 14,
+        "passed": 4,
+        "failed": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "runs": [
+        {
+          "run_id": "b0e3665e2f8248489db1f2ebfad37158",
+          "case": "extended_conflict_newer",
+          "status": "needs_info",
+          "usage": {
+            "model_turns": 4,
+            "http_attempts": 4,
+            "tool_calls": 3
+          }
+        },
+        {
+          "run_id": "8c97f708fd7d4d0fb3f6641b08318f6a",
+          "case": "extended_notification",
+          "status": "unresolved",
+          "usage": {
+            "model_turns": 2,
+            "http_attempts": 2,
+            "tool_calls": 0
+          }
+        },
+        {
+          "run_id": "f9e0b0462fe344abb8e720c8519bfa65",
+          "case": "extended_notification",
+          "status": "needs_info",
+          "usage": {
+            "model_turns": 4,
+            "http_attempts": 4,
+            "tool_calls": 3
+          }
+        },
+        {
+          "run_id": "7aac0718170c45d7a4651cc482517e9d",
+          "case": "extended_scope",
+          "status": "resolved",
+          "usage": {
+            "model_turns": 3,
+            "http_attempts": 3,
+            "tool_calls": 2
+          }
+        },
+        {
+          "run_id": "88db9049ef8b46a888d89330cb3d86b2",
+          "case": "required_conflict",
+          "status": "needs_info",
+          "usage": {
+            "model_turns": 4,
+            "http_attempts": 4,
+            "tool_calls": 3
+          }
+        }
+      ]
+    },
+    {
+      "round": 2,
+      "counts": {
+        "collected": 4,
+        "deselected": 14,
+        "passed": 4,
+        "failed": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "runs": [
+        {
+          "run_id": "b8acf6478191408396d12ca418d9dfc0",
+          "case": "extended_conflict_newer",
+          "status": "needs_info",
+          "usage": {
+            "model_turns": 4,
+            "http_attempts": 4,
+            "tool_calls": 3
+          }
+        },
+        {
+          "run_id": "996f38b9c95349ebb5eae981f10ff22c",
+          "case": "extended_notification",
+          "status": "unresolved",
+          "usage": {
+            "model_turns": 3,
+            "http_attempts": 3,
+            "tool_calls": 1
+          }
+        },
+        {
+          "run_id": "f1471657c26a4f5998bb909edcf5073e",
+          "case": "extended_notification",
+          "status": "needs_info",
+          "usage": {
+            "model_turns": 4,
+            "http_attempts": 4,
+            "tool_calls": 3
+          }
+        },
+        {
+          "run_id": "2400e4327adf4922a4b52ec8ffbca353",
+          "case": "extended_scope",
+          "status": "resolved",
+          "usage": {
+            "model_turns": 5,
+            "http_attempts": 5,
+            "tool_calls": 4
+          }
+        },
+        {
+          "run_id": "e6158f614fdf434697c5762c5c208dab",
+          "case": "required_conflict",
+          "status": "needs_info",
+          "usage": {
+            "model_turns": 4,
+            "http_attempts": 4,
+            "tool_calls": 3
+          }
+        }
+      ]
+    },
+    {
+      "round": 3,
+      "counts": {
+        "collected": 4,
+        "deselected": 14,
+        "passed": 4,
+        "failed": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "runs": [
+        {
+          "run_id": "986ba6f5b0974d868e2215b6a85fe9ac",
+          "case": "extended_conflict_newer",
+          "status": "needs_info",
+          "usage": {
+            "model_turns": 4,
+            "http_attempts": 4,
+            "tool_calls": 3
+          }
+        },
+        {
+          "run_id": "3636682dfef4422d8badb872f143998d",
+          "case": "extended_notification",
+          "status": "needs_info",
+          "usage": {
+            "model_turns": 4,
+            "http_attempts": 4,
+            "tool_calls": 3
+          }
+        },
+        {
+          "run_id": "c1926d9529374d0597d28c4d8064581b",
+          "case": "extended_notification",
+          "status": "unresolved",
+          "usage": {
+            "model_turns": 2,
+            "http_attempts": 2,
+            "tool_calls": 0
+          }
+        },
+        {
+          "run_id": "894a9f9bf09548f2aa5db305185aff4a",
+          "case": "extended_scope",
+          "status": "resolved",
+          "usage": {
+            "model_turns": 3,
+            "http_attempts": 3,
+            "tool_calls": 1
+          }
+        },
+        {
+          "run_id": "422748c81f51424d9bc95a2bb0baf9ea",
+          "case": "required_conflict",
+          "status": "needs_info",
+          "usage": {
+            "model_turns": 4,
+            "http_attempts": 4,
+            "tool_calls": 3
+          }
+        }
+      ]
+    }
+  ]
+}

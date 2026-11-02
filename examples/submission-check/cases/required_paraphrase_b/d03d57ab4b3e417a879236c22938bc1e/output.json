@@ -1,0 +1,43 @@
+{
+  "mock_scenario": null,
+  "run_id": "d03d57ab4b3e417a879236c22938bc1e",
+  "mode": "real",
+  "stage": "tool_integration",
+  "requested_retrieval": "hybrid",
+  "result_origin": "model",
+  "termination_reason": "completed",
+  "result": {
+    "citations": [
+      {
+        "evidence_id": "d03d57ab4b3e417a879236c22938bc1e:E1",
+        "doc_id": "D01",
+        "quote": "## 二、提交期限\n\n1. 国内差旅报销须在行程结束后 30 天内提交。\n2. 报销申请的处理状态与上述提交期限分别记录。\n\n"
+      }
+    ],
+    "answer": "按国内差旅报销规定，国内差旅报销须在行程结束后 30 天内提交。报销申请的处理状态与该提交期限分别记录。",
+    "gaps": [],
+    "clarification": null,
+    "status": "resolved",
+    "decision_summary": "D01 明确规定国内差旅报销须在行程结束后 30 天内提交，足以直接回答期限问题。",
+    "answer_parts": [
+      {
+        "text": "按国内差旅报销规定，国内差旅报销须在行程结束后 30 天内提交。报销申请的处理状态与该提交期限分别记录。",
+        "citation_numbers": [
+          1
+        ]
+      }
+    ]
+  },
+  "session_id": "133a0d54b4b947b99e569e745d372b14",
+  "turn_id": 1,
+  "previous_run_id": null,
+  "usage": {
+    "model_turns": 3,
+    "http_attempts": 3,
+    "tool_calls": 1
+  },
+  "export": {
+    "format": "compact-v1",
+    "raw_output_sha256": "fd2b1d86136758135f11fbc3aa81a3264ad1b436f5ff44db05dda843d23bf349"
+  }
+}

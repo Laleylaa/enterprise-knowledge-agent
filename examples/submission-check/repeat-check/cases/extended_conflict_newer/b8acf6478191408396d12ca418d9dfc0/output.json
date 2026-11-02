@@ -1,0 +1,51 @@
+{
+  "mock_scenario": null,
+  "run_id": "b8acf6478191408396d12ca418d9dfc0",
+  "mode": "real",
+  "stage": "tool_integration",
+  "requested_retrieval": "hybrid",
+  "result_origin": "model",
+  "termination_reason": "completed",
+  "result": {
+    "citations": [
+      {
+        "evidence_id": "b8acf6478191408396d12ca418d9dfc0:E1",
+        "doc_id": "D01",
+        "quote": "## 提交期限\n\n差旅报销须在行程结束后 30 天内提交。\n"
+      },
+      {
+        "evidence_id": "b8acf6478191408396d12ca418d9dfc0:E2",
+        "doc_id": "D02",
+        "quote": "## 提交期限\n\n差旅报销须在行程结束后 15 天内提交。\n"
+      }
+    ],
+    "answer": "现有两份《差旅报销规定》对提交期限规定不一致：D01（版本日期 2026-01-01）规定，差旅报销须在行程结束后 30 天内提交；D02（版本日期 2026-02-01）规定，差旅报销须在行程结束后 15 天内提交。",
+    "gaps": [
+      "两份差旅报销规定的提交期限不同（30 天与 15 天），尚缺适用于本人情形的制度依据"
+    ],
+    "clarification": "你办理的差旅报销适用哪一份规定（D01 还是 D02），或是否有可核实的文件线索？",
+    "status": "needs_info",
+    "decision_summary": "已取得两份差旅报销规定的提交期限原文，但两者期限不同且缺适用关系，需用户提供适用制度线索。",
+    "answer_parts": [
+      {
+        "text": "现有两份《差旅报销规定》对提交期限规定不一致：D01（版本日期 2026-01-01）规定，差旅报销须在行程结束后 30 天内提交；D02（版本日期 2026-02-01）规定，差旅报销须在行程结束后 15 天内提交。",
+        "citation_numbers": [
+          1,
+          2
+        ]
+      }
+    ]
+  },
+  "session_id": "7a714f5f2e984f3f89d37e62f719e9a4",
+  "turn_id": 1,
+  "previous_run_id": null,
+  "usage": {
+    "model_turns": 4,
+    "http_attempts": 4,
+    "tool_calls": 3
+  },
+  "export": {
+    "format": "compact-v1",
+    "raw_output_sha256": "f4f6dea1bb1c9aba04ae8e464a624f7927c73a5bb1adb819ceb650ee85b4486b"
+  }
+}

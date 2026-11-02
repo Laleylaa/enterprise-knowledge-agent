@@ -1,1 +1,0 @@
-{"scope": "formal_offline_cli", "live_model": false, "model_origin": "production_script", "scenario": "budget", "test_id": "tests/e2e/offline/test_mock.py::test_formal_offline_scenarios[budget-F1_single_rule-incomplete]", "network_blocked": true, "credentials_present": false, "tokenizer_cache_present": false, "retrieval": "bm25"}

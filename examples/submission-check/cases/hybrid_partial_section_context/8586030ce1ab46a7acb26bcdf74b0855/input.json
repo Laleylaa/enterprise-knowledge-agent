@@ -1,0 +1,44 @@
+{
+  "format": "compact-v1",
+  "question": "我是海外差旅，看到报销说明里写行程结束后30天内提交，这条也适用于我吗？",
+  "session_id": "4839f476cfd745b79e3abde67821592d",
+  "turn_id": 1,
+  "history": [],
+  "settings": {
+    "mode": "real",
+    "model_name": "deepseek-flash",
+    "retrieval_mode": "hybrid",
+    "thinking": false,
+    "max_model_turns": 10,
+    "max_tool_calls": 16,
+    "max_http_attempts": 20,
+    "model_timeout": 30.0,
+    "tool_timeout": 10.0,
+    "turn_timeout": 120.0,
+    "fixture": "R1_section_context"
+  },
+  "corpus": "../../../corpora/0968165fa3e194faf8e15dcb2767c2c4f0167ed0677516d2648f50fcc00ea074.json",
+  "fault_injection": {
+    "origin": "test_only",
+    "mode": "always",
+    "targets": [
+      "search_knowledge"
+    ],
+    "executions": 1,
+    "injections": [
+      {
+        "tool": "search_knowledge",
+        "tool_call_id": "call_00_eVpp0LMNhMBmNt2Hv6WI1676",
+        "branch": "vector",
+        "injection": "test_embedding_timeout",
+        "execution_number": 1
+      }
+    ],
+    "visible_to_model": "only_actual_tool_error"
+  },
+  "test": {
+    "scope": "business_cli",
+    "live_model": true,
+    "model_origin": "live_provider"
+  }
+}

@@ -1,2 +1,0 @@
-{"tool": "search_knowledge", "tool_call_id": "call_00_dZVfZSlnIwdEnEqMvvsI1183", "arguments": {"query": "海外差旅 报销 行程结束后30天内提交", "purpose": "核实海外差旅报销提交时限的规定及适用范围", "doc_ids": null, "limit": 5, "cursor": null}}
-{"tool": "search_knowledge", "tool_call_id": "call_00_2LXVcAIX0aKcBgdNrLmF7652", "arguments": {"query": "海外差旅报销 提交期限 规定", "purpose": "查找海外差旅提交期限的相应制度", "doc_ids": null, "limit": 5, "cursor": null}}

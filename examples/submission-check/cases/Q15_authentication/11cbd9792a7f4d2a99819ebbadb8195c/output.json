@@ -1,0 +1,32 @@
+{
+  "mock_scenario": null,
+  "run_id": "11cbd9792a7f4d2a99819ebbadb8195c",
+  "mode": "real",
+  "stage": "tool_integration",
+  "requested_retrieval": "bm25",
+  "result_origin": "runtime_fallback",
+  "termination_reason": "model_request_failed",
+  "result": {
+    "citations": [],
+    "answer": "模型请求失败且无法继续；请检查服务、凭证或网络。",
+    "gaps": [
+      "当前问题的回答或查证尚未完成。"
+    ],
+    "clarification": null,
+    "status": "incomplete",
+    "decision_summary": "程序记录执行中断事实，未生成后续模型决策。",
+    "answer_parts": []
+  },
+  "session_id": "4d60a4bed617427ea68480194007632f",
+  "turn_id": 1,
+  "previous_run_id": null,
+  "usage": {
+    "model_turns": 1,
+    "http_attempts": 1,
+    "tool_calls": 0
+  },
+  "export": {
+    "format": "compact-v1",
+    "raw_output_sha256": "b22e8f3f4406e28e16990bf7f8bd5da5be2ef0cf63ad6d514da32b30bc01a0cc"
+  }
+}

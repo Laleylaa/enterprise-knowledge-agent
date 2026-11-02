@@ -1,0 +1,26 @@
+{
+  "format": "compact-v1",
+  "question": "我是国内差旅，预置 D03 据说说明了 D01 与 D02 的适用范围，请查证报销期限。",
+  "session_id": "41db24af9d3442179a735dac159df9ec",
+  "turn_id": 1,
+  "history": [],
+  "settings": {
+    "mode": "real",
+    "model_name": "deepseek-flash",
+    "retrieval_mode": "hybrid",
+    "thinking": false,
+    "max_model_turns": 10,
+    "max_tool_calls": 16,
+    "max_http_attempts": 20,
+    "model_timeout": 30.0,
+    "tool_timeout": 10.0,
+    "turn_timeout": 120.0,
+    "fixture": "F4_scope_evidence"
+  },
+  "corpus": "../../../corpora/5a2a251258494acd278aa19536b8f2640b3bf71010b27ffa9426bb708bb63e97.json",
+  "test": {
+    "scope": "business_cli",
+    "live_model": true,
+    "model_origin": "live_provider"
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "format": "compact-v1",
+  "question": "国内差旅报销有什么要求？",
+  "session_id": "3cc4239fb56640c09d661324b1b2e840",
+  "turn_id": 1,
+  "history": [],
+  "settings": {
+    "mode": "real",
+    "model_name": "deepseek-flash",
+    "retrieval_mode": "hybrid",
+    "thinking": false,
+    "max_model_turns": 10,
+    "max_tool_calls": 16,
+    "max_http_attempts": 20,
+    "model_timeout": 30.0,
+    "tool_timeout": 10.0,
+    "turn_timeout": 120.0,
+    "fixture": "F1_single_rule"
+  },
+  "corpus": "../../../corpora/f394b4f46fa10eee64669ba4e12609203c91854b21036f3b2524e24bfe27b7f0.json",
+  "test": {
+    "scope": "chat_cli_e2e",
+    "live_model": true,
+    "model_origin": "live_provider"
+  }
+}

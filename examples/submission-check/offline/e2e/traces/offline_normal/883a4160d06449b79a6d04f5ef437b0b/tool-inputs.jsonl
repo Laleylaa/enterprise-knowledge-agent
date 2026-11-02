@@ -1,1 +1,0 @@
-{"tool": "search_knowledge", "tool_call_id": "offline-1", "arguments": {"query": "差旅 报销 期限", "purpose": "离线脚本：实际检索期限条款", "doc_ids": null, "limit": 5, "cursor": null}}

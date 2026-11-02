@@ -1,3 +1,0 @@
-{"tool": "read_document", "tool_call_id": "call_00_gCniT8lilE9C0hsdaSpX1428", "arguments": {"doc_id": "D01", "purpose": "读取 D01 全文以核实国内差旅报销期限条款", "section_id": null, "chunk_id": null, "cursor": null}}
-{"tool": "read_document", "tool_call_id": "call_00_MtslcXccW0KCNkhFYnhS3992", "arguments": {"doc_id": "D01", "purpose": "重试读取 D01 全文，取得国内差旅报销期限原文", "section_id": null, "chunk_id": null, "cursor": null}}
-{"tool": "search_knowledge", "tool_call_id": "call_00_zuAJOCLBlwRnbvBwAYut2716", "arguments": {"query": "国内差旅报销期限", "purpose": "全文读取失败，改用检索取得国内差旅报销期限相关原文", "doc_ids": ["D01"], "limit": 10, "cursor": null}}

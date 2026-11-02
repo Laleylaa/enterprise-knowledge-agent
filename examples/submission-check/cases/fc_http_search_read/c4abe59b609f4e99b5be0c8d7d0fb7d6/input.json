@@ -1,0 +1,23 @@
+{
+  "format": "compact-v1",
+  "question": "请查询差旅报销相关制度原文。",
+  "history": [],
+  "settings": {
+    "mode": "real",
+    "model_name": "deepseek-flash",
+    "retrieval_mode": "bm25",
+    "thinking": false,
+    "max_model_turns": 10,
+    "max_tool_calls": 16,
+    "max_http_attempts": 20,
+    "model_timeout": 30.0,
+    "tool_timeout": 10.0,
+    "turn_timeout": 120.0,
+    "fixture": "R1_section_context"
+  },
+  "corpus": "../../../corpora/0968165fa3e194faf8e15dcb2767c2c4f0167ed0677516d2648f50fcc00ea074.json",
+  "test": {
+    "live_model": false,
+    "model_origin": "local_http_injection"
+  }
+}

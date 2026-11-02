@@ -1,1 +1,0 @@
-{"tool": "read_document", "tool_call_id": "offline-1", "arguments": {"doc_id": "D01", "purpose": "离线脚本：实际读取指定原文", "section_id": null, "chunk_id": null, "cursor": null}}

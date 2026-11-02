@@ -1,0 +1,3 @@
+{"event": "evidence_index", "items": []}
+{"sequence": 4, "event": "model_request_failed", "model_turn": 1, "origin": "runtime", "data": {"model_turn": 1, "attempt": 1, "error_type": "ModelAuthenticationError", "status_code": 401, "retryable": false}}
+{"sequence": 5, "event": "final_result", "origin": "runtime", "data": {"status": "incomplete", "termination_reason": "model_request_failed", "result_origin": "runtime_fallback"}}

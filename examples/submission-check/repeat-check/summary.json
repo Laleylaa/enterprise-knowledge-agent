@@ -1,0 +1,14 @@
+{
+  "format": "compact-v1",
+  "total": 12,
+  "passed": 12,
+  "failed": 0,
+  "errors": 0,
+  "skipped": 0,
+  "run_records": 15,
+  "live_outputs": 15,
+  "live_citations": 30,
+  "semantic_review": "not_automatically_assessed",
+  "results": "results.xml",
+  "runs": "cases.md"
+}

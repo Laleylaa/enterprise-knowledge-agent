@@ -1,0 +1,56 @@
+{
+  "format": "compact-v1",
+  "question": "国内差旅报销期限多久？",
+  "session_id": "8634ddf001a443b787fe04ec42237d10",
+  "turn_id": 1,
+  "history": [],
+  "settings": {
+    "mode": "real",
+    "model_name": "deepseek-flash",
+    "retrieval_mode": "hybrid",
+    "thinking": false,
+    "max_model_turns": 10,
+    "max_tool_calls": 16,
+    "max_http_attempts": 20,
+    "model_timeout": 30.0,
+    "tool_timeout": 10.0,
+    "turn_timeout": 120.0,
+    "fixture": "F1_single_rule"
+  },
+  "corpus": "../../../corpora/f394b4f46fa10eee64669ba4e12609203c91854b21036f3b2524e24bfe27b7f0.json",
+  "fault_injection": {
+    "origin": "test_only",
+    "mode": "always",
+    "targets": [
+      "search_knowledge",
+      "read_document"
+    ],
+    "executions": 3,
+    "injections": [
+      {
+        "tool": "search_knowledge",
+        "tool_call_id": "call_00_3iAv2PSOXzZhJ7n6g0373937",
+        "execution_number": 1,
+        "injection": "test_backend_oserror"
+      },
+      {
+        "tool": "search_knowledge",
+        "tool_call_id": "call_00_UyVkNx8vK3vuym6Cb3GH3686",
+        "execution_number": 2,
+        "injection": "test_backend_oserror"
+      },
+      {
+        "tool": "search_knowledge",
+        "tool_call_id": "call_00_ivifMDcH6K9h6DKqOdQs5934",
+        "execution_number": 3,
+        "injection": "test_backend_oserror"
+      }
+    ],
+    "visible_to_model": "only_actual_tool_error"
+  },
+  "test": {
+    "scope": "business_cli",
+    "live_model": true,
+    "model_origin": "live_provider"
+  }
+}

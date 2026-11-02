@@ -1,0 +1,37 @@
+{
+  "mock_scenario": null,
+  "run_id": "1ebc736fbc164c0fbb5a9ed9389762b3",
+  "mode": "real",
+  "stage": "tool_integration",
+  "requested_retrieval": "hybrid",
+  "result_origin": "model",
+  "termination_reason": "completed",
+  "result": {
+    "citations": [],
+    "answer": "您好，目前还不清楚您指的是哪项费用或哪种情形，无法判断能否报销。请说明具体要报销的事项和相关场景。",
+    "gaps": [
+      "尚不清楚所指的报销事项和具体场景"
+    ],
+    "clarification": "请说明您要报销的具体事项（如费用类型）和发生场景，以便核实对应制度。",
+    "status": "needs_info",
+    "decision_summary": "原始问题对象不明，未指出具体费用或场景，先追问报销对象。",
+    "answer_parts": [
+      {
+        "text": "您好，目前还不清楚您指的是哪项费用或哪种情形，无法判断能否报销。请说明具体要报销的事项和相关场景。",
+        "citation_numbers": []
+      }
+    ]
+  },
+  "session_id": "7546cd90cbef4619a9f8ca06287953aa",
+  "turn_id": 1,
+  "previous_run_id": null,
+  "usage": {
+    "model_turns": 2,
+    "http_attempts": 2,
+    "tool_calls": 0
+  },
+  "export": {
+    "format": "compact-v1",
+    "raw_output_sha256": "a03c992e0dbc7d360f92eddbe921da4e91be4f28180b45f9072fb2d7f17884b3"
+  }
+}

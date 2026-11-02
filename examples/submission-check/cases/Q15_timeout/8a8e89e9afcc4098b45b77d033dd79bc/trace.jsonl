@@ -1,0 +1,5 @@
+{"event": "evidence_index", "items": []}
+{"sequence": 4, "event": "model_request_failed", "model_turn": 1, "origin": "runtime", "data": {"model_turn": 1, "attempt": 1, "error_type": "ModelTimeoutError", "status_code": null, "retryable": true}}
+{"sequence": 5, "event": "model_request_retry", "model_turn": 1, "origin": "runtime", "data": {"model_turn": 1}}
+{"sequence": 7, "event": "model_request_failed", "model_turn": 1, "origin": "runtime", "data": {"model_turn": 1, "attempt": 2, "error_type": "ModelTimeoutError", "status_code": null, "retryable": true}}
+{"sequence": 8, "event": "final_result", "origin": "runtime", "data": {"status": "incomplete", "termination_reason": "model_request_failed", "result_origin": "runtime_fallback"}}

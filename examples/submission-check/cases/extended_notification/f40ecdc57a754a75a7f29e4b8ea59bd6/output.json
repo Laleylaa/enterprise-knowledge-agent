@@ -1,0 +1,51 @@
+{
+  "mock_scenario": null,
+  "run_id": "f40ecdc57a754a75a7f29e4b8ea59bd6",
+  "mode": "real",
+  "stage": "tool_integration",
+  "requested_retrieval": "hybrid",
+  "result_origin": "model",
+  "termination_reason": "completed",
+  "result": {
+    "citations": [
+      {
+        "evidence_id": "f40ecdc57a754a75a7f29e4b8ea59bd6:E1",
+        "doc_id": "D01",
+        "quote": "## 提交期限\n\n差旅报销须在行程结束后 30 天内提交。\n"
+      },
+      {
+        "evidence_id": "f40ecdc57a754a75a7f29e4b8ea59bd6:E2",
+        "doc_id": "D02",
+        "quote": "## 提交期限\n\n差旅报销须在行程结束后 15 天内提交。\n"
+      }
+    ],
+    "answer": "两份现行资料的版本日期均为 2026-01-01，对差旅报销提交期限的规定不一致：D01《差旅报销规定》要求差旅报销须在行程结束后 30 天内提交；D02《差旅报销规定》要求须在行程结束后 15 天内提交。您已说明没有更多可核实的线索，以上冲突在本轮无法依原文确定应适用哪一份。",
+    "gaps": [
+      "两份资料对差旅报销提交期限的规定分别为 30 天与 15 天，缺少可确定应适用哪一份的规定或线索"
+    ],
+    "clarification": null,
+    "status": "unresolved",
+    "decision_summary": "两份同版本日期的差旅报销规定对提交期限规定不一致，用户已表示无更多核实线索，冲突未解，本轮保留有据的期限条款并说明未取得可确定适用关系的依据。",
+    "answer_parts": [
+      {
+        "text": "两份现行资料的版本日期均为 2026-01-01，对差旅报销提交期限的规定不一致：D01《差旅报销规定》要求差旅报销须在行程结束后 30 天内提交；D02《差旅报销规定》要求须在行程结束后 15 天内提交。您已说明没有更多可核实的线索，以上冲突在本轮无法依原文确定应适用哪一份。",
+        "citation_numbers": [
+          1,
+          2
+        ]
+      }
+    ]
+  },
+  "session_id": "90a5743ad892423da83a6a88112d7e54",
+  "turn_id": 2,
+  "previous_run_id": "12521a6ce0244e97858b142465a789de",
+  "usage": {
+    "model_turns": 3,
+    "http_attempts": 3,
+    "tool_calls": 2
+  },
+  "export": {
+    "format": "compact-v1",
+    "raw_output_sha256": "b90cd073c86a8323535e3eab4f9456f1d9861c761da2b53912d48407224ffe15"
+  }
+}

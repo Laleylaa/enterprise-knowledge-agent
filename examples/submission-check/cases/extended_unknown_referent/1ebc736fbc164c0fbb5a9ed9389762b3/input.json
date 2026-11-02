@@ -1,0 +1,26 @@
+{
+  "format": "compact-v1",
+  "question": "这个能报销吗？",
+  "session_id": "7546cd90cbef4619a9f8ca06287953aa",
+  "turn_id": 1,
+  "history": [],
+  "settings": {
+    "mode": "real",
+    "model_name": "deepseek-flash",
+    "retrieval_mode": "hybrid",
+    "thinking": false,
+    "max_model_turns": 10,
+    "max_tool_calls": 16,
+    "max_http_attempts": 20,
+    "model_timeout": 30.0,
+    "tool_timeout": 10.0,
+    "turn_timeout": 120.0,
+    "fixture": "F5_leave_and_scope"
+  },
+  "corpus": "../../../corpora/44f26d29f4ce84fe3ac83f6f93d2da4fa0b468b3b225d7e136e8d60188994ab2.json",
+  "test": {
+    "scope": "business_cli",
+    "live_model": true,
+    "model_origin": "live_provider"
+  }
+}

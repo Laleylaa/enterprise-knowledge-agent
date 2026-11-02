@@ -1,0 +1,54 @@
+{
+  "mock_scenario": null,
+  "run_id": "41afd461eb9e446bac0657c858a6ad57",
+  "mode": "real",
+  "stage": "tool_integration",
+  "requested_retrieval": "hybrid",
+  "result_origin": "model",
+  "termination_reason": "completed",
+  "result": {
+    "citations": [
+      {
+        "evidence_id": "41afd461eb9e446bac0657c858a6ad57:E1",
+        "doc_id": "D03",
+        "quote": "## 适用关系\n\nD01 适用于国内差旅，D02 适用于海外差旅。\n"
+      },
+      {
+        "evidence_id": "41afd461eb9e446bac0657c858a6ad57:E5",
+        "doc_id": "D01",
+        "quote": "## 提交期限\n\n差旅报销须在行程结束后 30 天内提交。\n"
+      }
+    ],
+    "answer": "D03《差旅制度适用范围说明》载明：D01 适用于国内差旅，D02 适用于海外差旅。您是国内差旅，适用 D01。\n\nD01 的提交期限规定为：差旅报销须在行程结束后 30 天内提交。",
+    "gaps": [],
+    "clarification": null,
+    "status": "resolved",
+    "decision_summary": "D03 明确 D01 适用于国内差旅，D01 原文载明提交期限为行程结束后 30 天内，已据原文回答。",
+    "answer_parts": [
+      {
+        "text": "D03《差旅制度适用范围说明》载明：D01 适用于国内差旅，D02 适用于海外差旅。您是国内差旅，适用 D01。",
+        "citation_numbers": [
+          1
+        ]
+      },
+      {
+        "text": "D01 的提交期限规定为：差旅报销须在行程结束后 30 天内提交。",
+        "citation_numbers": [
+          2
+        ]
+      }
+    ]
+  },
+  "session_id": "41db24af9d3442179a735dac159df9ec",
+  "turn_id": 1,
+  "previous_run_id": null,
+  "usage": {
+    "model_turns": 4,
+    "http_attempts": 4,
+    "tool_calls": 3
+  },
+  "export": {
+    "format": "compact-v1",
+    "raw_output_sha256": "71d6c5cd86e76424c3dcf85d0f555af73a498b185486c2e072d16fff05e632f3"
+  }
+}

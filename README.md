@@ -56,7 +56,7 @@ PYTHONPATH=src python -m knowledge_agent chat --mode real \
 
 以上真实入口使用独立的[业务知识库](data/knowledge_base/README.md)（8份合成制度与FAQ：差旅、凭证与补交、请假、设备借用、账号权限）。专项验收仍使用固定 fixtures，Mock仍使用对应脚本资料；原有真实运行记录不代表扩充后资料的新一轮验收；新增专项验证保存在local_validation。
 
-去掉 `--question` 进入连续对话，`/exit` 退出。`--history` 可显式导入 `{"schema_version":1,"messages":[{"role":"user","content":"此前的问题"},{"role":"assistant","content":"此前的回答"}]}` 文件。历史只帮助理解指代，制度结论每轮重新取证。
+去掉 `--question` 进入连续对话，`/exit` 退出。`--history` 可显式导入 `{"schema_version":1,"messages":[{"role":"user","content":"此前的问题"},{"role":"assistant","content":"此前的回答"}]}` 文件。历史用于理解指代；同一会话内已取得的原文经资料版本核验后可复用，资料变化或依据不足时重新取证。导入历史不恢复原文证据。
 
 默认文本展示仅含任务状态、回答（含必要追问）、引用及资料缺口；引用保留文档ID、版本日期与原文。离线Mock在任务状态旁注明流程验证边界。内部结束原因、证据ID、字符位置、工具执行与检索降级信息保留在 `--format json` 的结果或输出目录的Trace中，不逐项打印到问答终端。
 
@@ -69,7 +69,7 @@ hybrid某一分支失败时保留有效分支原文，Trace记录partial和具�
 ## 测试与交付边界
 
 ```sh
-# 默认不调用真实模型：17项基础检查 + 7项Mock，18项live跳过
+# 默认不调用真实模型：24项基础检查 + 7项Mock，18项live跳过
 python -m pytest tests -q
 # 只收集真实业务，不执行模型
 PYTHONPATH=src python -m knowledge_agent evaluate --mode real --collect-only --output-dir runtime/evaluation/collect
@@ -89,19 +89,24 @@ tests/
    contracts/           少量基础模块、工具与连接检查
    support/             提交版共用辅助代码
 examples/
-   submission-check/    最近完整验收：真实、Mock、基础检查及问题原件
-   source-id-boundary/  内部ID修订后，现有上下文测试的定向复测
+   submission-check/    精简验收包：测试结果、每轮输入/输出/Trace、共用资料
 docs/                   需求、设计、评估、AI使用、复盘
 local_validation/       Git忽略：完整开发回归与历史证据
 ```
 
-`tests/`、`examples/` 已解除整体忽略，提交版不依赖 `local_validation/`。后续临时运行建议写入runtime，避免混入提交证据。各批次含输入、输出、原始Trace、JUnit及独立语义核对；不把自动通过或Mock脚本当成语义验收。
+`tests/`、`examples/` 已解除整体忽略，提交版不依赖 `local_validation/`。后续临时运行建议写入runtime，避免混入提交证据。提交包含输入、实际输出、精简Trace、共用资料和JUnit结果；不把自动通过或Mock脚本当成语义验收。
 
-最新定向修订：明确内部来源ID只能填入source_ids，正文、缺口、追问不得出现内部ID；只复跑现有上下文测试，1/1通过，两轮实际输出和终端展示均未复现，见[定向报告](examples/source-id-boundary/README.md)。没有新增测试或运行时输出替换，修改后未全量重跑。
+当前代码完整重跑49项测试：49项通过、0失败、0错误、0跳过。基础24项、Mock7项、必验真实业务6项及扩展真实业务12项全部通过。本批23轮真实输出及28条引用已进行AI辅助阅读，见[完整报告](examples/submission-check/README.md)、[全部运行记录](examples/submission-check/cases.md)。4个冲突与适用关系用例另各固定复测3次，12次全部通过，见[定向复测](examples/submission-check/repeat-check/README.md)。取证阶段以conflict报告未解冲突，回复阶段独立判断最终状态；测试预期、实际结果与已知限制见[评估](docs/03-evaluation.md)。
 
-此前完整重跑42项全部通过、0跳过，23轮输出与27条引用已审核，其中发现上述正文内部ID问题；原始记录保留。见[完整报告](examples/submission-check/README.md)、[题目逐项对照](examples/submission-check/requirements-checklist.md)。个人记录与最终提交信息仍待补齐。
+通知追问保留跨轮原文及双方引用，返回冲突未解，详见[评估](docs/03-evaluation.md)。
 
-更早的全量批次、中间复测、历史失败和本地探索统一归档至local_validation；examples只保留上述两组准备提交的证据，不依赖本地历史文件。“口头/通知形式”经用户复核接受，不计作错误。
+`pytest --examples-dir` 与 `evaluate` 共用精简导出逻辑。运行时完整日志用于测试和本地排查；每轮提交材料仅保留输入、实际输出及Trace，资料按版本共用。完整复跑及打包命令见[材料说明](examples/submission-check/README.md)。已有批次也可直接打包，不重新调用模型：
+
+```sh
+PYTHONPATH=src .venv/bin/python -m knowledge_agent.submission --source runtime/evaluation/new-batch --output examples/new-submission
+```
+
+examples保留当前版本的完整回归及定向复测精简包；历史批次与完整调试材料留在本地，评审入口不依赖本地文件。
 
 ## 提交信息与未完成项
 

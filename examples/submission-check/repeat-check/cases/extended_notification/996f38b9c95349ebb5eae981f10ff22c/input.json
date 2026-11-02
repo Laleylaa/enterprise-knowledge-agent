@@ -1,0 +1,36 @@
+{
+  "format": "compact-v1",
+  "question": "人事刚通知以 15 天为准，我没有更多可核实的线索",
+  "session_id": "b33dc97549e447deb1b46502bfa7ccf2",
+  "turn_id": 2,
+  "previous_run_id": "f1471657c26a4f5998bb909edcf5073e",
+  "history": [
+    {
+      "role": "user",
+      "content": "差旅报销期限多久？"
+    },
+    {
+      "role": "assistant",
+      "content": "任务状态：待补充信息\n\n回答：\n两份差旅报销规定对提交期限的规定不一致：D01 规定“差旅报销须在行程结束后 30 天内提交”；D02 规定“差旅报销须在行程结束后 15 天内提交”。[1][2]\n\n两个版本日期均为 2026-01-01，本轮未能确定应以哪一份为准，因此暂时无法给出唯一的期限答案。请告知你适用的是哪份规定（或所在单位适用哪个文件），以便确认。\n请补充：你适用的是哪份差旅报销规定（D01 的 30 天，还是 D02 的 15 天）？或有其他可核实适用文件的线索吗？\n\n引用：\n[1] D01｜版本日期：2026-01-01\n## 提交期限\n\n差旅报销须在行程结束后 30 天内提交。\n\n[2] D02｜版本日期：2026-01-01\n## 提交期限\n\n差旅报销须在行程结束后 15 天内提交。\n\n\n资料缺口：D01 与 D02 的提交期限分别为 30 天和 15 天，缺适用关系，无法确定应执行哪一份。"
+    }
+  ],
+  "settings": {
+    "mode": "real",
+    "model_name": "deepseek-flash",
+    "retrieval_mode": "hybrid",
+    "thinking": false,
+    "max_model_turns": 10,
+    "max_tool_calls": 16,
+    "max_http_attempts": 20,
+    "model_timeout": 30.0,
+    "tool_timeout": 10.0,
+    "turn_timeout": 120.0,
+    "fixture": "F2_conflicting_rules"
+  },
+  "corpus": "../../../corpora/dc44427ae96ce4dbd5ea27832a34f409a6464b7bb1dd6e8cffbd784ecc7f6829.json",
+  "test": {
+    "scope": "chat_cli_e2e",
+    "live_model": true,
+    "model_origin": "live_provider"
+  }
+}

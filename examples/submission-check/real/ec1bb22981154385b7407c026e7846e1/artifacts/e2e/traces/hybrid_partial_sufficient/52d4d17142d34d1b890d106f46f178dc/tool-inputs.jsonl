@@ -1,2 +1,0 @@
-{"tool": "search_knowledge", "tool_call_id": "call_00_SU2pTfZsPOIcE7Iqmq4v7130", "arguments": {"query": "国内差旅报销期限", "purpose": "查找国内差旅费用报销的时限规定", "doc_ids": null, "limit": 5, "cursor": null}}
-{"tool": "search_knowledge", "tool_call_id": "call_01_bn8WOCSSa1JFyXD9WlUn8051", "arguments": {"query": "差旅费报销 时限 起算 出差结束后 天内提交", "purpose": "查找报销期限的起算条件和天数", "doc_ids": null, "limit": 5, "cursor": null}}

@@ -1,0 +1,11 @@
+{"event": "evidence_index", "items": []}
+{"sequence": 4, "event": "model_actions", "model_turn": 1, "origin": "mock", "actions": [{"tool_name": "read_document", "tool_call_id": "offline-1", "args": {"doc_id": "D01", "purpose": "离线脚本：实际读取指定原文"}}]}
+{"sequence": 5, "event": "tool_requested", "model_turn": 1, "origin": "mock", "data": {"tool": "read_document", "tool_call_id": "offline-1"}}
+{"sequence": 7, "event": "offline_fault_injected", "origin": "mock", "data": {"mode": "always", "backend_attempts": 1, "last_tool": "read_document", "injected": true, "not_live_service_failure": true}}
+{"sequence": 9, "event": "tool_result", "origin": "runtime", "data": {"tool": "read_document", "tool_call_id": "offline-1", "status": "error", "returned_items": 0, "documents": [], "evidence_ids": [], "errors": [{"code": "READ_FAILED", "message": "本次原文读取失败，未能取得正文。", "retryable": true, "target": {"kind": "doc", "id": "D01"}}], "execution": {"strategy": "document", "requested_mode": null, "effective_branches": [], "next_cursor": null, "has_more": false, "return_limited": false}}}
+{"sequence": 11, "event": "model_actions", "model_turn": 2, "origin": "mock", "actions": [{"tool_name": "finish_research", "tool_call_id": "offline-2", "args": {"reason": "blocked", "decision_summary": "离线预设 tool_failure 脚本停止取证；不证明模型决策能力。"}}]}
+{"sequence": 12, "event": "research_complete", "origin": "runtime", "data": {"result": {"reason": "blocked", "decision_summary": "离线预设 tool_failure 脚本停止取证；不证明模型决策能力。"}}}
+{"sequence": 13, "event": "answer_started", "origin": "runtime", "data": {"round": 1, "source_count": 0, "allow_supplement": true, "source_mapping": []}}
+{"sequence": 15, "event": "model_actions", "model_turn": 3, "origin": "mock", "actions": [{"tool_name": "submit_answer", "tool_call_id": "offline-answer", "args": {"status": "incomplete", "decision_summary": "离线预设回答脚本依据程序交付原文，仅验证流程，不证明模型决策。"}}]}
+{"sequence": 16, "event": "answer_draft", "origin": "runtime", "data": {"status": "incomplete", "decision_summary": "离线预设回答脚本依据程序交付原文，仅验证流程，不证明模型决策。", "source_ids": [[]]}}
+{"sequence": 18, "event": "final_result", "origin": "runtime", "data": {"status": "incomplete", "termination_reason": "completed", "result_origin": "mock"}}

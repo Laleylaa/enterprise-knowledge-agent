@@ -1,3 +1,0 @@
-{"tool": "search_knowledge", "tool_call_id": "call_00_Q8F40cX7TpyENMKeaKYp8692", "arguments": {"query": "国内差旅报销要求", "purpose": "查找国内差旅费用报销的制度要求", "doc_ids": null, "limit": 5, "cursor": null}}
-{"tool": "search_knowledge", "tool_call_id": "call_01_KTOgc264vlWm33Xm7V1W2261", "arguments": {"query": "国内差旅 住宿费 交通费 标准 审批 报销凭证", "purpose": "补充查找差旅标准与报销凭证要求", "doc_ids": null, "limit": 5, "cursor": null}}
-{"tool": "read_document", "tool_call_id": "call_00_b8HwawKJ79lR5B4gwy078298", "arguments": {"doc_id": "D01", "purpose": "确认该文档是否还有其他关于国内差旅报销要求（标准、凭证等）的章节", "section_id": null, "chunk_id": null, "cursor": null}}
