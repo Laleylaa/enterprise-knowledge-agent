@@ -3,21 +3,51 @@
   "documents": [
     {
       "doc_id": "D01",
-      "title": "差旅报销规定 D01",
-      "version_date": "2026-01-01",
+      "title": "国内差旅报销规定",
+      "version_date": "2026-11-02",
       "source_path": "documents/D01.md"
     },
     {
       "doc_id": "D02",
-      "title": "差旅报销规定 D02",
-      "version_date": "2026-01-01",
+      "title": "海外差旅报销规定",
+      "version_date": "2026-11-02",
       "source_path": "documents/D02.md"
     },
     {
+      "doc_id": "D03",
+      "title": "差旅报销凭证要求",
+      "version_date": "2026-11-02",
+      "source_path": "documents/D03.md"
+    },
+    {
       "doc_id": "D04",
-      "title": "请假申请规定 D04",
-      "version_date": "2026-01-01",
+      "title": "请假申请规定",
+      "version_date": "2026-11-02",
       "source_path": "documents/D04.md"
+    },
+    {
+      "doc_id": "D05",
+      "title": "报销补充材料办理规则",
+      "version_date": "2026-11-02",
+      "source_path": "documents/D05.md"
+    },
+    {
+      "doc_id": "D06",
+      "title": "办公设备临时借用管理办法",
+      "version_date": "2026-10-01",
+      "source_path": "documents/D06.md"
+    },
+    {
+      "doc_id": "D07",
+      "title": "办公设备临时借用常见问题",
+      "version_date": "2026-10-01",
+      "source_path": "documents/D07.md"
+    },
+    {
+      "doc_id": "D08",
+      "title": "企业账号与权限申请指南",
+      "version_date": "2026-11-02",
+      "source_path": "documents/D08.md"
     }
   ]
 }
