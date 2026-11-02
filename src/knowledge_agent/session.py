@@ -105,7 +105,7 @@ class ConversationSession:
         if result.run_id != self.active_run_id:
             raise RuntimeError("Result does not belong to active session turn")
         # Only final presented conversation text crosses turns, never raw tool/retry messages.
-        self.history.append(HistoryEntry(role="assistant", content=render_result(result, include_observed=False),
+        self.history.append(HistoryEntry(role="assistant", content=render_result(result),
                                          origin="session", run_id=result.run_id))
         self.previous_run_id = result.run_id
         self.active_run_id = None

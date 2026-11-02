@@ -28,10 +28,6 @@ def run_chat(settings, source, *, question: str | None = None, history_path: Pat
             return exc.result  # Present saved evidence, then leave the chat; never resume input.
 
     try:
-        if settings.mode == "mock" and settings.mock_scenario:
-            from knowledge_agent.offline_scenarios import QUESTIONS
-            print(f"离线预设脚本 {settings.mock_scenario}；仅验证流程，不证明模型决策能力。"
-                  f"固定输入：{QUESTIONS[settings.mock_scenario]}", file=sys.stderr)
         if history_path is not None:
             try:
                 session.history, imported = load_history(history_path, settings.max_input_chars)
@@ -70,7 +66,6 @@ def run_chat(settings, source, *, question: str | None = None, history_path: Pat
                            termination_reason=result.termination_reason)
             recorder.write("history.json", session.export())
             print(result.model_dump_json() if output_format == "json" else render_result(result))
-            print(f"运行材料：{settings.output_dir / settings.mode / result.run_id}", file=sys.stderr)
             if result.termination_reason == "user_cancelled":
                 reason = "user_cancelled"
                 return 130

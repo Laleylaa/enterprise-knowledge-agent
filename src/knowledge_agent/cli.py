@@ -98,7 +98,6 @@ def main(argv: list[str] | None = None) -> int:
             if settings.prepared_path is None:
                 raise ValueError("chat 需要 --corpus 与匹配的 --prepared，或在配置中设置正式资料路径。")
             with open_indexed_source(settings) as source:
-                show_retrieval_warnings(source)
                 return run_chat(settings, source, question=args.question, history_path=args.history,
                                 output_format=args.output_format)
         if settings.mode == "mock" and settings.prepared_path is not None:
