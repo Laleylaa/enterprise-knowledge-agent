@@ -4,7 +4,7 @@
 
 | 文件 | 对应原文 | 块数 |
 | --- | --- | --- |
-| [knowledge_base.json](knowledge_base.json) | [日常业务库](../knowledge_base/manifest.json) | 10 |
+| [knowledge_base.json](knowledge_base.json) | [日常业务库：8份文档](../knowledge_base/manifest.json) | 32 |
 | [F1_single_rule.json](F1_single_rule.json) | [F1](../fixtures/F1_single_rule/manifest.json) | 4 |
 | [F2_conflicting_rules.json](F2_conflicting_rules.json) | [F2](../fixtures/F2_conflicting_rules/manifest.json) | 4 |
 | [F2_newer_D02.json](F2_newer_D02.json) | [F2日期变体](../fixtures/F2_newer_D02/manifest.json) | 4 |
@@ -27,4 +27,4 @@ PYTHONPATH=src python -m knowledge_agent prepare --retrieval bm25 \
   --corpus data/fixtures/F1_single_rule/manifest.json --prepared data/prepared/F1_single_rule.json
 ```
 
-首次需要下载时，使用主README的 `prepare --retrieval hybrid --download`。本次仅新建业务库的派生块，原测试资料块不重建、不覆盖。
+首次需要下载时，使用主README的 `prepare --retrieval hybrid --download`。此次仅重建扩充后业务库的派生块，原测试资料块不重建、不覆盖。

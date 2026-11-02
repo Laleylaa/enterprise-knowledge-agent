@@ -18,7 +18,6 @@
       "internal_id_occurrences_in_user_visible_fields": [],
       "output": "cf4156e06e9840dd891440615f4d5ec6/artifacts/e2e/outputs/required_context/a45d1bc372ab41f5b48ab4d32cf041c1/output.json",
       "trace": "cf4156e06e9840dd891440615f4d5ec6/artifacts/e2e/traces/required_context/a45d1bc372ab41f5b48ab4d32cf041c1/trace.jsonl",
-      "terminal_preview": "terminal-turn-1.txt",
       "reading": "本次正文、缺口、追问和终端展示无内部定位ID；公开文档ID与引用正常，内容由原文支持。"
     },
     {
@@ -28,9 +27,9 @@
       "internal_id_occurrences_in_user_visible_fields": [],
       "output": "cf4156e06e9840dd891440615f4d5ec6/artifacts/e2e/outputs/required_context/7d2e990916f44a95a3373081cae590de/output.json",
       "trace": "cf4156e06e9840dd891440615f4d5ec6/artifacts/e2e/traces/required_context/7d2e990916f44a95a3373081cae590de/trace.jsonl",
-      "terminal_preview": "terminal-turn-2.txt",
       "reading": "本次正文、缺口、追问和终端展示无内部定位ID；公开文档ID与引用正常，内容由原文支持。"
     }
   ],
-  "limits": "修改后未全量重跑；一次通过不能证明长期不复现。先前42/42为本次修订前的完整批次，原失败输出保留。"
+  "limits": "修改后未全量重跑；一次通过不能证明长期不复现。先前42/42为本次修订前的完整批次，原失败输出保留。",
+  "terminal_preview_storage": "由原始JSON渲染的重复预览已归档至local_validation，仅原始输出和Trace作为提交材料；渲染审核结论不变。"
 }

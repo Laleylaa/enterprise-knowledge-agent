@@ -1,6 +1,6 @@
 # 企业知识问答 Agent
 
-面向员工制度问答的CLI项目。模型根据检索和原文读取结果决定继续查证、追问或结束，输出回答、文档ID与原文引用、资料缺口和任务状态。全部制度为合成资料。
+面向员工制度问答的CLI项目。取证Agent根据检索和原文读取结果动态补查或停止；独立回答阶段接收程序交付的原文，按段落选择证据ID。程序展开真实引用，输出自然语言回答、文档ID与原文、资料缺口和任务状态。全部制度为合成资料。
 
 **评审入口：** [需求](docs/01-requirements.md) → [设计](docs/02-solution.md) → [测试结果与覆盖](docs/03-evaluation.md) → [实际输入、输出和Trace](examples/README.md)。[AI使用记录](docs/04-ai-usage.md)与[复盘](docs/05-retrospective.md)单独维护。
 
@@ -54,9 +54,11 @@ PYTHONPATH=src python -m knowledge_agent chat --mode real \
   --question "国内差旅报销期限多久？" --format json --output-dir runtime/chat
 ```
 
-以上真实入口使用独立的[业务知识库](data/knowledge_base/README.md)（国内差旅、海外差旅、请假申请）。专项验收仍使用固定 fixtures，Mock仍使用对应脚本资料；已有真实运行记录不代表这套组合资料的新一轮验收。
+以上真实入口使用独立的[业务知识库](data/knowledge_base/README.md)（8份合成制度与FAQ：差旅、凭证与补交、请假、设备借用、账号权限）。专项验收仍使用固定 fixtures，Mock仍使用对应脚本资料；原有真实运行记录不代表扩充后资料的新一轮验收；新增专项验证保存在local_validation。
 
 去掉 `--question` 进入连续对话，`/exit` 退出。`--history` 可显式导入 `{"schema_version":1,"messages":[{"role":"user","content":"此前的问题"},{"role":"assistant","content":"此前的回答"}]}` 文件。历史只帮助理解指代，制度结论每轮重新取证。
+
+默认文本展示仅含任务状态、回答（含必要追问）、引用及资料缺口；引用保留文档ID、版本日期与原文。离线Mock在任务状态旁注明流程验证边界。内部结束原因、证据ID、字符位置、工具执行与检索降级信息保留在 `--format json` 的结果或输出目录的Trace中，不逐项打印到问答终端。
 
 真实模式默认hybrid，可显式 `--retrieval bm25` 或 `--retrieval vector`。配置优先级：CLI > 系统环境 > .env > 默认。`KA_RETRIEVAL_MODE` 属于显式配置。Mock若继承vector/hybrid配置会在启动前报错，可用 `--retrieval bm25` 覆盖。
 
@@ -87,19 +89,23 @@ tests/
    contracts/           少量基础模块、工具与连接检查
    support/             提交版共用辅助代码
 examples/
-   real/                当前真实hybrid批次
-   mock/                当前Mock BM25批次
-   contracts/           基础检查及独立运行报告
-   history/             明确标注版本的历史失败说明
+   submission-check/    最近完整验收：真实、Mock、基础检查及问题原件
+   source-id-boundary/  内部ID修订后，现有上下文测试的定向复测
 docs/                   需求、设计、评估、AI使用、复盘
 local_validation/       Git忽略：完整开发回归与历史证据
 ```
 
 `tests/`、`examples/` 已解除整体忽略，提交版不依赖 `local_validation/`。后续临时运行建议写入runtime，避免混入提交证据。各批次含输入、输出、原始Trace、JUnit及独立语义核对；不把自动通过或Mock脚本当成语义验收。
 
+最新定向修订：明确内部来源ID只能填入source_ids，正文、缺口、追问不得出现内部ID；只复跑现有上下文测试，1/1通过，两轮实际输出和终端展示均未复现，见[定向报告](examples/source-id-boundary/README.md)。没有新增测试或运行时输出替换，修改后未全量重跑。
+
+此前完整重跑42项全部通过、0跳过，23轮输出与27条引用已审核，其中发现上述正文内部ID问题；原始记录保留。见[完整报告](examples/submission-check/README.md)、[题目逐项对照](examples/submission-check/requirements-checklist.md)。个人记录与最终提交信息仍待补齐。
+
+更早的全量批次、中间复测、历史失败和本地探索统一归档至local_validation；examples只保留上述两组准备提交的证据，不依赖本地历史文件。“口头/通知形式”经用户复核接受，不计作错误。
+
 ## 提交信息与未完成项
 
 - 所选题：企业知识问答 Agent；正式题号待本人确认。
-- GitHub URL、最终commit SHA、实际个人投入时长：待本人填写。本次整理未commit或push。
+- GitHub URL、最终commit SHA、实际个人投入时长：待本人填写。代码已分批本地commit，尚未push，最终SHA以完整提交收尾后为准。
 - 个人修改、学习收获需本人核实；AI辅助阅读不等于独立人工签署。
 - 当前结果与已知缺陷以[评估文档](docs/03-evaluation.md)为准，小型合成资料和有限样本不证明生产可靠性。
