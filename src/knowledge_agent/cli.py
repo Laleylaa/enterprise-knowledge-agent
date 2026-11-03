@@ -101,7 +101,7 @@ def main(argv: list[str] | None = None) -> int:
                 return run_chat(settings, source, question=args.question, history_path=args.history,
                                 output_format=args.output_format)
         if settings.mode == "mock" and settings.prepared_path is not None:
-            print("MOCK_SCENARIO_UNSUPPORTED：现有 CLI Mock 仅支持原冒烟资料；正式工具离线接入请运行 tool_calls 测试。", file=sys.stderr)
+            print("MOCK_SCENARIO_UNSUPPORTED：smoke 的 Mock 模式仅支持内置冒烟资料；使用正式检索与读取工具的离线场景，请按 README 运行 chat --mode mock --scenario normal 或 evaluate --mode mock。", file=sys.stderr)
             return 2
         if settings.mode == "mock" and args.question != SMOKE_QUESTION:
             print("MOCK_SCENARIO_UNSUPPORTED：当前仅支持文档中声明的固定冒烟问题。", file=sys.stderr)

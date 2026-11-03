@@ -20,7 +20,7 @@ class Settings(BaseSettings):
     deepseek_api_key: SecretStr | None = Field(default=None, validation_alias="DEEPSEEK_API_KEY")
     model_name: str = Field(default="deepseek-flash", min_length=1)
     base_url: str = "https://api.deepseek.com"
-    # This initial integration deliberately has no thinking-mode switch.
+    # Thinking mode is disabled for all model requests.
     thinking: Literal[False] = False
     corpus_path: Path = Path("data/smoke/manifest.json")
     prepared_path: Path | None = None

@@ -39,7 +39,6 @@ D01 与 D02 的适用范围不同；D06 与 D07 则未提供可消解冲突的�
 | [F1_single_rule](fixtures/F1_single_rule/manifest.json) | 国内 30 天及申请状态；没有凭证要求，用于明确答案、改写、上下文、部分回答及 Mock |
 | [F2_conflicting_rules](fixtures/F2_conflicting_rules/manifest.json) | 同日期的 30 天与 15 天规定，无适用关系，用于冲突及通知追问 |
 | [F2_newer_D02](fixtures/F2_newer_D02/manifest.json) | 仅将 D02 日期改晚，检查是否错误地按日期消解冲突 |
-| [F3_explicit_scope](fixtures/F3_explicit_scope/manifest.json) | 国内 30 天、海外 15 天的基础范围资料；当前提交版端到端测试未直接引用 |
 | [F4_scope_evidence](fixtures/F4_scope_evidence/manifest.json) | 在冲突资料中增加 D03，明确 D01 国内、D02 海外，检查跨文档查证 |
 | [F5_leave_and_scope](fixtures/F5_leave_and_scope/manifest.json) | 国内、海外与请假流程；未提供育儿假天数，用于资料不足、澄清和条件更正 |
 | [F6_replaced_rule](fixtures/F6_replaced_rule/manifest.json) | 将 F1 的 30 天改为 20 天，其余内容和日期不变，检查原文替换后的答案变化 |
