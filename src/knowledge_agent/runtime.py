@@ -1,4 +1,4 @@
-"""Single-turn coordination; reusable by CLI and later evaluation entry points."""
+"""Single-turn coordination shared by CLI and evaluation flows."""
 
 import asyncio
 import json
@@ -75,7 +75,7 @@ async def run_turn(
     question: str, settings: Settings, source: KnowledgeSource | IndexedCorpus,
     *, model_factory: ModelFactory | None = None, session: ConversationSession | None = None,
 ) -> RunResult:
-    """Run the framework loop with indexed tools or the explicit legacy smoke source."""
+    """Run the framework loop with indexed tools or the explicit fixed smoke source."""
     if settings.mode == "mock" and settings.mock_scenario:
         from knowledge_agent.offline_scenarios import validate_scenario_input
         validate_scenario_input(settings.mock_scenario, question)

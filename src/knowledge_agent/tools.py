@@ -68,7 +68,7 @@ def tool_error(ctx: RunContext[TurnContext], tool: str, code: str, message: str)
 
 
 async def search_knowledge(ctx: RunContext[TurnContext], query: NonEmpty, purpose: NonEmpty) -> dict:
-    """取得冒烟资料候选。仅返回本次小型合成资料全集；尚未实现关键词或向量排序。
+    """接入冒烟检查专用：返回本次小型合成资料全集；正式排序检索由 retrieval 模块提供。
 
     Args:
         query: 要查找的制度问题；冒烟资料源不会按此参数筛选。

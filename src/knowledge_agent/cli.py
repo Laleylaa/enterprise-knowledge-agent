@@ -25,7 +25,7 @@ def create_parser() -> argparse.ArgumentParser:
     common.add_argument("--mode", choices=["real", "mock"], default=None)
     common.add_argument("--corpus", dest="corpus_path", type=Path, default=None)
     common.add_argument("--prepared", dest="prepared_path", type=Path, default=None,
-                        help="使用正式检索／读取工具及该派生块；未指定时保留原冒烟资料源")
+                        help="使用正式检索／读取工具及该派生块；smoke 在生效配置中无派生块路径时使用固定冒烟资料源")
     common.add_argument("--output-dir", type=Path, default=None)
     common.add_argument("--retrieval", dest="retrieval_mode", choices=["bm25", "vector", "hybrid"], default=None,
                         help="真实模式默认 hybrid，可显式选择 bm25／vector；Mock 仅支持 bm25")
@@ -112,7 +112,7 @@ def main(argv: list[str] | None = None) -> int:
                 result = asyncio.run(run_turn(args.question, settings, source))
         else:
             if settings.retrieval_mode is not None:
-                raise ValueError("显式检索模式需要正式 --corpus／--prepared；原 smoke_fixture 不支持模式切换。")
+                raise ValueError("显式检索模式需要正式 --corpus／--prepared；smoke_fixture 是固定冒烟资料源，不提供检索模式切换。")
             source = FixtureCorpus.load(settings.corpus_path, settings.max_tool_chars)
             result = asyncio.run(run_turn(args.question, settings, source))
         print(result.model_dump_json(indent=2))

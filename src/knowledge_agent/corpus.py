@@ -1,4 +1,4 @@
-"""Immutable, tiny fixture store for integration; no ranked retrieval yet."""
+"""Immutable fixture store for smoke checks; ranked retrieval lives in retrieval/."""
 
 import hashlib
 import json
@@ -15,7 +15,7 @@ def fingerprint(value: str) -> str:
 
 
 class KnowledgeSource(Protocol):
-    """Small read-only boundary, to be extended by the retrieval phase."""
+    """Read-only source contract for fixed smoke fixtures."""
 
     corpus_hash: str
     strategy: str
@@ -39,11 +39,11 @@ class FixtureCorpus:
     def load(cls, path: Path, max_chars: int) -> "FixtureCorpus":
         documents = load_documents(path)
         if sum(len(d.body) for d in documents) > max_chars:
-            raise CorpusError("冒烟资料超过单次返回预算；此阶段不支持分页，请使用小型资料集。")
+            raise CorpusError("冒烟资料超过单次返回预算；冒烟入口一次返回完整资料，请使用小型资料集。")
         return cls(documents)
 
     def candidates(self) -> list[Document]:
-        """Return the entire small fixture; intentionally NOT a search algorithm."""
+        """Return the complete fixed fixture for smoke checks."""
         return [d.model_copy(deep=True) for d in self._documents.values()]
 
     def get(self, doc_id: str) -> Document | None:
