@@ -70,7 +70,7 @@ flowchart TD
 | CLI 与会话 | [cli.py](../src/knowledge_agent/cli.py)、[chat.py](../src/knowledge_agent/chat.py)、[session.py](../src/knowledge_agent/session.py) | 运行入口、历史导入、连续提问和会话生命周期 |
 | 取证与回复协调 | [runtime.py](../src/knowledge_agent/runtime.py)、[agent.py](../src/knowledge_agent/agent.py) | 建立上下文，配置取证循环与回复模块，控制阶段切换和补查 |
 | 模型接入 | [model_adapter.py](../src/knowledge_agent/model_adapter.py) | 模型请求、传输重试、上下文检查及请求记录 |
-| 检索与读取 | [retrieval](../src/knowledge_agent/retrieval/README.md)、[reading](../src/knowledge_agent/reading/README.md)、[tool_binding.py](../src/knowledge_agent/tool_binding.py) | 检索排序、原文读取、分页、工具注册和执行反馈 |
+| 检索与读取 | [检索工具](../src/knowledge_agent/retrieval/tool.py)、[读取工具](../src/knowledge_agent/reading/tool.py)、[tool_binding.py](../src/knowledge_agent/tool_binding.py) | 检索排序、原文读取、分页、工具注册和执行反馈 |
 | 证据与输出 | [evidence.py](../src/knowledge_agent/evidence.py)、[answering.py](../src/knowledge_agent/answering.py)、[schemas.py](../src/knowledge_agent/schemas.py) | 证据登记、原文交接、来源解析及输出结构 |
 | 执行控制 | [budgets.py](../src/knowledge_agent/budgets.py)、[execution_policy.py](../src/knowledge_agent/execution_policy.py)、[output_validation.py](../src/knowledge_agent/output_validation.py) | 调用额度、超时、工具执行和输出修正 |
 | 展示与记录 | [presentation.py](../src/knowledge_agent/presentation.py)、[trace.py](../src/knowledge_agent/trace.py) | 答案和引用排版，输入、输出及 Trace 保存 |
@@ -143,6 +143,22 @@ Markdown 保存制度正文，`manifest.json` 维护文档 ID、标题、版本�
 两个工具都接收 `purpose`，提示模型简述尚未回答的用户事项及必要原文缺口，或明确的读取请求。该字段记入Trace，不改变检索排序或读取内容；是否需要继续取证仍由模型判断。工具返回原文、定位、执行状态及错误。读取工具的 cursor 用于定位列表分页。定位用于后续查阅，原文片段用于回答依据。
 
 混合检索某一分支失败时保留有效分支结果，以 `partial`、`errors` 和 `effective_branches` 说明情况。模型据此判断已有原文是否足够，或是否需要其他取证动作。
+
+检索返回完整原文块；读取支持全文、章节或精确块，章节与块选择器互斥。超出返回预算时，读取工具返回 `CONTENT_TOO_LARGE` 与定位列表，定位本身不作为证据。分页游标绑定当前工具实例、资料快照和请求参数，不支持跨轮复用。缺失文档、无效参数和执行失败以明确错误反馈，工具不判断制度含义或优先级。
+
+两个工具也提供独立 CLI，便于核对检索结果和原文。安装依赖后，在仓库根目录执行以下命令，不调用问答模型：
+
+```sh
+PYTHONPATH=src python -m knowledge_agent.retrieval search --retrieval bm25 \
+  --corpus data/fixtures/F1_single_rule/manifest.json --prepared data/prepared/F1_single_rule.json \
+  --query "国内差旅报销期限" --output-dir runtime/search-tool
+
+PYTHONPATH=src python -m knowledge_agent.reading \
+  --corpus data/fixtures/F1_single_rule/manifest.json --prepared data/prepared/F1_single_rule.json \
+  --doc-id D01 --output-dir runtime/read-tool
+```
+
+独立工具材料保存在 `<输出目录>/<run_id>/`，记录 `model_calls=0`；正式 Agent 绑定时共享本轮证据集合与记录器。完整参数见各入口的 `--help`，资产准备见[运行说明](../README.md#准备本地检索资产)。
 
 ### 4.3 引用与结果生成
 

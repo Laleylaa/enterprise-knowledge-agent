@@ -89,6 +89,6 @@ def test_publish_preserves_failed_test_counts_and_resolvable_sources(raw_run, tm
     corpus = (inp.parent / json.loads(inp.read_text())['corpus']).resolve()
     assert corpus.is_relative_to(output) and corpus.is_file()
     assert json.loads(corpus.read_text())['documents'][0]['body'] == '提交期限30天。'
-    assert len(list(output.rglob('*.*'))) == 8  # Three run files, corpus and four batch files.
+    assert len(list(output.rglob('*.*'))) == 7  # Three run files, corpus and three batch files.
     with pytest.raises(ValueError):
         publish(source, output)

@@ -1,6 +1,6 @@
-# Single installation entry point: runtime, smoke tests and pinned transitive dependencies.
-# Verified offline smoke environment: Python 3.11.15 / macOS arm64.
-# One real API smoke passed; full contracts still await verification.
+# Single installation entry point: runtime, tests and pinned transitive dependencies.
+# Verified environment: Python 3.11.15 / macOS arm64.
+# Test scope, recorded results and limitations: docs/03-evaluation.md.
 
 # Direct runtime dependencies
 pydantic-ai-slim[openai]==2.64.0

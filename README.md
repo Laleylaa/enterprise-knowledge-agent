@@ -1,116 +1,225 @@
 # 企业知识问答 Agent
 
-面向员工制度问答的CLI项目。取证Agent根据检索和原文读取结果动态补查或停止；独立回答阶段接收程序交付的原文，按段落选择证据ID。程序展开真实引用，输出自然语言回答、文档ID与原文、资料缺口和任务状态。全部制度为合成资料。
+面向员工制度问答的本地 CLI 项目。模型根据文档检索与原文读取结果选择补查、结束取证或交由回复阶段追问，输出回答、文档 ID 与原文引用、资料缺口和任务状态。全部制度与 FAQ 均为合成资料。
 
-**评审入口：** [需求](docs/01-requirements.md) → [设计](docs/02-solution.md) → [测试结果与覆盖](docs/03-evaluation.md) → [实际输入、输出和Trace](examples/README.md)。[AI使用记录](docs/04-ai-usage.md)与[复盘](docs/05-retrospective.md)单独维护。
+项目采用一个取证 Agent 循环与独立回复模块，支持冲突查证、上下文追问、工具故障处理和有限执行。提供真实模型入口，以及无需密钥的离线 Mock 入口。
 
-## 安装
+## 评审入口
 
-Python 3.11（项目声明支持3.11～3.12），本地验证环境为macOS arm64。依赖集中固定在requirements.txt，PydanticAI负责标准工具调用循环。
+建议先查看评估与实际运行记录，再按下文完成离线运行；配置模型服务后可复跑真实业务验收。
+
+| 检查内容 | 材料入口 |
+| --- | --- |
+| 用户、范围与成功标准 | [需求文档](docs/01-requirements.md) |
+| 调用流程、动态决策、框架职责与技术取舍 | [技术方案](docs/02-solution.md) |
+| 六项必验的预期、实际结果及限制 | [测试与评估](docs/03-evaluation.md) |
+| 输入、实际输出、Trace 与资料快照 | [运行记录索引](examples/submission-check/cases.md) |
+| 模型根据工具结果调整动作的路径 | [动态决策验证](docs/03-evaluation.md#3-两阶段状态与动态决策验证) |
+| AI 辅助范围、个人贡献与验证 | [AI 使用说明](docs/04-ai-usage.md) |
+| 关键问题、实践收获与改进计划 | [项目复盘](docs/05-retrospective.md) |
+
+已保存的完整验收批次为 **49 项通过，0 失败、0 错误、0 跳过**：基础契约 24 项、离线 Mock 7 项、真实业务必验 6 项、真实业务扩展 12 项。另有 4 个冲突与适用关系用例各复测 3 次，共 12 次通过，单独计数。材料入口见[批次与索引](examples/README.md#批次与索引)。
+
+按评审目的选择运行入口：
+
+| 使用方式 | LLM 配置 | Embedding 配置 | 操作入口 |
+| --- | --- | --- | --- |
+| 离线 Mock | 无需密钥，使用固定脚本 | 无需模型资产，使用 BM25 | [离线运行](#离线运行) |
+| 真实问答，默认 hybrid 主线 | 配置模型服务与 API 密钥 | 准备本地 BGE 模型 | 按[真实模型运行](#真实模型运行)依次配置、准备和提问 |
+| 真实问答，仅 BM25 | 配置模型服务与 API 密钥 | 无需模型资产 | 完成模型服务配置后，使用 `--retrieval bm25` [运行问答](#单次问答与连续对话) |
+
+## 环境与安装
+
+- Python：项目声明支持 3.11～3.12，已验证环境为 **Python 3.11.15 / macOS arm64**。下列命令使用 macOS/Linux 的 shell；其他平台未作运行验证。
+- 依赖：统一安装 [requirements.txt](requirements.txt)，包括 PydanticAI 2.64.0、OpenAI SDK 3.42.0、检索组件及 pytest。框架承担的职责见技术方案。
+- 网络与模型资产：安装依赖需要网络；真实问答需要模型服务。hybrid/vector 首次使用还需下载本地 BGE 资产，推理使用 CPU，无需 GPU。
 
 ```sh
+git clone https://github.com/Laleylaa/enterprise-knowledge-agent.git
+cd enterprise-knowledge-agent
 python3.11 -m venv .venv
 source .venv/bin/activate
 python -m pip install -r requirements.txt
 ```
 
-以下命令从仓库根执行；无需先安装项目本身。可选 `python -m pip install -e .` 后使用 `knowledge-agent`。
+已有仓库时，从创建虚拟环境开始。后续命令均在仓库根目录、已激活的虚拟环境中执行。`PYTHONPATH=src` 用于直接加载源码，无需额外安装项目包。
 
-## 离线Mock：无需模型密钥和本地向量权重
+## 离线运行
+
+无需创建 `.env`、填写密钥或下载 tokenizer / 向量权重。依赖安装完成后，使用仓库预生成的检索块即可离线运行。
+
+### 单次问答
 
 ```sh
 PYTHONPATH=src python -m knowledge_agent chat --mode mock --retrieval bm25 --scenario normal \
   --corpus data/fixtures/F1_single_rule/manifest.json \
   --prepared data/prepared/F1_single_rule.json \
-  --question "国内差旅报销期限多久？" --format json --output-dir runtime/offline
+  --question "国内差旅报销期限多久？" --output-dir runtime/offline
+```
 
+预期显示“已解决”，回答国内差旅行程结束后 30 天内提交，并列出 D01 原文与版本日期。任务状态旁会标明离线 Mock 的验证边界。
+
+### 正常、资料不足与工具失败等场景
+
+```sh
 PYTHONPATH=src python -m knowledge_agent evaluate --mode mock --retrieval bm25 \
   --output-dir runtime/evaluation/mock
 ```
 
-依赖安装后可完全离线运行，使用仓库预生成块。Mock只使用BM25，模型响应是固定脚本，工具和运行器实际执行；它只验证流程，不证明真实模型决策。
+该命令运行 7 项离线测试，覆盖正常、冲突、缺资料、工具失败、故障恢复、预算停止及不支持的输入；预期汇总为 `status: passed`、`passed: 7`。终端会给出本批材料目录，其中保存测试日志、汇总、JUnit 结果及各次运行记录。
 
-| scenario | 固定问题与资料 | 行为 |
+单次 `chat` 也可使用以下固定脚本；替换 `--scenario`、`--question`，并成对选择对应资料路径。
+
+| scenario | 固定问题 | 资料目录／预生成块 | 预期任务状态 |
+| --- | --- | --- | --- |
+| normal | 国内差旅报销期限多久？ | F1_single_rule | resolved |
+| conflict | 差旅报销期限多久？ | F2_conflicting_rules | needs_info |
+| missing | 请查阅 D99 的规定。 | F1_single_rule | unresolved |
+| tool_failure | 国内差旅报销期限多久？ | F1_single_rule | incomplete |
+| recovery | 国内差旅报销期限多久？ | F1_single_rule | resolved |
+| budget | 国内差旅报销期限多久？ | F1_single_rule | incomplete |
+
+资料路径格式为 `data/fixtures/<资料目录>/manifest.json` 与 `data/prepared/<资料目录>.json`。Mock 实际执行检索、读取和预算控制，但模型响应为固定脚本，**只验证流程，不证明真实模型决策效果**；不支持任意问题，也不会在真实模式故障时自动启用。
+
+## 真实模型运行
+
+### 配置模型服务
+
+首次配置时执行：
+
+```sh
+cp .env.example .env
+```
+
+在本机 `.env` 中填写 `DEEPSEEK_API_KEY`。已有 `.env` 时直接编辑，保留自己的配置。默认模型为 `deepseek-flash`，服务地址为 `https://api.deepseek.com`；可通过 `KA_MODEL_NAME`、`KA_BASE_URL` 调整。真实调用会使用所配置账户的 API 额度，`.env` 已被 Git 忽略。
+
+默认主线使用两类模型，职责与配置如下：
+
+| 组件 | 职责 | 配置方式 |
 | --- | --- | --- |
-| normal | 国内差旅报销期限多久？／F1 | 搜索原文并引用 |
-| conflict | 差旅报销期限多久？／F2 | 读取并保留冲突 |
-| missing | 请查阅 D99 的规定。／F1 | 原文不存在 |
-| tool_failure | 国内差旅报销期限多久？／F1 | 注入读取失败 |
-| recovery | 同上／F1 | 搜索失败后脚本改读原文 |
-| budget | 同上／F1 | 实际预算守卫停止，返回incomplete |
+| 远程 LLM | 决定工具动作、判断证据状态并生成回答 | 在 `.env` 填写 `DEEPSEEK_API_KEY`；`KA_MODEL_NAME`、`KA_BASE_URL` 默认已配置 |
+| 本地 embedding 模型 | 将查询和文档块编码为向量，参与 hybrid 检索 | 使用固定版本 `BAAI/bge-small-zh-v1.5`；由下方准备命令下载，无需额外 API 密钥或部署服务 |
 
-Mock不支持任意问题；不匹配的输入明确拒绝。真实模式不会因模型失败而静默切换Mock。
+沿用默认方案时，只需手动填写 LLM 密钥，再执行一次资产准备命令。embedding 模型默认保存到 `runtime/models/bge-small-zh-v1.5`，可通过 `.env` 中的 `KA_EMBEDDING_MODEL_PATH` 指向已准备的同版本资产；`KA_TOKENIZER_PATH` 指定分块 tokenizer 文件，`KA_RETRIEVAL_CACHE_DIR` 指定检索缓存目录。模型文件会按固定版本校验，这些路径配置不用于任意替换 embedding 模型。
 
-## 真实入口：默认hybrid
+配置优先级为 **CLI 参数 > 系统环境变量 > .env > 默认值**。完整变量见 [.env.example](.env.example)。
 
-从 `.env.example` 复制本地 `.env` 并填写 `DEEPSEEK_API_KEY`。密钥不提交。`KA_MODEL_NAME` 默认deepseek-flash，可在本地配置。首次准备hybrid资产需显式允许下载：
+### 准备本地检索资产
+
+默认真实检索为 hybrid（BM25 与本地向量融合）。首次运行需要访问 Hugging Face 下载固定版本的 BGE-small-zh-v1.5 模型与 tokenizer 资产，命令如下：
 
 ```sh
-PYTHONPATH=src python -m knowledge_agent prepare --retrieval hybrid --download \
-  --corpus data/knowledge_base/manifest.json --prepared data/prepared/knowledge_base.json
-
-PYTHONPATH=src python -m knowledge_agent chat --mode real \
+PYTHONPATH=src python -m knowledge_agent prepare --mode real --retrieval hybrid --download \
   --corpus data/knowledge_base/manifest.json --prepared data/prepared/knowledge_base.json \
-  --question "国内差旅报销期限多久？" --format json --output-dir runtime/chat
+  --output-dir runtime/preparation
 ```
 
-以上真实入口使用独立的[业务知识库](data/knowledge_base/README.md)（8份合成制度与FAQ：差旅、凭证与补交、请假、设备借用、账号权限）。专项验收仍使用固定 fixtures，Mock仍使用对应脚本资料；原有真实运行记录不代表扩充后资料的新一轮验收；新增专项验证保存在local_validation。
+成功时输出 `status: prepared`，`effective_branches` 包含 `bm25` 和 `vector`。`prepare` 不调用问答模型；后续资产齐备时可省略 `--download`。若返回 `partial`，说明部分检索分支不可用，应根据 `errors` 修复后再验证完整 hybrid。
 
-去掉 `--question` 进入连续对话，`/exit` 退出。`--history` 可显式导入 `{"schema_version":1,"messages":[{"role":"user","content":"此前的问题"},{"role":"assistant","content":"此前的回答"}]}` 文件。历史用于理解指代；同一会话内已取得的原文经资料版本核验后可复用，资料变化或依据不足时重新取证。导入历史不恢复原文证据。
-
-默认文本展示仅含任务状态、回答（含必要追问）、引用及资料缺口；引用保留文档ID、版本日期与原文。离线Mock在任务状态旁注明流程验证边界。内部结束原因、证据ID、字符位置、工具执行与检索降级信息保留在 `--format json` 的结果或输出目录的Trace中，不逐项打印到问答终端。
-
-真实模式默认hybrid，可显式 `--retrieval bm25` 或 `--retrieval vector`。配置优先级：CLI > 系统环境 > .env > 默认。`KA_RETRIEVAL_MODE` 属于显式配置。Mock若继承vector/hybrid配置会在启动前报错，可用 `--retrieval bm25` 覆盖。
-
-hybrid某一分支失败时保留有效分支原文，Trace记录partial和具体错误。证据充分可回答；缺范围时由模型继续取证。完整hybrid主线需要本地BGE权重；只有BM25有效的记录必须标明降级，不能当作完整双分支运行。
-
-`prepare` 不调用主模型；已有预生成块的BM25问答无需tokenizer或权重。不要手改派生块，原文变化后用prepare重新生成，详见[资料说明](data/README.md)。
-
-## 测试与交付边界
+### 单次问答与连续对话
 
 ```sh
-# 默认不调用真实模型：24项基础检查 + 7项Mock，18项live跳过
-python -m pytest tests -q
-# 只收集真实业务，不执行模型
-PYTHONPATH=src python -m knowledge_agent evaluate --mode real --collect-only --output-dir runtime/evaluation/collect
-# 18项真实业务：6项题目必验 + 12项重要补充
-PYTHONPATH=src python -m knowledge_agent evaluate --mode real --run-live --output-dir runtime/evaluation/real
+PYTHONPATH=src python -m knowledge_agent chat --mode real --retrieval hybrid \
+  --corpus data/knowledge_base/manifest.json --prepared data/prepared/knowledge_base.json \
+  --question "国内差旅报销期限多久？" --output-dir runtime/chat
 ```
 
-`evaluate --suite tests/e2e/required` 可只跑必验，`tests/e2e/extended` 可只跑补充，`-k` 过滤名称。真实默认收集这两个目录并排除offline，Mock只接受offline。基础模块/工具/连接检查独立在 `tests/contracts/`，不替代业务验收。
+去掉 `--question` 进入连续对话，可继续提问“需要哪些凭证？”，输入 `/exit` 退出。增加 `--format json` 可查看结构化结果。
+
+该入口加载 8 份[业务制度与 FAQ](data/README.md#业务资料)，覆盖差旅、凭证与补交、请假、设备借用和账号权限。业务资料提供场景素材；测试使用按验收条件整理的独立 fixtures。
+
+若只使用 BM25，将问答命令中的 `--retrieval hybrid` 改为 `--retrieval bm25`，可直接使用预生成块，跳过本地模型资产准备；问答仍调用真实模型。`vector` 只使用本地向量检索，需要先准备模型资产。
+
+`--history history.json` 可导入如下格式的历史文件：
+
+```json
+{"schema_version":1,"messages":[{"role":"user","content":"我想了解国内差旅报销。"},{"role":"assistant","content":"请说明需要查询的事项。"}]}
+```
+
+历史用于理解指代和用户条件。当前会话取得的原文经版本核验后可在后续问题中复用；导入历史只恢复文本，不恢复原文证据。
+
+### 输出与运行记录
+
+文本输出包含任务状态、回答与必要追问、引用和资料缺口。单题运行的退出码如下：
+
+| 状态或情况 | 含义 | 退出码 |
+| --- | --- | --- |
+| resolved | 已解决 | 0 |
+| needs_info | 待补充信息，附具体追问 | 0 |
+| unresolved | 资料不足、冲突未解或超出范围 | 0 |
+| incomplete | 必要处理因故障或执行上限中断 | 1 |
+| 输入、配置或文件处理错误 | CLI 报错 | 2 |
+| 用户中断 | 取消本次执行 | 130 |
+
+每轮问答材料保存到 `<输出目录>/<real或mock>/<run_id>/`，包含 `input.json`、`output.json`、`trace.jsonl` 及原文和调用记录；会话材料另存于 `<输出目录>/<real或mock>/sessions/<session_id>/`。
+
+每轮默认最多 10 次模型调用、16 次业务工具调用，处理时限 120 秒，不含事先资料准备和索引初始化。硬中断返回 `incomplete`；检索单分支降级则由模型根据已有原文判断能否回答，具体错误记录在 Trace 中。完整规则见[会话与执行控制](docs/02-solution.md#5-会话与执行控制)。
+
+## 测试与复现
+
+### 无真实模型调用的检查
+
+```sh
+python -m pytest tests -q
+```
+
+预期 **31 项通过、18 项跳过**：24 项基础契约与 7 项 Mock 执行，18 项真实业务测试需显式启用。此命令的通过结果不等于全部真实业务验收通过。
+
+### 真实业务验收
+
+完成密钥配置和 hybrid 资产准备后运行：
+
+```sh
+# 仅收集：不调用模型，不计为通过
+PYTHONPATH=src python -m knowledge_agent evaluate --mode real --retrieval hybrid --collect-only \
+  --output-dir runtime/evaluation/collect
+
+# 执行六项必验与十二项扩展业务测试
+PYTHONPATH=src python -m knowledge_agent evaluate --mode real --retrieval hybrid --run-live \
+  --output-dir runtime/evaluation/real
+```
+
+`evaluate` 自动使用每个用例规定的资料，不接受 `--corpus`、`--prepared` 覆盖。可增加 `--suite tests/e2e/required` 只跑六项必验，或用 `-k` 筛选名称。完整业务验收使用 hybrid；两项检索降级专项在其他检索模式下跳过，跳过不算完整通过。
+
+评估输出包含材料目录与通过、失败、错误、跳过计数。真实模型的措辞和动作可能变化，自动检查通过后仍需结合原文核对答案含义与引用支持关系。
+
+[完整复跑与打包步骤](examples/README.md#完整复跑与打包)说明如何合并基础、Mock 和真实业务结果，生成包含输入、实际输出、精简 Trace 与共用资料快照的提交包。已有提交材料可直接阅读，无需先运行测试；新运行记录写入 `runtime/`，评审不依赖本地开发归档。
+
+## 项目结构
 
 ```text
-src/                    产品代码与模型、工具接入
-data/                   合成原文、版本元数据与预生成块
+README.md                       环境、安装、运行与评审导航
+requirements.txt                固定依赖版本
+.env.example                    配置变量示例
+src/knowledge_agent/             Agent、模型接入、工具与 CLI
+  retrieval/                    检索工具
+  reading/                      原文读取工具
 tests/
-   e2e/required/         六类必验业务
-   e2e/extended/         重要补充业务
-   e2e/offline/          正式Mock流程
-   contracts/           少量基础模块、工具与连接检查
-   support/             提交版共用辅助代码
-examples/
-   submission-check/    精简验收包：测试结果、每轮输入/输出/Trace、共用资料
-docs/                   需求、设计、评估、AI使用、复盘
-local_validation/       Git忽略：完整开发回归与历史证据
+  contracts/                    基础契约检查
+  e2e/required/                 六项必验业务
+  e2e/extended/                 十二项扩展业务
+  e2e/offline/                  七项离线流程检查
+data/
+  knowledge_base/               日常业务资料
+  fixtures/                     独立验收资料
+  prepared/                     预生成检索块
+examples/submission-check/      实际验收结果与运行记录
+docs/
+  01-requirements.md             需求
+  02-solution.md                 方案
+  03-evaluation.md               评估
+  04-ai-usage.md                 AI 使用
+  05-retrospective.md            复盘
 ```
 
-`tests/`、`examples/` 已解除整体忽略，提交版不依赖 `local_validation/`。后续临时运行建议写入runtime，避免混入提交证据。提交包含输入、实际输出、精简Trace、共用资料和JUnit结果；不把自动通过或Mock脚本当成语义验收。
+资料用途与维护见 [data/README.md](data/README.md)，工具职责与独立调用见[技术方案](docs/02-solution.md#42-检索和读取工具)，验证材料与打包步骤见 [examples/README.md](examples/README.md)。
 
-当前代码完整重跑49项测试：49项通过、0失败、0错误、0跳过。基础24项、Mock7项、必验真实业务6项及扩展真实业务12项全部通过。本批23轮真实输出及28条引用已进行AI辅助阅读，见[完整报告](examples/submission-check/README.md)、[全部运行记录](examples/submission-check/cases.md)。4个冲突与适用关系用例另各固定复测3次，12次全部通过，见[定向复测](examples/submission-check/repeat-check/README.md)。取证阶段以conflict报告未解冲突，回复阶段独立判断最终状态；测试预期、实际结果与已知限制见[评估](docs/03-evaluation.md)。
+## 提交与版本定位
 
-通知追问保留跨轮原文及双方引用，返回冲突未解，详见[评估](docs/03-evaluation.md)。
-
-`pytest --examples-dir` 与 `evaluate` 共用精简导出逻辑。运行时完整日志用于测试和本地排查；每轮提交材料仅保留输入、实际输出及Trace，资料按版本共用。完整复跑及打包命令见[材料说明](examples/submission-check/README.md)。已有批次也可直接打包，不重新调用模型：
+所选题目为**第三题 — 企业知识问答 Agent**，仓库地址为 [Laleylaa/enterprise-knowledge-agent](https://github.com/Laleylaa/enterprise-knowledge-agent)。评审可在检出的仓库中执行以下命令确认版本，并与提交时提供的 commit SHA 核对：
 
 ```sh
-PYTHONPATH=src .venv/bin/python -m knowledge_agent.submission --source runtime/evaluation/new-batch --output examples/new-submission
+git rev-parse HEAD
 ```
 
-examples保留当前版本的完整回归及定向复测精简包；历史批次与完整调试材料留在本地，评审入口不依赖本地文件。
-
-## 提交信息与未完成项
-
-- 所选题：企业知识问答 Agent；正式题号待本人确认。
-- GitHub URL、最终commit SHA、实际个人投入时长：待本人填写。代码已分批本地commit，尚未push，最终SHA以完整提交收尾后为准。
-- 个人修改、学习收获需本人核实；AI辅助阅读不等于独立人工签署。
-- 当前结果与已知缺陷以[评估文档](docs/03-evaluation.md)为准，小型合成资料和有限样本不证明生产可靠性。
+个人贡献与验证说明以 [AI 使用说明](docs/04-ai-usage.md)为准，完成情况与后续计划见[项目复盘](docs/05-retrospective.md)，当前效果和验证限制见[评估文档](docs/03-evaluation.md)。
