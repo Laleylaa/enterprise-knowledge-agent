@@ -24,13 +24,13 @@ def publish(source: Path, output: Path):
         for path in sorted(work.rglob('output.json')):
             if path.parent.parent.parent.name != 'outputs':
                 continue
-            result = json.loads(path.read_text())
+            result = json.loads(path.read_text(encoding='utf-8'))
             if result.get('export', {}).get('format') != FORMAT:
                 raise ValueError(f'Unsupported evidence format: {path}')
             scope, case, run = path.parents[3], path.parent.parent.name, path.parent.name
             inp_path = scope / 'inputs' / case / run / 'input.json'
             trace_path = scope / 'traces' / case / run / 'trace.jsonl'
-            inp = json.loads(inp_path.read_text())
+            inp = json.loads(inp_path.read_text(encoding='utf-8'))
             target = output / 'cases' / case / run
             target.mkdir(parents=True, exist_ok=False)
             if inp.get('corpus'):
@@ -38,8 +38,8 @@ def publish(source: Path, output: Path):
                 if not corpus.is_relative_to(work):
                     raise ValueError('Corpus reference escapes source evidence')
                 dest = output / 'corpora' / corpus.name
-                save(dest, json.loads(corpus.read_text()))
-                inp['corpus'] = os.path.relpath(dest, target)
+                save(dest, json.loads(corpus.read_text(encoding='utf-8')))
+                inp['corpus'] = Path(os.path.relpath(dest, target)).as_posix()
             save(target / 'input.json', inp)
             shutil.copyfile(path, target / 'output.json')
             shutil.copyfile(trace_path, target / 'trace.jsonl')
@@ -84,7 +84,7 @@ def publish(source: Path, output: Path):
                                [('输入', 'input.json'), ('输出', 'output.json'), ('Trace', 'trace.jsonl')])
             mode = '真实模型' if row['live_model'] else '离线Mock' if row['mode'] == 'mock' else '本地替身'
             table.append(f'| {row["case"]} | {row["turn"] or "—"} | {mode} | {row["status"]} | {row["usage"].get("tool_calls", "—")} | {links} |')
-        (output / 'cases.md').write_text('\n'.join(table) + '\n')
+        (output / 'cases.md').write_text('\n'.join(table) + '\n', encoding='utf-8', newline='\n')
         return summary
 
 

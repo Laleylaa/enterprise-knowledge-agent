@@ -1,0 +1,49 @@
+{
+  "mock_scenario": null,
+  "run_id": "716533efa52944d7b4d9585b82b4f93e",
+  "mode": "real",
+  "stage": "tool_integration",
+  "requested_retrieval": "hybrid",
+  "result_origin": "model",
+  "termination_reason": "completed",
+  "result": {
+    "citations": [
+      {
+        "evidence_id": "716533efa52944d7b4d9585b82b4f93e:E2",
+        "doc_id": "D10",
+        "quote": "申请编号只能用于定位办理记录，不能作为制度适用范围或优先级的判断依据。\n\n9. 本节上述提交期限仅适用于国内差旅。海外差旅的提交期限须另查相应制度，不能据本节推定为 30 天。\n\n"
+      },
+      {
+        "evidence_id": "716533efa52944d7b4d9585b82b4f93e:E1",
+        "doc_id": "D10",
+        "quote": "## 提交与补充材料\n\n1. 差旅报销申请须在行程结束后 30 天内提交。提交时间以系统收到申请的时间为准，草稿保存时间不作为提交时间。\n\n2. 申请应注明行程起止日期、出发地点、目的地点和出差事项。每项费用单独填写金额及用途，相关凭证与费用明细对应保存。\n\n3. 行程信息填写有误时，申请人应在说明栏记录更正内容和原因。更正记录与原申请关联保存，不能用新的草稿覆盖已经提交的申请记录。\n\n4. 同一次行程包含多项费用时，各项费用可以在同一申请中列明。附件应能够对应费用项目，不能将不同费用项目的凭证合并标记为同一项。\n\n"
+      }
+    ],
+    "answer": "不适用。差旅报销办理说明中写明：提交期限（含行程结束后30天内提交）仅适用于国内差旅；海外差旅的提交期限须另查相应制度，不能据该节推定为30天。",
+    "gaps": [],
+    "clarification": null,
+    "status": "resolved",
+    "decision_summary": "原文明确该提交期限仅适用于国内差旅，海外差旅须另查相应制度，故对海外差旅不适用。",
+    "answer_parts": [
+      {
+        "text": "不适用。差旅报销办理说明中写明：提交期限（含行程结束后30天内提交）仅适用于国内差旅；海外差旅的提交期限须另查相应制度，不能据该节推定为30天。",
+        "citation_numbers": [
+          1,
+          2
+        ]
+      }
+    ]
+  },
+  "session_id": "769cc672b0a4439998047f0ea595957d",
+  "turn_id": 1,
+  "previous_run_id": null,
+  "usage": {
+    "model_turns": 3,
+    "http_attempts": 3,
+    "tool_calls": 1
+  },
+  "export": {
+    "format": "compact-v1",
+    "raw_output_sha256": "e7752b98cf412826b05a16c4f563c73284f97326c52c25d84f32d584dfe163d6"
+  }
+}

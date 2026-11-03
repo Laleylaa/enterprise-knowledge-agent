@@ -6,10 +6,9 @@
 
 | 批次 | 自动测试结果 | 真实模型记录 | 材料入口 |
 | --- | --- | --- | --- |
-| 完整验收 | 49 项通过，0 失败、错误或跳过 | 23 轮回答、28 条引用 | [汇总](submission-check/summary.json) · [逐项结果](submission-check/results.xml) · [运行记录](submission-check/cases.md) |
-| 定向复测 | 4 个既有用例各执行 3 次，共 12 次通过 | 15 轮回答、30 条引用 | [固定计划](submission-check/repeat-check/plan.json) · [汇总](submission-check/repeat-check/summary.json) · [逐项结果](submission-check/repeat-check/results.xml) · [运行记录](submission-check/repeat-check/cases.md) |
+| 完整验收 | 54 项通过，0 失败、错误或跳过 | 23 轮回答、30 条引用 | [汇总](submission-check/summary.json) · [逐项结果](submission-check/results.xml) · [运行记录](submission-check/cases.md) |
 
-完整批次另含 Mock 与本地替身，共 41 组运行记录。定向复测单独计数，不累加到 49 项中；它验证文档冲突、较新版本冲突、通知追问和明确适用范围。具体预期与实际行为见[两阶段状态与动态决策验证](../docs/03-evaluation.md#3-两阶段状态与动态决策验证)。
+本批次包含基础契约 29 项、离线 Mock 7 项、真实业务必验 6 项和扩展 12 项。共保留 41 组实际运行记录，包含真实模型、Mock 与本地替身记录；测试项数与运行记录数分别统计。具体预期与实际行为见[两阶段状态与动态决策验证](../docs/03-evaluation.md#3-两阶段状态与动态决策验证)。
 
 ## 文件说明
 
@@ -24,26 +23,12 @@
 
 ## 完整复跑与打包
 
-在仓库根目录执行，先完成依赖、密钥和 hybrid 资产准备。使用新的输出目录，保留每次执行的结果：
+按根 README 激活虚拟环境并设置环境变量后，在仓库根目录执行；先完成依赖、密钥和 hybrid 资产准备。以下单行命令适用于 macOS/Linux 与 Windows PowerShell。使用新的输出目录，保留每次执行的结果：
 
 ```sh
-mkdir -p runtime/evaluation/new-batch
-.venv/bin/python -m pytest tests/contracts tests/e2e/offline -q --examples-dir runtime/evaluation/new-batch/offline --junitxml=runtime/evaluation/new-batch/offline-results.xml
-PYTHONPATH=src .venv/bin/python -m knowledge_agent evaluate --mode real --retrieval hybrid --run-live --output-dir runtime/evaluation/new-batch/real
-PYTHONPATH=src .venv/bin/python -m knowledge_agent.submission --source runtime/evaluation/new-batch --output examples/new-submission
+python -m pytest tests/contracts tests/e2e/offline -q --examples-dir runtime/evaluation/new-batch/offline --junitxml=runtime/evaluation/new-batch/offline-results.xml
+python -m knowledge_agent evaluate --mode real --retrieval hybrid --run-live --output-dir runtime/evaluation/new-batch/real
+python -m knowledge_agent.submission --source runtime/evaluation/new-batch --output runtime/new-submission
 ```
 
-前两条测试命令分别运行 31 项基础与离线检查、18 项真实业务检查。打包脚本读取已有结果，生成 `summary.json`、`results.xml`、`cases.md`、各轮记录和共用资料；不重新调用模型，也不改写业务答案。真实模型的措辞和运行 ID 可能变化。
-
-## 定向复测
-
-预先固定执行 3 轮，每轮运行相同的 4 个用例，并保留全部轮次：
-
-```sh
-for round in 1 2 3; do
-  PYTHONPATH=src .venv/bin/python -m knowledge_agent evaluate --mode real --retrieval hybrid --run-live -k 'test_conflicting_documents or test_Q02_newer_date or test_notification_without_channel or test_scope_lookup' --output-dir "runtime/evaluation/new-repeat-check/$round"
-done
-PYTHONPATH=src .venv/bin/python -m knowledge_agent.submission --source runtime/evaluation/new-repeat-check --output examples/new-repeat-check
-```
-
-这些重复运行用于检查既有冲突与适用关系场景，不代表长期稳定性评估。
+前两条测试命令分别运行 36 项基础与离线检查、18 项真实业务检查，共 54 项。复跑结果和导出包默认保存在本地 `runtime/`。打包脚本读取已有结果，生成 `summary.json`、`results.xml`、`cases.md`、各轮记录和共用资料；不重新调用模型，也不改写业务答案。真实模型的措辞和运行 ID 可能变化。

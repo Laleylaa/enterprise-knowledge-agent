@@ -69,12 +69,10 @@ Markdown 是唯一可编辑的制度正文；manifest 使用 UTF-8 JSON，格式
 
 预生成块使用固定版本的 BGE-small-zh-v1.5 tokenizer，默认目标 320、上限 480、重叠最多 48 tokens，保存章节、字符位置和来源指纹。BM25 与读取工具加载已有块时无需 tokenizer 文件或向量权重；重新分块需要本地 tokenizer，hybrid/vector 还需要本地模型资产。
 
-修改原文后重新准备对应资料，例如：
+按根 README 激活环境并设置环境变量后，修改原文并重新准备对应资料，例如（macOS/Linux 与 Windows PowerShell 通用）：
 
 ```sh
-PYTHONPATH=src python -m knowledge_agent prepare --mode real --retrieval bm25 \
-  --corpus data/knowledge_base/manifest.json --prepared data/prepared/knowledge_base.json \
-  --output-dir runtime/preparation
+python -m knowledge_agent prepare --mode real --retrieval bm25 --corpus data/knowledge_base/manifest.json --prepared data/prepared/knowledge_base.json --output-dir runtime/preparation
 ```
 
 首次准备资产见[根 README](../README.md#准备本地检索资产)。不要手改派生 JSON 来改变答案。业务资料与 fixtures 分别维护；修改测试资料时同步核对预期、重建检索块并运行受影响的测试，保留其输入、输出和 Trace。

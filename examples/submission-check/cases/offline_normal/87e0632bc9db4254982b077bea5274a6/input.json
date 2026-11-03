@@ -1,0 +1,29 @@
+{
+  "format": "compact-v1",
+  "question": "国内差旅报销期限多久？",
+  "session_id": "8edcf904019d4ad7bb51bd3e79c746bf",
+  "turn_id": 1,
+  "history": [],
+  "settings": {
+    "mode": "mock",
+    "model_name": "deepseek-flash",
+    "retrieval_mode": "bm25",
+    "thinking": false,
+    "mock_scenario": "normal",
+    "max_model_turns": 10,
+    "max_tool_calls": 16,
+    "max_http_attempts": 20,
+    "model_timeout": 30.0,
+    "tool_timeout": 10.0,
+    "turn_timeout": 120.0,
+    "fixture": "F1_single_rule"
+  },
+  "corpus": "../../../corpora/f394b4f46fa10eee64669ba4e12609203c91854b21036f3b2524e24bfe27b7f0.json",
+  "test": {
+    "scope": "formal_offline_cli",
+    "test_id": "tests/e2e/offline/test_mock.py::test_formal_offline_scenarios[normal-F1_single_rule-resolved]",
+    "live_model": false,
+    "model_origin": "production_script",
+    "scenario": "normal"
+  }
+}

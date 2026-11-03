@@ -1,0 +1,51 @@
+{
+  "mock_scenario": "conflict",
+  "run_id": "6b6f278e318748ed84121fbca3bcf53b",
+  "mode": "mock",
+  "stage": "tool_integration",
+  "requested_retrieval": "bm25",
+  "result_origin": "mock",
+  "termination_reason": "completed",
+  "result": {
+    "citations": [
+      {
+        "evidence_id": "6b6f278e318748ed84121fbca3bcf53b:E1",
+        "doc_id": "D01",
+        "quote": "## 提交期限\n\n差旅报销须在行程结束后 30 天内提交。\n"
+      },
+      {
+        "evidence_id": "6b6f278e318748ed84121fbca3bcf53b:E2",
+        "doc_id": "D02",
+        "quote": "## 提交期限\n\n差旅报销须在行程结束后 15 天内提交。\n"
+      }
+    ],
+    "answer": "两份原文分别规定30天与15天，当前脚本不选择适用制度。",
+    "gaps": [
+      "缺少可核实的适用关系。"
+    ],
+    "clarification": "请提供适用制度或可核实的范围线索。",
+    "status": "needs_info",
+    "decision_summary": "离线预设回答脚本依据程序交付原文，仅验证流程，不证明模型决策。",
+    "answer_parts": [
+      {
+        "text": "两份原文分别规定30天与15天，当前脚本不选择适用制度。",
+        "citation_numbers": [
+          1,
+          2
+        ]
+      }
+    ]
+  },
+  "session_id": "1b3c3286da0740658e8fa1b8415689df",
+  "turn_id": 1,
+  "previous_run_id": null,
+  "usage": {
+    "model_turns": 5,
+    "http_attempts": 0,
+    "tool_calls": 3
+  },
+  "export": {
+    "format": "compact-v1",
+    "raw_output_sha256": "0b624cb66a6acf2515f39649f8fd620e9de8000929c9e4a3dc2c538a50e1d5b7"
+  }
+}

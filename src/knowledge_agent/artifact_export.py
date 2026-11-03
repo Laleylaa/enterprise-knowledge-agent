@@ -11,21 +11,21 @@ FORMAT = 'compact-v1'
 
 def read(files, name, default=None):
     path = files.get(name)
-    return json.loads(path.read_text()) if path else default
+    return json.loads(path.read_text(encoding='utf-8')) if path else default
 
 
 def lines(files, name):
     path = files.get(name)
-    return [json.loads(line) for line in path.read_text().splitlines()] if path else []
+    return [json.loads(line) for line in path.read_text(encoding='utf-8').splitlines()] if path else []
 
 
 def save(path, value, *, jsonl=False):
     path.parent.mkdir(parents=True, exist_ok=True)
     content = (''.join(json.dumps(row, ensure_ascii=False) + '\n' for row in value) if jsonl else
                json.dumps(value, ensure_ascii=False, indent=2) + '\n')
-    if path.exists() and path.read_text() != content:
+    if path.exists() and path.read_text(encoding='utf-8') != content:
         raise FileExistsError(f'Refusing to overwrite different submission evidence: {path}')
-    path.write_text(content)
+    path.write_text(content, encoding='utf-8', newline='\n')
 
 
 def selected(value, keys):
@@ -124,7 +124,7 @@ def export_files(files, destination, case_id, run_id):
         canonical = json.dumps(shared, ensure_ascii=False, sort_keys=True).encode()
         corpus_path = destination / 'corpora' / (hashlib.sha256(canonical).hexdigest() + '.json')
         save(corpus_path, shared)
-        corpus_ref = os.path.relpath(corpus_path, input_path.parent)
+        corpus_ref = Path(os.path.relpath(corpus_path, input_path.parent)).as_posix()
     settings = selected(config, ('mode', 'model_name', 'retrieval_mode', 'requested_retrieval',
                                  'thinking', 'mock_scenario', 'max_model_turns', 'max_tool_calls',
                                  'max_http_attempts', 'model_timeout', 'tool_timeout', 'turn_timeout'))
@@ -158,7 +158,7 @@ def convert_archive(source, destination):
         raise FileExistsError('Use a new destination; never overwrite original evidence')
     count = 0
     for manifest in sorted(source.rglob('artifacts.json')):
-        record = json.loads(manifest.read_text())
+        record = json.loads(manifest.read_text(encoding='utf-8'))
         root = manifest.parents[3]
         files = {}
         for entry in record['artifacts']:

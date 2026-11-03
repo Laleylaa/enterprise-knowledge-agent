@@ -1,0 +1,37 @@
+{
+  "mock_scenario": null,
+  "run_id": "e66d950940d34c4a899fa53af870fb71",
+  "mode": "real",
+  "stage": "tool_integration",
+  "requested_retrieval": "hybrid",
+  "result_origin": "model",
+  "termination_reason": "completed",
+  "result": {
+    "citations": [],
+    "answer": "本次检索工具持续失败，两路检索分支均未成功，未能取得国内差旅报销期限的相关制度原文，暂时无法核实该期限。请稍后重试。",
+    "gaps": [
+      "国内差旅报销期限的制度原文尚未取得，需待检索恢复后核实。"
+    ],
+    "clarification": null,
+    "status": "incomplete",
+    "decision_summary": "检索工具两路分支均报错，未返回任何原文，且取证因故障停止，无法回答差旅报销期限，按执行受阻处理。",
+    "answer_parts": [
+      {
+        "text": "本次检索工具持续失败，两路检索分支均未成功，未能取得国内差旅报销期限的相关制度原文，暂时无法核实该期限。请稍后重试。",
+        "citation_numbers": []
+      }
+    ]
+  },
+  "session_id": "25476d81d9074cdab2e61899baef156e",
+  "turn_id": 1,
+  "previous_run_id": null,
+  "usage": {
+    "model_turns": 4,
+    "http_attempts": 4,
+    "tool_calls": 2
+  },
+  "export": {
+    "format": "compact-v1",
+    "raw_output_sha256": "8c0d384868a913b5694b8d251521ca59d1d9e033c173604c00a22cfdaf02c797"
+  }
+}

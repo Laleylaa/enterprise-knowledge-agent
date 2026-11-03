@@ -18,7 +18,7 @@
 | AI 辅助范围、个人贡献与验证 | [AI 使用说明](docs/04-ai-usage.md) |
 | 关键问题、实践收获与改进计划 | [项目复盘](docs/05-retrospective.md) |
 
-已保存的完整验收批次为 **49 项通过，0 失败、0 错误、0 跳过**：基础契约 24 项、离线 Mock 7 项、真实业务必验 6 项、真实业务扩展 12 项。另有 4 个冲突与适用关系用例各复测 3 次，共 12 次通过，单独计数。材料入口见[批次与索引](examples/README.md#批次与索引)。
+正式验收批次为 **54 项通过，0 失败、0 错误、0 跳过**：基础契约 29 项、离线 Mock 7 项、真实业务必验 6 项、真实业务扩展 12 项。材料入口见[批次与索引](examples/README.md#批次与索引)。
 
 按评审目的选择运行入口：
 
@@ -30,9 +30,13 @@
 
 ## 环境与安装
 
-- Python：项目声明支持 3.11～3.12，已验证环境为 **Python 3.11.15 / macOS arm64**。下列命令使用 macOS/Linux 的 shell；其他平台未作运行验证。
+- Python：项目声明支持 3.11～3.12，已验证环境为 **Python 3.11.15 / macOS arm64**。提供 macOS/Linux 与原生 Windows PowerShell 命令；Windows/Linux 未纳入本次实机验证，平台适配检查见[评估文档](docs/03-evaluation.md#4-基础验证与结果核对)。
 - 依赖：统一安装 [requirements.txt](requirements.txt)，包括 PydanticAI 2.64.0、OpenAI SDK 3.42.0、检索组件及 pytest。框架承担的职责见技术方案。
 - 网络与模型资产：安装依赖需要网络；真实问答需要模型服务。hybrid/vector 首次使用还需下载本地 BGE 资产，推理使用 CPU，无需 GPU。
+
+### macOS / Linux
+
+已安装 Python 3.11 时执行；使用 Python 3.12 时，将创建虚拟环境的命令改为 `python3.12 -m venv .venv`。
 
 ```sh
 git clone https://github.com/Laleylaa/enterprise-knowledge-agent.git
@@ -40,9 +44,27 @@ cd enterprise-knowledge-agent
 python3.11 -m venv .venv
 source .venv/bin/activate
 python -m pip install -r requirements.txt
+export PYTHONPATH=src
+export PYTHONUTF8=1
 ```
 
-已有仓库时，从创建虚拟环境开始。后续命令均在仓库根目录、已激活的虚拟环境中执行。`PYTHONPATH=src` 用于直接加载源码，无需额外安装项目包。
+### Windows（原生 PowerShell）
+
+安装 Git 与 64 位 Python 3.11 或 3.12 后，在 PowerShell 执行。使用 Python 3.12 时，将 `py -3.11` 改为 `py -3.12`。无需安装 WSL。
+
+```powershell
+git clone https://github.com/Laleylaa/enterprise-knowledge-agent.git
+cd enterprise-knowledge-agent
+py -3.11 -m venv .venv
+.\.venv\Scripts\Activate.ps1
+python -m pip install -r requirements.txt
+$env:PYTHONPATH = "src"
+$env:PYTHONUTF8 = "1"
+```
+
+若 PowerShell 提示禁止执行激活脚本，可先执行 `Set-ExecutionPolicy -Scope Process -ExecutionPolicy RemoteSigned`，再重新激活；该设置仅作用于当前 PowerShell 会话。
+
+两种平台已有仓库时均从创建虚拟环境开始。后续命令均在仓库根目录、已激活的虚拟环境中执行，使用同一个 `python -m knowledge_agent` 入口。`PYTHONPATH` 用于直接加载源码，`PYTHONUTF8` 统一中文文件与日志编码；重新打开终端后需重新激活环境并设置这两个变量。下方运行命令使用单行形式，可直接用于上述两种终端。
 
 ## 离线运行
 
@@ -51,10 +73,7 @@ python -m pip install -r requirements.txt
 ### 单次问答
 
 ```sh
-PYTHONPATH=src python -m knowledge_agent chat --mode mock --retrieval bm25 --scenario normal \
-  --corpus data/fixtures/F1_single_rule/manifest.json \
-  --prepared data/prepared/F1_single_rule.json \
-  --question "国内差旅报销期限多久？" --output-dir runtime/offline
+python -m knowledge_agent chat --mode mock --retrieval bm25 --scenario normal --corpus data/fixtures/F1_single_rule/manifest.json --prepared data/prepared/F1_single_rule.json --question "国内差旅报销期限多久？" --output-dir runtime/offline
 ```
 
 预期显示“已解决”，回答国内差旅行程结束后 30 天内提交，并列出 D01 原文与版本日期。任务状态旁会标明离线 Mock 的验证边界。
@@ -62,8 +81,7 @@ PYTHONPATH=src python -m knowledge_agent chat --mode mock --retrieval bm25 --sce
 ### 正常、资料不足与工具失败等场景
 
 ```sh
-PYTHONPATH=src python -m knowledge_agent evaluate --mode mock --retrieval bm25 \
-  --output-dir runtime/evaluation/mock
+python -m knowledge_agent evaluate --mode mock --retrieval bm25 --output-dir runtime/evaluation/mock
 ```
 
 该命令运行 7 项离线测试，覆盖正常、冲突、缺资料、工具失败、故障恢复、预算停止及不支持的输入；预期汇总为 `status: passed`、`passed: 7`。终端会给出本批材料目录，其中保存测试日志、汇总、JUnit 结果及各次运行记录。
@@ -85,11 +103,7 @@ PYTHONPATH=src python -m knowledge_agent evaluate --mode mock --retrieval bm25 \
 
 ### 配置模型服务
 
-首次配置时执行：
-
-```sh
-cp .env.example .env
-```
+首次配置时复制配置模板：macOS/Linux 执行 `cp .env.example .env`；Windows PowerShell 执行 `Copy-Item .env.example .env`。
 
 在本机 `.env` 中填写 `DEEPSEEK_API_KEY`。已有 `.env` 时直接编辑，保留自己的配置。默认模型为 `deepseek-flash`，服务地址为 `https://api.deepseek.com`；可通过 `KA_MODEL_NAME`、`KA_BASE_URL` 调整。真实调用会使用所配置账户的 API 额度，`.env` 已被 Git 忽略。
 
@@ -108,10 +122,10 @@ cp .env.example .env
 
 默认真实检索为 hybrid（BM25 与本地向量融合）。首次运行需要访问 Hugging Face 下载固定版本的 BGE-small-zh-v1.5 模型与 tokenizer 资产，命令如下：
 
+`runtime/` 保存本地模型、缓存和运行记录，不随仓库提交。首次克隆后该目录不存在是正常情况；下方命令会按 `.env` 中配置的路径创建目录并准备资产，无需手动创建。已提交的 `data/prepared/` 是检索块，不包含 embedding 模型权重。
+
 ```sh
-PYTHONPATH=src python -m knowledge_agent prepare --mode real --retrieval hybrid --download \
-  --corpus data/knowledge_base/manifest.json --prepared data/prepared/knowledge_base.json \
-  --output-dir runtime/preparation
+python -m knowledge_agent prepare --mode real --retrieval hybrid --download --corpus data/knowledge_base/manifest.json --prepared data/prepared/knowledge_base.json --output-dir runtime/preparation
 ```
 
 成功时输出 `status: prepared`，`effective_branches` 包含 `bm25` 和 `vector`。`prepare` 不调用问答模型；后续资产齐备时可省略 `--download`。若返回 `partial`，说明部分检索分支不可用，应根据 `errors` 修复后再验证完整 hybrid。
@@ -119,9 +133,7 @@ PYTHONPATH=src python -m knowledge_agent prepare --mode real --retrieval hybrid 
 ### 单次问答与连续对话
 
 ```sh
-PYTHONPATH=src python -m knowledge_agent chat --mode real --retrieval hybrid \
-  --corpus data/knowledge_base/manifest.json --prepared data/prepared/knowledge_base.json \
-  --question "国内差旅报销期限多久？" --output-dir runtime/chat
+python -m knowledge_agent chat --mode real --retrieval hybrid --corpus data/knowledge_base/manifest.json --prepared data/prepared/knowledge_base.json --question "国内差旅报销期限多久？" --output-dir runtime/chat
 ```
 
 去掉 `--question` 进入连续对话，可继续提问“需要哪些凭证？”，输入 `/exit` 退出。增加 `--format json` 可查看结构化结果。
@@ -163,7 +175,7 @@ PYTHONPATH=src python -m knowledge_agent chat --mode real --retrieval hybrid \
 python -m pytest tests -q
 ```
 
-预期 **31 项通过、18 项跳过**：24 项基础契约与 7 项 Mock 执行，18 项真实业务测试需显式启用。此命令的通过结果不等于全部真实业务验收通过。
+预期 **36 项通过、18 项跳过**：29 项基础契约与 7 项 Mock 执行，18 项真实业务测试需显式启用。此命令的通过结果不等于全部真实业务验收通过。
 
 ### 真实业务验收
 
@@ -171,12 +183,10 @@ python -m pytest tests -q
 
 ```sh
 # 仅收集：不调用模型，不计为通过
-PYTHONPATH=src python -m knowledge_agent evaluate --mode real --retrieval hybrid --collect-only \
-  --output-dir runtime/evaluation/collect
+python -m knowledge_agent evaluate --mode real --retrieval hybrid --collect-only --output-dir runtime/evaluation/collect
 
 # 执行六项必验与十二项扩展业务测试
-PYTHONPATH=src python -m knowledge_agent evaluate --mode real --retrieval hybrid --run-live \
-  --output-dir runtime/evaluation/real
+python -m knowledge_agent evaluate --mode real --retrieval hybrid --run-live --output-dir runtime/evaluation/real
 ```
 
 `evaluate` 自动使用每个用例规定的资料，不接受 `--corpus`、`--prepared` 覆盖。可增加 `--suite tests/e2e/required` 只跑六项必验，或用 `-k` 筛选名称。完整业务验收使用 hybrid；两项检索降级专项在其他检索模式下跳过，跳过不算完整通过。

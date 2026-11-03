@@ -1,0 +1,36 @@
+{
+  "format": "compact-v1",
+  "question": "期限呢",
+  "session_id": "d1694319a6b14aed9004baa2ea8e5954",
+  "turn_id": 2,
+  "previous_run_id": "099f9d754915439a97deab7c205b57dc",
+  "history": [
+    {
+      "role": "user",
+      "content": "国内差旅报销有什么要求？"
+    },
+    {
+      "role": "assistant",
+      "content": "任务状态：已解决\n\n回答：\n依据D01《国内差旅报销规定》，国内差旅报销须在行程结束后 30 天内提交。[1]\n\n该规定同时说明，报销申请的处理状态与上述提交期限分别记录。[1]\n\n申请状态方面：“已提交”表示申请已进入处理队列，不代表审核通过；“处理中”表示申请仍在审核，不能据此认定已完成付款；员工查询处理进度时，应区分申请状态与付款状态。[2]\n\n引用：\n[1] D01｜版本日期：2026-01-01\n## 二、提交期限\n\n1. 国内差旅报销须在行程结束后 30 天内提交。\n2. 报销申请的处理状态与上述提交期限分别记录。\n\n\n[2] D01｜版本日期：2026-01-01\n## 三、申请状态说明\n\n1. “已提交”表示申请已进入处理队列，不代表审核通过。\n2. “处理中”表示申请仍在审核，不能据此认定已完成付款。\n3. 员工查询处理进度时，应区分申请状态与付款状态。\n\n\n资料缺口：无"
+    }
+  ],
+  "settings": {
+    "mode": "real",
+    "model_name": "deepseek-flash",
+    "retrieval_mode": "hybrid",
+    "thinking": false,
+    "max_model_turns": 10,
+    "max_tool_calls": 16,
+    "max_http_attempts": 20,
+    "model_timeout": 30.0,
+    "tool_timeout": 10.0,
+    "turn_timeout": 120.0,
+    "fixture": "F1_single_rule"
+  },
+  "corpus": "../../../corpora/f394b4f46fa10eee64669ba4e12609203c91854b21036f3b2524e24bfe27b7f0.json",
+  "test": {
+    "scope": "chat_cli_e2e",
+    "live_model": true,
+    "model_origin": "live_provider"
+  }
+}

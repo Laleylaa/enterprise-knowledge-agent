@@ -11,6 +11,7 @@ from uuid import uuid4
 from knowledge_agent.trace import RunRecorder
 
 ROOT = Path(__file__).resolve().parents[2]
+WINDOWS = sys.platform == 'win32'
 
 
 def resolve_suite(suite, mode):
@@ -31,6 +32,24 @@ def resolve_suite(suite, mode):
 
 def stop_evaluation(process):
     """Give pytest time to save interrupted results, then stop its worker group."""
+    if WINDOWS:
+        if process.poll() is not None:
+            return
+        try:
+            process.send_signal(signal.CTRL_BREAK_EVENT)
+            process.wait(timeout=5)
+            return
+        except (OSError, subprocess.TimeoutExpired):
+            pass
+        # terminate()/kill() on Windows only stop the parent. Include its workers.
+        try:
+            subprocess.run(['taskkill', '/PID', str(process.pid), '/T', '/F'],
+                           stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+                           timeout=5, check=False)
+            process.wait(timeout=2)
+        except (OSError, subprocess.TimeoutExpired) as exc:
+            raise RuntimeError('评估进程树清理失败，请检查该批次是否仍在运行。') from exc
+        return
     for sig, timeout in ((signal.SIGINT, 5), (signal.SIGTERM, 2), (signal.SIGKILL, 2)):
         try:
             os.killpg(process.pid, sig)
@@ -76,14 +95,14 @@ def observed_runs(directory):
     """Report actual run identities and degradation separately from test assertions."""
     runs, modes, degraded = [], set(), 0
     for path in sorted((directory / 'artifacts/e2e/outputs').glob('*/*/output.json')):
-        result = json.loads(path.read_text())
+        result = json.loads(path.read_text(encoding='utf-8'))
         modes.add(result['requested_retrieval'])
         runs.append({'run_id': result['run_id'], 'mode': result['mode'],
                      'retrieval': result['requested_retrieval'], 'origin': result['result_origin'],
                      'status': result['result']['status'], 'usage': result['usage'],
                      'output': str(path.relative_to(directory))})
     for path in (directory / 'artifacts/e2e/traces').glob('*/*/trace.jsonl'):
-        for line in path.read_text().splitlines():
+        for line in path.read_text(encoding='utf-8').splitlines():
             event = json.loads(line)
             if event.get('event') != 'tool_result':
                 continue
@@ -133,6 +152,7 @@ def evaluate(settings, *, suite=None, run_live=False, collect_only=False, select
     env.pop('PYTEST_ADDOPTS', None)
     env.pop('PYTEST_PLUGINS', None)
     env['PYTEST_DISABLE_PLUGIN_AUTOLOAD'] = '1'
+    env['PYTHONUTF8'] = '1'
     env['PYTHONPATH'] = os.pathsep.join([str(ROOT), str(ROOT / 'src')])
     if settings.has_api_key and settings.mode == 'real':
         env['DEEPSEEK_API_KEY'] = settings.deepseek_api_key.get_secret_value()
@@ -144,8 +164,10 @@ def evaluate(settings, *, suite=None, run_live=False, collect_only=False, select
     print(f'评估材料：{directory}', file=sys.stderr)
     with (directory / 'pytest.log').open('w', encoding='utf-8') as log:
         try:
+            group = ({'creationflags': subprocess.CREATE_NEW_PROCESS_GROUP} if WINDOWS else
+                     {'start_new_session': True})
             process = subprocess.Popen(command, cwd=ROOT, env=env, stdout=log, stderr=subprocess.STDOUT,
-                                       start_new_session=True)
+                                       **group)
         except OSError:
             launch_failed, code = True, 2
             recorder.event('evaluation_launch_failed')
@@ -160,7 +182,7 @@ def evaluate(settings, *, suite=None, run_live=False, collect_only=False, select
                 stop_evaluation(process)
                 raise
     facts_path = directory / 'test-facts.json'
-    facts = json.loads(facts_path.read_text()) if facts_path.exists() else {}
+    facts = json.loads(facts_path.read_text(encoding='utf-8')) if facts_path.exists() else {}
     summary = {**summarize(code, facts, collect_only=collect_only, cancelled=cancelled),
                **observed_runs(directory),
                'evaluation_id': identity, 'directory': str(directory), 'mode': settings.mode,

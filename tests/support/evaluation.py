@@ -2,6 +2,7 @@
 
 import json
 from pathlib import Path
+import signal
 
 import pytest
 
@@ -13,10 +14,17 @@ def pytest_addoption(parser):
     parser.addoption('--evaluation-facts', default=None)
 
 
+def pytest_configure(config):
+    if config.getoption('--evaluation-config') and hasattr(signal, 'SIGBREAK'):
+        # Let pytest save interrupted results when the Windows parent forwards Ctrl+C.
+        previous = signal.signal(signal.SIGBREAK, signal.default_int_handler)
+        config.add_cleanup(lambda: signal.signal(signal.SIGBREAK, previous))
+
+
 @pytest.fixture
 def evaluation_settings(request):
     path = request.config.getoption('--evaluation-config')
-    return Settings(_env_file=None, **json.loads(Path(path).read_text())) if path else None
+    return Settings(_env_file=None, **json.loads(Path(path).read_text(encoding='utf-8'))) if path else None
 
 
 def pytest_sessionfinish(session, exitstatus):
@@ -29,7 +37,7 @@ def pytest_sessionfinish(session, exitstatus):
                'errors': len(stats.get('error', [])), 'skipped': len(stats.get('skipped', [])),
                'pytest_exit_code': int(exitstatus),
                'items': [item.nodeid for item in session.items]}
-    Path(destination).write_text(json.dumps(summary, ensure_ascii=False, indent=2) + '\n')
+    Path(destination).write_text(json.dumps(summary, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
 
 
 def apply_evaluation(monkeypatch, settings, *, default_retrieval='hybrid'):

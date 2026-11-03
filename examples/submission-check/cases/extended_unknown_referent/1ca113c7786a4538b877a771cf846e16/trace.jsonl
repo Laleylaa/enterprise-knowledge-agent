@@ -1,0 +1,7 @@
+{"event": "evidence_index", "items": []}
+{"sequence": 4, "event": "model_actions", "model_turn": 1, "origin": "real", "actions": [{"tool_name": "finish_research", "tool_call_id": "call_00_89scXisVFevypk5egBZN5115", "args": {"reason": "unclear_question", "decision_summary": "用户仅问\"这个能报销吗\"，无历史可确定\"这个\"所指的费用或事项，对象不明，未进行检索，交由回答阶段澄清。"}}]}
+{"sequence": 5, "event": "research_complete", "origin": "runtime", "data": {"result": {"reason": "unclear_question", "decision_summary": "用户仅问\"这个能报销吗\"，无历史可确定\"这个\"所指的费用或事项，对象不明，未进行检索，交由回答阶段澄清。"}}}
+{"sequence": 6, "event": "answer_started", "origin": "runtime", "data": {"round": 1, "source_count": 0, "allow_supplement": false, "source_mapping": []}}
+{"sequence": 8, "event": "model_actions", "model_turn": 2, "origin": "real", "actions": [{"tool_name": "submit_answer", "tool_call_id": "call_00_rZmoX7ZHXQ8TfKPu7py92457", "args": {"status": "needs_info", "decision_summary": "用户仅问“这个能报销吗”，未指明具体事项，对象不明，无法定位适用制度，需先确认所指事项和场景。"}}]}
+{"sequence": 9, "event": "answer_draft", "origin": "runtime", "data": {"status": "needs_info", "decision_summary": "用户仅问“这个能报销吗”，未指明具体事项，对象不明，无法定位适用制度，需先确认所指事项和场景。", "source_ids": [[]]}}
+{"sequence": 11, "event": "final_result", "origin": "runtime", "data": {"status": "needs_info", "termination_reason": "completed", "result_origin": "model"}}

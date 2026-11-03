@@ -146,16 +146,12 @@ Markdown 保存制度正文，`manifest.json` 维护文档 ID、标题、版本�
 
 检索返回完整原文块；读取支持全文、章节或精确块，章节与块选择器互斥。超出返回预算时，读取工具返回 `CONTENT_TOO_LARGE` 与定位列表，定位本身不作为证据。分页游标绑定当前工具实例、资料快照和请求参数，不支持跨轮复用。缺失文档、无效参数和执行失败以明确错误反馈，工具不判断制度含义或优先级。
 
-两个工具也提供独立 CLI，便于核对检索结果和原文。安装依赖后，在仓库根目录执行以下命令，不调用问答模型：
+两个工具也提供独立 CLI，便于核对检索结果和原文。按[README](../README.md#环境与安装)安装依赖、激活环境并设置环境变量后，在仓库根目录执行以下命令，不调用问答模型：
 
 ```sh
-PYTHONPATH=src python -m knowledge_agent.retrieval search --retrieval bm25 \
-  --corpus data/fixtures/F1_single_rule/manifest.json --prepared data/prepared/F1_single_rule.json \
-  --query "国内差旅报销期限" --output-dir runtime/search-tool
+python -m knowledge_agent.retrieval search --retrieval bm25 --corpus data/fixtures/F1_single_rule/manifest.json --prepared data/prepared/F1_single_rule.json --query "国内差旅报销期限" --output-dir runtime/search-tool
 
-PYTHONPATH=src python -m knowledge_agent.reading \
-  --corpus data/fixtures/F1_single_rule/manifest.json --prepared data/prepared/F1_single_rule.json \
-  --doc-id D01 --output-dir runtime/read-tool
+python -m knowledge_agent.reading --corpus data/fixtures/F1_single_rule/manifest.json --prepared data/prepared/F1_single_rule.json --doc-id D01 --output-dir runtime/read-tool
 ```
 
 独立工具材料保存在 `<输出目录>/<run_id>/`，记录 `model_calls=0`；正式 Agent 绑定时共享本轮证据集合与记录器。完整参数见各入口的 `--help`，资产准备见[运行说明](../README.md#准备本地检索资产)。

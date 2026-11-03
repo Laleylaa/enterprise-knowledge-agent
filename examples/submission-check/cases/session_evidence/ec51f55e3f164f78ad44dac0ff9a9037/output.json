@@ -1,0 +1,43 @@
+{
+  "mock_scenario": null,
+  "run_id": "ec51f55e3f164f78ad44dac0ff9a9037",
+  "mode": "mock",
+  "stage": "tool_integration",
+  "requested_retrieval": "bm25",
+  "result_origin": "mock",
+  "termination_reason": "completed",
+  "result": {
+    "citations": [
+      {
+        "evidence_id": "ec51f55e3f164f78ad44dac0ff9a9037:E3",
+        "doc_id": "D01",
+        "quote": "## 二、提交期限\n\n1. 国内差旅报销须在行程结束后 30 天内提交。\n2. 报销申请的处理状态与上述提交期限分别记录。\n\n"
+      }
+    ],
+    "answer": "## 二、提交期限\n\n1. 国内差旅报销须在行程结束后 30 天内提交。\n2. 报销申请的处理状态与上述提交期限分别记录。\n\n",
+    "gaps": [],
+    "clarification": null,
+    "status": "resolved",
+    "decision_summary": "受控模型仅核对原文交接与引用。",
+    "answer_parts": [
+      {
+        "text": "## 二、提交期限\n\n1. 国内差旅报销须在行程结束后 30 天内提交。\n2. 报销申请的处理状态与上述提交期限分别记录。\n\n",
+        "citation_numbers": [
+          1
+        ]
+      }
+    ]
+  },
+  "session_id": "8eeb01d10a6d4c53bcdb3d09cde8cc1a",
+  "turn_id": 3,
+  "previous_run_id": "b1db08b9e46c416c82c4f977c38664ac",
+  "usage": {
+    "model_turns": 2,
+    "http_attempts": 0,
+    "tool_calls": 0
+  },
+  "export": {
+    "format": "compact-v1",
+    "raw_output_sha256": "b06d9206deedc711884173f8e822bbba1346ebdac651a5dc1ff9d672436f4b1f"
+  }
+}

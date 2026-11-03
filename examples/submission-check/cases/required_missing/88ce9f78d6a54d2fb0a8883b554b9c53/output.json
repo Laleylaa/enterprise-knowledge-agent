@@ -1,0 +1,37 @@
+{
+  "mock_scenario": null,
+  "run_id": "88ce9f78d6a54d2fb0a8883b554b9c53",
+  "mode": "real",
+  "stage": "tool_integration",
+  "requested_retrieval": "hybrid",
+  "result_origin": "model",
+  "termination_reason": "completed",
+  "result": {
+    "citations": [],
+    "answer": "现有资料中未取得关于育儿假天数的规定，无法回答公司育儿假有多少天。",
+    "gaps": [
+      "尚未取得规定育儿假天数的制度原文"
+    ],
+    "clarification": null,
+    "status": "unresolved",
+    "decision_summary": "检索正常完成，取得的原文仅涉及请假申请审批流程与差旅报销提交期限，未包含育儿假天数条款，故无法给出天数结论。",
+    "answer_parts": [
+      {
+        "text": "现有资料中未取得关于育儿假天数的规定，无法回答公司育儿假有多少天。",
+        "citation_numbers": []
+      }
+    ]
+  },
+  "session_id": "f56cb7eb160047da9d7fafa7d5a4a5f5",
+  "turn_id": 1,
+  "previous_run_id": null,
+  "usage": {
+    "model_turns": 8,
+    "http_attempts": 8,
+    "tool_calls": 4
+  },
+  "export": {
+    "format": "compact-v1",
+    "raw_output_sha256": "07d68ae79be8a8f356900d5a359116863cc9cc8b897ad1b3e3c9eff5f988bbee"
+  }
+}

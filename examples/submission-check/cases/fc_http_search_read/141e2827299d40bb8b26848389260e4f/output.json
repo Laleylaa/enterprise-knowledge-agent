@@ -1,0 +1,15 @@
+{
+  "stage": "agent_tool_calls",
+  "model_origin": "local_http_injection",
+  "live_model": false,
+  "stopped_after": "tool_observation",
+  "usage": {
+    "model_turns": 3,
+    "http_attempts": 3,
+    "tool_calls": 2
+  },
+  "export": {
+    "format": "compact-v1",
+    "raw_output_sha256": "901303b2102fd75d9b818139ac800256ac4089cc79a60e3e316517ea89851efd"
+  }
+}

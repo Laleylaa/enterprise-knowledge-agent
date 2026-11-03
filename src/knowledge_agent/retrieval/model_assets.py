@@ -86,5 +86,5 @@ def download_model(path: Path) -> dict:
             temporary.unlink(missing_ok=True)
     manifest = validate_model(path)
     # This is informative; runtime still independently validates all pinned files.
-    (path / "model-manifest.json").write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + "\n")
+    (path / "model-manifest.json").write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     return manifest

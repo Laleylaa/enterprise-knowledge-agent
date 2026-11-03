@@ -1,13 +1,13 @@
 {
   "format": "compact-v1",
-  "total": 49,
-  "passed": 49,
+  "total": 54,
+  "passed": 54,
   "failed": 0,
   "errors": 0,
   "skipped": 0,
   "run_records": 41,
   "live_outputs": 23,
-  "live_citations": 28,
+  "live_citations": 30,
   "semantic_review": "not_automatically_assessed",
   "results": "results.xml",
   "runs": "cases.md"

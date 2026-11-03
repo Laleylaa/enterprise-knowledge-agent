@@ -1,0 +1,32 @@
+{
+  "mock_scenario": "budget",
+  "run_id": "72648ac67535451baddad0346d7386c6",
+  "mode": "mock",
+  "stage": "tool_integration",
+  "requested_retrieval": "bm25",
+  "result_origin": "runtime_fallback",
+  "termination_reason": "model_turn_limit",
+  "result": {
+    "citations": [],
+    "answer": "没有剩余模型轮次继续处理或观察工具结果。",
+    "gaps": [
+      "当前问题的回答或查证尚未完成。"
+    ],
+    "clarification": null,
+    "status": "incomplete",
+    "decision_summary": "程序记录执行中断事实，未生成后续模型决策。",
+    "answer_parts": []
+  },
+  "session_id": "498202131add486e806b707126300946",
+  "turn_id": 1,
+  "previous_run_id": null,
+  "usage": {
+    "model_turns": 10,
+    "http_attempts": 0,
+    "tool_calls": 9
+  },
+  "export": {
+    "format": "compact-v1",
+    "raw_output_sha256": "82727d10ce9cb0b50b4c6fdc3667899da5a9580e82c5561c397e8cd11dd03f08"
+  }
+}

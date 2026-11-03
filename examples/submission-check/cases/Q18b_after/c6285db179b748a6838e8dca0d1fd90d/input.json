@@ -1,0 +1,35 @@
+{
+  "format": "compact-v1",
+  "question": "国内差旅报销期限多久？",
+  "session_id": "0f78b929f5e34fc99e3a4e0e9aaf33e8",
+  "turn_id": 1,
+  "history": [
+    {
+      "role": "user",
+      "content": "国内差旅报销期限多久？"
+    },
+    {
+      "role": "assistant",
+      "content": "任务状态：已解决\n\n回答：\n国内差旅报销须在行程结束后 30 天内提交。[1]\n\n引用：\n[1] D01｜版本日期：2026-01-01\n## 二、提交期限\n\n1. 国内差旅报销须在行程结束后 30 天内提交。\n2. 报销申请的处理状态与上述提交期限分别记录。\n\n\n\n资料缺口：无"
+    }
+  ],
+  "settings": {
+    "mode": "real",
+    "model_name": "deepseek-flash",
+    "retrieval_mode": "hybrid",
+    "thinking": false,
+    "max_model_turns": 10,
+    "max_tool_calls": 16,
+    "max_http_attempts": 20,
+    "model_timeout": 30.0,
+    "tool_timeout": 10.0,
+    "turn_timeout": 120.0,
+    "fixture": "F6_replaced_rule"
+  },
+  "corpus": "../../../corpora/a21f854ecf2fa6dcd96b57a6e7bf9b92f12d1d55d5423a52ee3395844468b0d1.json",
+  "test": {
+    "scope": "business_cli",
+    "live_model": true,
+    "model_origin": "live_provider"
+  }
+}
