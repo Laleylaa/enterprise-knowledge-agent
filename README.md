@@ -73,7 +73,7 @@ $env:PYTHONUTF8 = "1"
 ### 单次问答
 
 ```sh
-python -m knowledge_agent chat --mode mock --retrieval bm25 --scenario normal --corpus data/fixtures/F1_single_rule/manifest.json --prepared data/prepared/F1_single_rule.json --question "国内差旅报销期限多久？" --output-dir runtime/offline
+python -m knowledge_agent chat --mode mock --retrieval bm25 --scenario normal --corpus data/fixtures/F1_single_rule/manifest.json --prepared data/prepared/F1_single_rule.json --question "国内差旅报销期限多久？" --output-dir examples/evaluation/mock-chat
 ```
 
 预期显示“已解决”，回答国内差旅行程结束后 30 天内提交，并列出 D01 原文与版本日期。任务状态旁会标明离线 Mock 的验证边界。
@@ -81,7 +81,7 @@ python -m knowledge_agent chat --mode mock --retrieval bm25 --scenario normal --
 ### 正常、资料不足与工具失败等场景
 
 ```sh
-python -m knowledge_agent evaluate --mode mock --retrieval bm25 --output-dir runtime/evaluation/mock
+python -m knowledge_agent evaluate --mode mock --retrieval bm25 --output-dir examples/evaluation/mock
 ```
 
 该命令运行 7 项离线测试，覆盖正常、冲突、缺资料、工具失败、故障恢复、预算停止及不支持的输入；预期汇总为 `status: passed`、`passed: 7`。终端会给出本批材料目录，其中保存测试日志、汇总、JUnit 结果及各次运行记录。
@@ -122,7 +122,7 @@ python -m knowledge_agent evaluate --mode mock --retrieval bm25 --output-dir run
 
 默认真实检索为 hybrid（BM25 与本地向量融合）。首次运行需要访问 Hugging Face 下载固定版本的 BGE-small-zh-v1.5 模型与 tokenizer 资产，命令如下：
 
-`runtime/` 保存本地模型、缓存和运行记录，不随仓库提交。首次克隆后该目录不存在是正常情况；下方命令会按 `.env` 中配置的路径创建目录并准备资产，无需手动创建。已提交的 `data/prepared/` 是检索块，不包含 embedding 模型权重。
+`runtime/` 保存本地模型、缓存和日常自由问答记录，不随仓库提交。首次克隆后该目录不存在是正常情况；下方命令会按 `.env` 中配置的路径创建目录并准备资产，无需手动创建。已提交的 `data/prepared/` 是检索块，不包含 embedding 模型权重。
 
 ```sh
 python -m knowledge_agent prepare --mode real --retrieval hybrid --download --corpus data/knowledge_base/manifest.json --prepared data/prepared/knowledge_base.json --output-dir runtime/preparation
@@ -172,7 +172,7 @@ python -m knowledge_agent chat --mode real --retrieval hybrid --corpus data/know
 ### 无真实模型调用的检查
 
 ```sh
-python -m pytest tests -q
+python -m pytest tests -q --examples-dir examples/evaluation/offline --junitxml=examples/evaluation/offline-results.xml
 ```
 
 预期 **36 项通过、18 项跳过**：29 项基础契约与 7 项 Mock 执行，18 项真实业务测试需显式启用。此命令的通过结果不等于全部真实业务验收通过。
@@ -183,17 +183,17 @@ python -m pytest tests -q
 
 ```sh
 # 仅收集：不调用模型，不计为通过
-python -m knowledge_agent evaluate --mode real --retrieval hybrid --collect-only --output-dir runtime/evaluation/collect
+python -m knowledge_agent evaluate --mode real --retrieval hybrid --collect-only --output-dir examples/evaluation/collect
 
 # 执行六项必验与十二项扩展业务测试
-python -m knowledge_agent evaluate --mode real --retrieval hybrid --run-live --output-dir runtime/evaluation/real
+python -m knowledge_agent evaluate --mode real --retrieval hybrid --run-live --output-dir examples/evaluation/real
 ```
 
 `evaluate` 自动使用每个用例规定的资料，不接受 `--corpus`、`--prepared` 覆盖。可增加 `--suite tests/e2e/required` 只跑六项必验，或用 `-k` 筛选名称。完整业务验收使用 hybrid；两项检索降级专项在其他检索模式下跳过，跳过不算完整通过。
 
 评估输出包含材料目录与通过、失败、错误、跳过计数。真实模型的措辞和动作可能变化，自动检查通过后仍需结合原文核对答案含义与引用支持关系。
 
-[完整复跑与打包步骤](examples/README.md#完整复跑与打包)说明如何合并基础、Mock 和真实业务结果，生成包含输入、实际输出、精简 Trace 与共用资料快照的提交包。已有提交材料可直接阅读，无需先运行测试；新运行记录写入 `runtime/`，评审不依赖本地开发归档。
+[完整复跑与打包步骤](examples/README.md#完整复跑与打包)说明如何合并基础、Mock 和真实业务结果，生成包含输入、实际输出、精简 Trace 与共用资料快照的提交包。已有提交材料可直接阅读，无需先运行测试。固定 Mock 与测试用例的复跑材料写入 `examples/evaluation/`，正式验收材料集中在 `examples/submission-check/`；日常从 `chat` 入口自由提问的记录写入 `runtime/`。评审不依赖本地开发归档。
 
 ## 项目结构
 

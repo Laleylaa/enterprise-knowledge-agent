@@ -149,9 +149,9 @@ Markdown 保存制度正文，`manifest.json` 维护文档 ID、标题、版本�
 两个工具也提供独立 CLI，便于核对检索结果和原文。按[README](../README.md#环境与安装)安装依赖、激活环境并设置环境变量后，在仓库根目录执行以下命令，不调用问答模型：
 
 ```sh
-python -m knowledge_agent.retrieval search --retrieval bm25 --corpus data/fixtures/F1_single_rule/manifest.json --prepared data/prepared/F1_single_rule.json --query "国内差旅报销期限" --output-dir runtime/search-tool
+python -m knowledge_agent.retrieval search --retrieval bm25 --corpus data/fixtures/F1_single_rule/manifest.json --prepared data/prepared/F1_single_rule.json --query "国内差旅报销期限" --output-dir examples/evaluation/search-tool
 
-python -m knowledge_agent.reading --corpus data/fixtures/F1_single_rule/manifest.json --prepared data/prepared/F1_single_rule.json --doc-id D01 --output-dir runtime/read-tool
+python -m knowledge_agent.reading --corpus data/fixtures/F1_single_rule/manifest.json --prepared data/prepared/F1_single_rule.json --doc-id D01 --output-dir examples/evaluation/read-tool
 ```
 
 独立工具材料保存在 `<输出目录>/<run_id>/`，记录 `model_calls=0`；正式 Agent 绑定时共享本轮证据集合与记录器。完整参数见各入口的 `--help`，资产准备见[运行说明](../README.md#准备本地检索资产)。
